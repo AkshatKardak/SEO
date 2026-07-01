@@ -7,7 +7,7 @@ import {
   Tag, AlertCircle, ExternalLink, Type, Search,
   Download, Share2, Check, Loader2,
 } from "lucide-react";
-import { dummyWebsiteAnalysis } from "../assets/assets";
+import { seoAPI } from "../services/api";
 import axios from "axios";
 
 interface AnalysisData {
@@ -53,7 +53,7 @@ interface AnalysisData {
 }
 
 export default function Report() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const reportRef = useRef<HTMLDivElement>(null);
 
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
@@ -61,22 +61,21 @@ export default function Report() {
   const [error, setError] = useState<string>("");
   const [activeTab, setActiveTab] = useState("overview");
 
-  // PDF export state
   const [exportingPDF, setExportingPDF] = useState(false);
-
-  // Share state
   const [shareUrl, setShareUrl] = useState("");
   const [sharing, setSharing] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const fetchAnalysis = async () => {
+    if (!id) return;
     try {
-      setTimeout(() => {
-        setAnalysis(dummyWebsiteAnalysis);
-        setLoading(false);
-      }, 1500);
-    } catch (e) {
-      setError("Failed to load analysis.");
+      setLoading(true);
+      setError("");
+      const data = await seoAPI.getAnalysis(id);
+      setAnalysis(data.analysis ?? data);
+    } catch (e: any) {
+      setError(e.message || "Failed to load analysis.");
+    } finally {
       setLoading(false);
     }
   };
@@ -93,7 +92,6 @@ export default function Report() {
         return;
       }
       const hostname = new URL(analysis.url).hostname;
-
       const opt = {
         margin: [8, 8, 8, 8] as [number, number, number, number],
         filename: `seo-report-${hostname}-${Date.now()}.pdf`,
@@ -106,7 +104,6 @@ export default function Report() {
         },
         pagebreak: { mode: ["avoid-all", "css", "legacy"] as const },
       };
-
       await html2pdf().set(opt).from(element).save();
     } catch (e) {
       console.error("PDF export failed:", e);
@@ -119,7 +116,7 @@ export default function Report() {
     if (!analysis) return;
     setSharing(true);
     try {
-      const token = sessionStorage.getItem("token") ?? "";
+      const token = sessionStorage.getItem("token") ?? localStorage.getItem("token") ?? "";
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/seo/${analysis._id}/share`,
         {},
@@ -155,7 +152,7 @@ export default function Report() {
   ];
 
   useEffect(() => {
-    (async () => await fetchAnalysis())();
+    fetchAnalysis();
   }, [id]);
 
   if (loading) {
@@ -176,7 +173,11 @@ export default function Report() {
           <AlertCircle size={48} className="mx-auto text-danger mb-4" />
           <h2 className="text-xl font-bold text-foreground mb-2">Report Not Found</h2>
           <p className="text-muted-foreground text-sm mb-6">{error || "This analysis doesn't exist."}</p>
-          <Link to="/dashboard" className="bg-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground inline-block" style={{ color: "var(--background)" }}>
+          <Link
+            to="/dashboard"
+            className="bg-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground inline-block"
+            style={{ color: "var(--background)" }}
+          >
             Back to Dashboard
           </Link>
         </div>
@@ -205,7 +206,6 @@ export default function Report() {
 
   return (
     <div className="min-h-screen pt-16 md:pt-24 bg-background">
-      {/* ── Printable Report Wrapper ── */}
       <div ref={reportRef} className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ── Back + Header + Action Buttons ── */}
@@ -240,9 +240,7 @@ export default function Report() {
               </div>
             </div>
 
-            {/* ── Action Buttons ── */}
             <div className="flex items-center gap-2 shrink-0">
-              {/* Share Button */}
               <button
                 onClick={generateShareLink}
                 disabled={sharing}
@@ -258,23 +256,17 @@ export default function Report() {
                 {copied ? "Copied!" : "Share"}
               </button>
 
-              {/* PDF Export Button */}
               <button
                 onClick={exportPDF}
                 disabled={exportingPDF}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium btn-glow disabled:opacity-50"
               >
-                {exportingPDF ? (
-                  <Loader2 size={15} className="animate-spin" />
-                ) : (
-                  <Download size={15} />
-                )}
+                {exportingPDF ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
                 {exportingPDF ? "Exporting..." : "Export PDF"}
               </button>
             </div>
           </div>
 
-          {/* Share URL pill — shows after generating */}
           {shareUrl && !copied && (
             <div className="mt-3 flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground max-w-xl">
               <Globe size={12} className="shrink-0 text-primary" />
@@ -293,7 +285,6 @@ export default function Report() {
         <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-6">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <ScoreGauge score={analysis.overallScore} size={160} strokeWidth={12} label="Overall Score" />
-
             <div className="flex-1 w-full">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
@@ -311,7 +302,6 @@ export default function Report() {
                   </div>
                 ))}
               </div>
-
               <div className="grid grid-cols-3 gap-3 mt-4">
                 <div className="bg-muted/30 border border-border rounded-xl p-3 text-center">
                   <p className="text-lg font-bold text-primary">{analysis.loadTime}ms</p>
@@ -357,7 +347,6 @@ export default function Report() {
         <div key={activeTab}>
           {activeTab === "overview" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Issues Summary */}
               <div className="bg-card border border-border rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <AlertCircle size={20} className="text-danger" />
@@ -394,7 +383,6 @@ export default function Report() {
                 )}
               </div>
 
-              {/* Links & Images */}
               <div className="space-y-6">
                 <div className="bg-card border border-border rounded-2xl p-6">
                   <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
@@ -441,7 +429,6 @@ export default function Report() {
                 </div>
               </div>
 
-              {/* Headings */}
               <div className="bg-card border border-border rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Heading size={20} className="text-accent" />
@@ -480,7 +467,6 @@ export default function Report() {
                 )}
               </div>
 
-              {/* Keywords */}
               <div className="bg-card border border-border rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Type size={20} className="text-warning" />
@@ -533,14 +519,12 @@ export default function Report() {
                         {meta.len !== undefined && <span className="text-xs text-muted-foreground">{meta.len} chars</span>}
                         {meta.value
                           ? <span className="w-2 h-2 rounded-full bg-success" />
-                          : <span className="w-2 h-2 rounded-full bg-danger" />
-                        }
+                          : <span className="w-2 h-2 rounded-full bg-danger" />}
                       </div>
                     </div>
                     {meta.value
                       ? <p className="text-sm text-muted-foreground break-all">{meta.value}</p>
-                      : <p className="text-sm text-danger/60 italic">Missing</p>
-                    }
+                      : <p className="text-sm text-danger/60 italic">Missing</p>}
                     {meta.ideal && <p className="text-[10px] text-muted-foreground/60 mt-1">Ideal: {meta.ideal}</p>}
                   </div>
                 ))}
@@ -565,7 +549,10 @@ export default function Report() {
                     { label: "Total Images", value: String(analysis.images.total), cls: "text-foreground" },
                     {
                       label: "Total Headings",
-                      value: String(analysis.headings.h1 + analysis.headings.h2 + analysis.headings.h3 + analysis.headings.h4 + analysis.headings.h5 + analysis.headings.h6),
+                      value: String(
+                        analysis.headings.h1 + analysis.headings.h2 + analysis.headings.h3 +
+                        analysis.headings.h4 + analysis.headings.h5 + analysis.headings.h6
+                      ),
                       cls: "text-foreground",
                     },
                   ].map((row) => (

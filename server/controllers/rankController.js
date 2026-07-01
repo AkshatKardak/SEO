@@ -1,7 +1,5 @@
-import { Stagehand } from "@browserbasehq/stagehand";
 import RankTracker from "../models/RankTracker.js";
 
-// Add a keyword to track
 // Add a keyword to track
 export const addKeyword = async (req, res) => {
   try {
@@ -28,17 +26,33 @@ export const addKeyword = async (req, res) => {
     await checkRankForTracker(tracker);
     const updated = await RankTracker.findById(tracker._id);
     res.status(201).json({ success: true, tracker: updated });
-
   } catch (error) {
     console.error("Add keyword error:", error.message);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
+// Get a single tracker by ID
+export const getTracker = async (req, res) => {
+  try {
+    const tracker = await RankTracker.findOne({
+      _id: req.params.id,
+      userId: req.userId,
+    });
+    if (!tracker)
+      return res.status(404).json({ success: false, message: "Tracker not found" });
+    res.json({ success: true, tracker });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Refresh rank for a tracker now
 export const refreshKeyword = async (req, res) => {
   try {
     const tracker = await RankTracker.findOne({ _id: req.params.id, userId: req.userId });
-    if (!tracker) return res.status(404).json({ success: false, message: "Tracker not found" });
+    if (!tracker)
+      return res.status(404).json({ success: false, message: "Tracker not found" });
 
     await checkRankForTracker(tracker);
     const updated = await RankTracker.findById(tracker._id);
@@ -99,7 +113,7 @@ export const checkRankForTracker = async (tracker) => {
         try {
           const resultDomain = new URL(items[i].link).hostname.replace("www.", "");
           if (resultDomain.includes(targetDomain) || targetDomain.includes(resultDomain)) {
-            position = start + i; // absolute position (1-indexed)
+            position = start + i;
             break;
           }
         } catch (_) {}
@@ -114,7 +128,6 @@ export const checkRankForTracker = async (tracker) => {
     });
 
     console.log(`[RankChecker] "${tracker.keyword}" → position ${position ?? "not found (>30)"}`);
-
   } catch (error) {
     console.error(`[RankChecker] Failed for "${tracker.keyword}":`, error.message);
   }

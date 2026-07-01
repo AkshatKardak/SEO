@@ -64,6 +64,11 @@ export const rankAPI = {
 
   getKeywords: () => request("/api/rank/list"),
 
+  getTracker: (id: string) => request(`/api/rank/${id}`),
+
+  refreshTracker: (id: string) =>
+    request(`/api/rank/${id}/refresh`, { method: "POST" }),
+
   deleteKeyword: (id: string) =>
     request(`/api/rank/${id}`, { method: "DELETE" }),
 };

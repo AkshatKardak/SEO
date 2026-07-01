@@ -6,7 +6,8 @@ import {
   Minus, RefreshCw, AlertCircle, ExternalLink, Trophy,
   Users, Calendar, Loader2,
 } from "lucide-react";
-import { dummyWebsiteRanking } from "../assets/assets";
+import { rankAPI } from "../services/api";
+import toast from "react-hot-toast";
 
 interface RankHistoryEntry {
   date: string;
@@ -41,28 +42,92 @@ interface TrackingData {
   createdAt: string;
 }
 
+// Derive computed fields from raw tracker shape returned by the API
+function deriveTracking(raw: any): TrackingData {
+  const history: RankHistoryEntry[] = (raw.history ?? []).map((h: any) => ({
+    date: h.date,
+    position: h.position ?? null,
+    page: h.page ?? null,
+    title: h.title ?? "",
+    snippet: h.snippet ?? "",
+  }));
+
+  const positions = history
+    .map((h) => h.position)
+    .filter((p): p is number => p !== null);
+
+  const currentPosition = positions.length ? positions[positions.length - 1] : null;
+  const prevPosition = positions.length >= 2 ? positions[positions.length - 2] : null;
+  const bestPosition = positions.length ? Math.min(...positions) : null;
+  const positionChange =
+    currentPosition !== null && prevPosition !== null
+      ? prevPosition - currentPosition
+      : 0;
+
+  let domain = raw.domain ?? "";
+  if (!domain && raw.targetUrl) {
+    try {
+      domain = new URL(
+        raw.targetUrl.startsWith("http") ? raw.targetUrl : `https://${raw.targetUrl}`
+      ).hostname.replace("www.", "");
+    } catch (_) {
+      domain = raw.targetUrl;
+    }
+  }
+
+  return {
+    _id: raw._id,
+    keyword: raw.keyword,
+    url: raw.targetUrl ?? raw.url ?? "",
+    domain,
+    currentPosition,
+    currentPage: null,
+    bestPosition,
+    positionChange,
+    rankHistory: history,
+    competitors: raw.competitors ?? [],
+    active: raw.active ?? true,
+    lastChecked: raw.lastChecked ?? null,
+    status: raw.status ?? "idle",
+    createdAt: raw.createdAt,
+  };
+}
+
 export default function RankDetail() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [tracking, setTracking] = useState<TrackingData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const chartRef = useRef<HTMLCanvasElement>(null);
 
   const fetchTracking = async () => {
-    setTimeout(() => {
-      setTracking(dummyWebsiteRanking);
+    if (!id) return;
+    try {
+      setLoading(true);
+      setError("");
+      const data = await rankAPI.getTracker(id);
+      setTracking(deriveTracking(data.tracker));
+    } catch (err: any) {
+      setError(err.message || "Failed to load tracker");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleRefresh = async () => {
-    if (!tracking) return;
+    if (!tracking || !id) return;
     setRefreshing(true);
-    setTimeout(() => {
-      setTracking(dummyWebsiteRanking);
+    try {
+      const data = await rankAPI.refreshTracker(id);
+      setTracking(deriveTracking(data.tracker));
+      toast.success("Rank refreshed!");
+    } catch (err: any) {
+      toast.error(err.message || "Refresh failed");
+    } finally {
       setRefreshing(false);
-    }, 1000);
+    }
   };
 
   const drawChart = useCallback(() => {
@@ -78,7 +143,6 @@ export default function RankDetail() {
 
     if (history.length === 0) return;
 
-    // High DPI support
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr;
@@ -97,9 +161,10 @@ export default function RankDetail() {
     const minPos = Math.max(1, Math.min(...positions) - 2);
     const maxPos = Math.max(...positions) + 2;
 
-    // Use getComputedStyle on the canvas element for correct resolved values
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark"
-      || (!document.documentElement.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const isDark =
+      document.documentElement.getAttribute("data-theme") === "dark" ||
+      (!document.documentElement.getAttribute("data-theme") &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
 
     const borderColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
     const primaryColor = "#01696f";
@@ -210,7 +275,7 @@ export default function RankDetail() {
   };
 
   useEffect(() => {
-    (async () => await fetchTracking())();
+    fetchTracking();
   }, [id]);
 
   useEffect(() => {
@@ -227,12 +292,13 @@ export default function RankDetail() {
     );
   }
 
-  if (!tracking) {
+  if (error || !tracking) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center glass-strong rounded-2xl p-10">
           <AlertCircle size={48} className="mx-auto text-danger mb-4" />
           <h2 className="text-xl font-bold text-foreground mb-2">Tracking Not Found</h2>
+          <p className="text-sm text-muted-foreground mb-6">{error || "This tracker doesn't exist."}</p>
           <Link
             to="/rank-tracker"
             className="bg-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground mt-4 inline-block"
@@ -374,7 +440,6 @@ export default function RankDetail() {
           {/* ── OVERVIEW TAB ── */}
           {activeTab === "overview" && (
             <div className="space-y-6">
-              {/* Chart */}
               <div className="glass rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <TrendingUp size={20} className="text-primary" />
@@ -399,7 +464,6 @@ export default function RankDetail() {
                 </p>
               </div>
 
-              {/* Top 3 Competitors Preview */}
               {tracking.competitors.length > 0 && (
                 <div className="glass rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -460,10 +524,7 @@ export default function RankDetail() {
               {tracking.competitors.length > 0 ? (
                 <div className="space-y-3">
                   {tracking.competitors.map((comp, i) => (
-                    <div
-                      key={i}
-                      className="glass rounded-xl p-4 hover:bg-muted/50 transition-all"
-                    >
+                    <div key={i} className="glass rounded-xl p-4 hover:bg-muted/50 transition-all">
                       <div className="flex items-start gap-4">
                         <div
                           className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 ${
@@ -550,14 +611,10 @@ export default function RankDetail() {
                           </p>
                           <div className="flex items-center gap-3 mt-0.5">
                             {entry.page && (
-                              <span className="text-xs text-muted-foreground">
-                                Page {entry.page}
-                              </span>
+                              <span className="text-xs text-muted-foreground">Page {entry.page}</span>
                             )}
                             {entry.title && (
-                              <span className="text-xs text-muted-foreground truncate">
-                                {entry.title}
-                              </span>
+                              <span className="text-xs text-muted-foreground truncate">{entry.title}</span>
                             )}
                           </div>
                         </div>
