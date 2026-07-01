@@ -6,31 +6,29 @@ const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "30d"})
 }
 
-export const register = async (req,res) => {
-    try{
-        const {name, email, password} = req.body;
+export const register = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-        if(!name || !email || !password) return res.status(400).json({
-            success: false, message: "All fields are required"
-        });
+    if (!name || !email || !password)
+      return res.status(400).json({ success: false, message: "All fields are required" });
 
-        const existingUser = await User.findOne({email})
-        if(existingUser) return res.status(400).json({
-            success: false, message: "User already existed"
-        });
+    const existingUser = await User.findOne({ email });
+    if (existingUser)
+      return res.status(400).json({ success: false, message: "User already exists" });
 
-        const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10))
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
 
-        const User = await User.create({name, email, password: hashedPassword})
+    const user = await User.create({ name, email, password: hashedPassword }); 
 
-        const token = generateToke(user._id);
-        res.status(201).json({success: true, token, user})
+    const token = generateToken(user._id); 
+    res.status(201).json({ success: true, token, user });
 
-        } catch (error) {
-            console.error("Register error:", error.message);
-            res.status(500).json({success: false, message: "server error"})
-    }
-}
+  } catch (error) {
+    console.error("Register error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
 //Login user details
 export const login = async (req,res) => {
@@ -50,7 +48,7 @@ export const login = async (req,res) => {
         if(!isMatch) {
             return res.status(400).json({ success: false, message: "Invalid Credentials"})
         }
-        const token = generateToke(user._id);
+        const token = generateToken(user._id);
         res.status(201).json({success: true, token, user})
 
         } catch (error) {
