@@ -8,6 +8,6 @@ const authRouter = express.Router();
 authRouter.post('/register', register);
 authRouter.post('/login', login);
 authRouter.get('/user', auth, getUser);
-router.put("/schedule", protect, updateSchedule);
+authRouter.put("/schedule", protect, updateSchedule);
 
 export default authRouter;
