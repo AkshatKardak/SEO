@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
-import { Search, BarChart3, History, LogOut, Menu, X, Target, Sun, Moon, ChartNoAxesColumnIcon } from "lucide-react";
+import { Search, BarChart3, History, LogOut, Menu, X, Target, Sun, Moon } from "lucide-react";
 import { useState } from "react";
+import Logo from "../assets/Logo.png";
 
 export default function Navbar() {
     const { user } = { user: { name: "John", email: "john@example.com", plan: "PRO" } };
@@ -29,8 +30,8 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <ChartNoAxesColumnIcon />
-                        <span className="text-xl tracking-tight text-foreground">Rank Pilot</span>
+                        <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain" />
+                        <span className="text-xl tracking-tight text-foreground font-semibold">SerpoAI</span>
                     </Link>
 
                     {/* Desktop nav */}
