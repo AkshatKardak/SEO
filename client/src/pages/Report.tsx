@@ -58,7 +58,7 @@ export default function Report() {
 
   const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error] = useState("");
+  const [error, setError] = useState<string>("");
   const [activeTab, setActiveTab] = useState("overview");
 
   // PDF export state
@@ -70,54 +70,60 @@ export default function Report() {
   const [copied, setCopied] = useState(false);
 
   const fetchAnalysis = async () => {
-    setTimeout(() => {
-      setAnalysis(dummyWebsiteAnalysis);
+    try {
+      setTimeout(() => {
+        setAnalysis(dummyWebsiteAnalysis);
+        setLoading(false);
+      }, 1500);
+    } catch (e) {
+      setError("Failed to load analysis.");
       setLoading(false);
-    }, 1500);
+    }
   };
 
   // ── PDF Export using html2pdf.js ──
-const exportPDF = async () => {
-  if (!analysis) return;
-  setExportingPDF(true);
-  try {
-    const html2pdf = (await import("html2pdf.js")).default;
-    const element = reportRef.current;
-    if (!element) {
-      setExportingPDF(false);
-      return;
+  const exportPDF = async () => {
+    if (!analysis) return;
+    setExportingPDF(true);
+    try {
+      const html2pdf = (await import("html2pdf.js")).default;
+      const element = reportRef.current;
+      if (!element) {
+        setExportingPDF(false);
+        return;
+      }
+      const hostname = new URL(analysis.url).hostname;
+
+      const opt = {
+        margin: [8, 8, 8, 8] as [number, number, number, number],
+        filename: `seo-report-${hostname}-${Date.now()}.pdf`,
+        image: { type: "jpeg" as const, quality: 0.97 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: {
+          unit: "mm" as const,
+          format: "a4" as const,
+          orientation: "portrait" as const,
+        },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] as const },
+      };
+
+      await html2pdf().set(opt).from(element).save();
+    } catch (e) {
+      console.error("PDF export failed:", e);
     }
-    const hostname = new URL(analysis.url).hostname;
-
-    const opt = {
-      margin: [8, 8, 8, 8] as [number, number, number, number],
-      filename: `seo-report-${hostname}-${Date.now()}.pdf`,
-      image: { type: "jpeg" as const, quality: 0.97 },
-      html2canvas: { scale: 2, useCORS: true, logging: false },
-      jsPDF: {
-        unit: "mm" as const,
-        format: "a4" as const,
-        orientation: "portrait" as const,  // ✅ literal type assertion
-      },
-      pagebreak: { mode: ["avoid-all", "css", "legacy"] as const },
-    };
-
-    await html2pdf().set(opt).from(element).save();
-  } catch (e) {
-    console.error("PDF export failed:", e);
-  }
-  setExportingPDF(false);
-};
+    setExportingPDF(false);
+  };
 
   // ── Share Report Link ──
   const generateShareLink = async () => {
     if (!analysis) return;
     setSharing(true);
     try {
+      const token = sessionStorage.getItem("token") ?? "";
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/seo/${analysis._id}/share`,
         {},
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setShareUrl(data.shareUrl);
       await navigator.clipboard.writeText(data.shareUrl);
@@ -312,7 +318,7 @@ const exportPDF = async () => {
                   <p className="text-[10px] text-muted-foreground">Load Time</p>
                 </div>
                 <div className="bg-muted/30 border border-border rounded-xl p-3 text-center">
-                  <p className="text-lg font-bold text-secondary">{Math.round(analysis.pageSize / 1024)}KB</p>
+                  <p className="text-lg font-bold text-foreground">{Math.round(analysis.pageSize / 1024)}KB</p>
                   <p className="text-[10px] text-muted-foreground">Page Size</p>
                 </div>
                 <div className="bg-muted/30 border border-border rounded-xl p-3 text-center">
@@ -398,15 +404,15 @@ const exportPDF = async () => {
                   <div className="grid grid-cols-3 gap-3">
                     <div className="glass rounded-xl p-4 text-center">
                       <p className="text-2xl font-bold text-primary">{analysis.links.internal}</p>
-                      <p className="text-xs text-gray-500">Internal</p>
+                      <p className="text-xs text-muted-foreground">Internal</p>
                     </div>
                     <div className="glass rounded-xl p-4 text-center">
-                      <p className="text-2xl font-bold text-secondary">{analysis.links.external}</p>
-                      <p className="text-xs text-gray-500">External</p>
+                      <p className="text-2xl font-bold text-foreground">{analysis.links.external}</p>
+                      <p className="text-xs text-muted-foreground">External</p>
                     </div>
                     <div className="glass rounded-xl p-4 text-center">
                       <p className="text-2xl font-bold text-accent">{analysis.links.total}</p>
-                      <p className="text-xs text-gray-500">Total</p>
+                      <p className="text-xs text-muted-foreground">Total</p>
                     </div>
                   </div>
                 </div>
@@ -418,18 +424,18 @@ const exportPDF = async () => {
                   </h3>
                   <div className="grid grid-cols-3 gap-3">
                     <div className="glass rounded-xl p-4 text-center">
-                      <p className="text-2xl font-bold">{analysis.images.total}</p>
-                      <p className="text-xs text-gray-500">Total</p>
+                      <p className="text-2xl font-bold text-foreground">{analysis.images.total}</p>
+                      <p className="text-xs text-muted-foreground">Total</p>
                     </div>
                     <div className="glass rounded-xl p-4 text-center">
                       <p className="text-2xl font-bold text-success">{analysis.images.withAlt}</p>
-                      <p className="text-xs text-gray-500">With Alt</p>
+                      <p className="text-xs text-muted-foreground">With Alt</p>
                     </div>
                     <div className="glass rounded-xl p-4 text-center">
                       <p className={`text-2xl font-bold ${analysis.images.missingAlt > 0 ? "text-danger" : "text-success"}`}>
                         {analysis.images.missingAlt}
                       </p>
-                      <p className="text-xs text-gray-500">Missing Alt</p>
+                      <p className="text-xs text-muted-foreground">Missing Alt</p>
                     </div>
                   </div>
                 </div>
@@ -438,7 +444,7 @@ const exportPDF = async () => {
               {/* Headings */}
               <div className="bg-card border border-border rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Heading size={20} className="text-secondary" />
+                  <Heading size={20} className="text-accent" />
                   Heading Structure
                 </h3>
                 <div className="space-y-2">
@@ -450,14 +456,14 @@ const exportPDF = async () => {
                     );
                     return (
                       <div key={tag} className="flex items-center gap-3">
-                        <span className="text-xs font-mono text-gray-400 w-6 uppercase">{tag}</span>
-                        <div className="flex-1 h-6 rounded-lg bg-white/5 overflow-hidden">
+                        <span className="text-xs font-mono text-muted-foreground w-6 uppercase">{tag}</span>
+                        <div className="flex-1 h-6 rounded-lg bg-muted/40 overflow-hidden">
                           <div
                             className="h-full rounded-lg gradient-bg transition-all"
                             style={{ width: `${(count / maxBar) * 100}%`, minWidth: count > 0 ? "20px" : "0" }}
                           />
                         </div>
-                        <span className={`text-sm font-bold w-6 text-right ${tag === "h1" && count !== 1 ? "text-danger" : ""}`}>
+                        <span className={`text-sm font-bold w-6 text-right ${tag === "h1" && count !== 1 ? "text-danger" : "text-foreground"}`}>
                           {count}
                         </span>
                       </div>
@@ -465,10 +471,10 @@ const exportPDF = async () => {
                   })}
                 </div>
                 {analysis.headings.h1Texts.length > 0 && (
-                  <div className="mt-4 p-3 rounded-xl bg-white/3 border border-white/5">
-                    <p className="text-xs text-gray-500 mb-1">H1 Text:</p>
+                  <div className="mt-4 p-3 rounded-xl bg-muted/30 border border-border">
+                    <p className="text-xs text-muted-foreground mb-1">H1 Text:</p>
                     {analysis.headings.h1Texts.map((text, i) => (
-                      <p key={i} className="text-sm text-gray-300 truncate">{text}</p>
+                      <p key={i} className="text-sm text-foreground truncate">{text}</p>
                     ))}
                   </div>
                 )}
@@ -484,18 +490,18 @@ const exportPDF = async () => {
                   <div className="space-y-2">
                     {analysis.keywords.map((kw, i) => (
                       <div key={kw.word} className="flex items-center gap-3">
-                        <span className="text-xs text-gray-500 w-4">{i + 1}</span>
-                        <span className="flex-1 text-sm font-medium">{kw.word}</span>
-                        <span className="text-xs text-gray-400">{kw.count}×</span>
-                        <div className="w-16 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                        <span className="text-xs text-muted-foreground w-4">{i + 1}</span>
+                        <span className="flex-1 text-sm font-medium text-foreground">{kw.word}</span>
+                        <span className="text-xs text-muted-foreground">{kw.count}×</span>
+                        <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
                           <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(kw.density * 10, 100)}%` }} />
                         </div>
-                        <span className="text-xs text-gray-500 w-12 text-right">{kw.density}%</span>
+                        <span className="text-xs text-muted-foreground w-12 text-right">{kw.density}%</span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">No keyword data available.</p>
+                  <p className="text-sm text-muted-foreground">No keyword data available.</p>
                 )}
               </div>
             </div>
@@ -535,7 +541,7 @@ const exportPDF = async () => {
                       ? <p className="text-sm text-muted-foreground break-all">{meta.value}</p>
                       : <p className="text-sm text-danger/60 italic">Missing</p>
                     }
-                    {meta.ideal && <p className="text-[10px] text-gray-600 mt-1">Ideal: {meta.ideal}</p>}
+                    {meta.ideal && <p className="text-[10px] text-muted-foreground/60 mt-1">Ideal: {meta.ideal}</p>}
                   </div>
                 ))}
               </div>

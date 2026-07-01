@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft, Target, Globe, Clock, TrendingUp, TrendingDown,
@@ -65,7 +65,7 @@ export default function RankDetail() {
     }, 1000);
   };
 
-  const drawChart = () => {
+  const drawChart = useCallback(() => {
     const canvas = chartRef.current;
     if (!canvas || !tracking) return;
 
@@ -97,11 +97,14 @@ export default function RankDetail() {
     const minPos = Math.max(1, Math.min(...positions) - 2);
     const maxPos = Math.max(...positions) + 2;
 
-    const styles = getComputedStyle(document.documentElement);
-    const borderColor = styles.getPropertyValue("--border").trim() || "rgba(128,128,128,0.2)";
-    const primaryColor = styles.getPropertyValue("--accent").trim() || "#3b82f6";
-    const textColor = styles.getPropertyValue("--muted-foreground").trim() || "rgba(128,128,128,0.5)";
-    const bgColor = styles.getPropertyValue("--background").trim() || "#ffffff";
+    // Use getComputedStyle on the canvas element for correct resolved values
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark"
+      || (!document.documentElement.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    const borderColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+    const primaryColor = "#01696f";
+    const textColor = isDark ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.45)";
+    const bgColor = isDark ? "#171614" : "#f7f6f2";
 
     // Grid
     ctx.strokeStyle = borderColor;
@@ -116,14 +119,14 @@ export default function RankDetail() {
 
       const posVal = Math.round(minPos + ((maxPos - minPos) / gridLines) * i);
       ctx.fillStyle = textColor;
-      ctx.font = "11px Outfit";
+      ctx.font = "11px Outfit, sans-serif";
       ctx.textAlign = "right";
       ctx.fillText(`#${posVal}`, padding.left - 8, y + 4);
     }
 
     // Date labels
     ctx.fillStyle = textColor;
-    ctx.font = "10px Outfit";
+    ctx.font = "10px Outfit, sans-serif";
     ctx.textAlign = "center";
     const maxLabels = Math.min(history.length, 7);
     const labelStep = Math.max(1, Math.floor(history.length / maxLabels));
@@ -150,8 +153,8 @@ export default function RankDetail() {
 
     // Gradient fill
     const gradient = ctx.createLinearGradient(0, padding.top, 0, h - padding.bottom);
-    gradient.addColorStop(0, "rgba(59, 130, 246, 0.15)");
-    gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
+    gradient.addColorStop(0, "rgba(1, 105, 111, 0.18)");
+    gradient.addColorStop(1, "rgba(1, 105, 111, 0)");
     ctx.beginPath();
     history.forEach((entry, i) => {
       const x = padding.left + (chartW / Math.max(history.length - 1, 1)) * i;
@@ -186,11 +189,11 @@ export default function RankDetail() {
     ctx.translate(12, h / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.fillStyle = textColor;
-    ctx.font = "11px Outfit";
+    ctx.font = "11px Outfit, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("Position", 0, 0);
     ctx.restore();
-  };
+  }, [tracking]);
 
   const getChangeIndicator = (change: number) => {
     if (change > 0) return { icon: <TrendingUp size={16} />, text: `+${change}`, class: "text-emerald-500" };
@@ -214,7 +217,7 @@ export default function RankDetail() {
     if (tracking && tracking.rankHistory.length > 0 && chartRef.current) {
       drawChart();
     }
-  }, [tracking, activeTab]);
+  }, [tracking, activeTab, drawChart]);
 
   if (loading) {
     return (
@@ -419,7 +422,7 @@ export default function RankDetail() {
                             i === 0
                               ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
                               : i === 1
-                              ? "bg-gray-400/15 text-gray-300 border border-gray-400/30"
+                              ? "bg-muted text-muted-foreground border border-border"
                               : "bg-orange-500/15 text-orange-400 border border-orange-500/30"
                           }`}
                         >
