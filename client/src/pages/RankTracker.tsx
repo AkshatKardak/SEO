@@ -2,12 +2,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Target, Plus, RefreshCw, Trash2, TrendingUp, TrendingDown,
+  Target, Plus, Trash2, TrendingUp, TrendingDown,
   Minus, ExternalLink, Clock, Loader2, X, Search, Globe,
   AlertCircle, Filter, ArrowUpDown, BarChart2,
 } from "lucide-react";
 import { rankAPI } from "../services/api";
 import toast from "react-hot-toast";
+import ScheduleSelector from "../components/ScheduleSelector";
 
 interface RankEntry {
   date: string;
@@ -61,6 +62,7 @@ export default function RankTracker() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+  const [schedulePreference, setSchedulePreference] = useState<string>("daily");
 
   const fetchKeywords = async () => {
     try {
@@ -71,6 +73,22 @@ export default function RankTracker() {
       toast.error(err.message || "Failed to load keywords");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fetch user schedule preference on mount
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (data.user?.schedulePreference) {
+        setSchedulePreference(data.user.schedulePreference);
+      }
+    } catch {
+      // silently fail — schedule selector will use default "daily"
     }
   };
 
@@ -146,6 +164,7 @@ export default function RankTracker() {
 
   useEffect(() => {
     fetchKeywords();
+    fetchUserProfile();
   }, []);
 
   return (
@@ -153,13 +172,13 @@ export default function RankTracker() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ── Page Header ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">
               <span className="gradient-text">Rank Tracker</span>
             </h1>
             <p className="text-muted-foreground text-sm mt-1">
-              Track keyword positions on Google — auto-refreshed daily at 6 AM.
+              Track keyword positions on Google — auto-refreshed on your schedule.
             </p>
           </div>
           <button
@@ -170,6 +189,14 @@ export default function RankTracker() {
             <Plus size={18} />
             Track Keyword
           </button>
+        </div>
+
+        {/* ── Schedule Selector ── */}
+        <div className="glass rounded-xl px-5 py-4 mb-6">
+          <ScheduleSelector
+            current={schedulePreference}
+            onChange={(val) => setSchedulePreference(val)}
+          />
         </div>
 
         {/* ── Summary Stats ── */}
@@ -353,11 +380,11 @@ export default function RankTracker() {
                 <p className="text-xs text-muted-foreground mt-0.5">We'll check Google and find your position.</p>
               </div>
               <button
-  type="button"
-  onClick={() => { setShowAddModal(false); setAddError(""); }}
-  className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
-  title="Close"
->
+                type="button"
+                onClick={() => { setShowAddModal(false); setAddError(""); }}
+                className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
+                title="Close"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -407,7 +434,7 @@ export default function RankTracker() {
               </div>
 
               <div className="severity-info rounded-xl p-3 text-xs">
-                💡 We'll search Google for your keyword and find your website's position (up to top 100 results). Updated every day at 6 AM.
+                💡 We'll search Google for your keyword and find your website's position (up to top 100 results). Updated on your chosen schedule.
               </div>
 
               <button

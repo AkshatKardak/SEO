@@ -72,3 +72,16 @@ export const getUser = async (req,res) => {
             res.status(500).json({success: false, message: "server error"})
     }
 }
+
+export const updateSchedule = async (req, res) => {
+  try {
+    const { schedulePreference } = req.body;
+    if (!["daily", "weekly", "off"].includes(schedulePreference)) {
+      return res.status(400).json({ success: false, message: "Invalid schedule option" });
+    }
+    await User.findByIdAndUpdate(req.userId, { schedulePreference });
+    res.json({ success: true, message: "Schedule updated" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

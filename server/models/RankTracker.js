@@ -13,5 +13,19 @@ const rankTrackerSchema = new mongoose.Schema({
   lastChecked: { type: Date, default: null },
 }, { timestamps: true });
 
+const rankEntrySchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  position: { type: Number, default: null },
+  competitors: [
+    {
+      position: Number,
+      url: String,
+      domain: String,
+      title: String,
+      snippet: String,
+    },
+  ],
+});
+
 const RankTracker = mongoose.model("RankTracker", rankTrackerSchema);
 export default RankTracker;

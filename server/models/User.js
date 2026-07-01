@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     plan: {type: String, enum: ["free", "pro"], default: "free"},
     analysisCount: {type: Number, default: 0},
     lastAnalysisDate: {type: Date, default: null},
+    schedulePreference: { type: String, enum: ["daily", "weekly", "off"], default: "daily" },
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema)
