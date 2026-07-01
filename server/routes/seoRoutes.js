@@ -11,11 +11,11 @@ const seoRouter = express.Router();
 seoRouter.post("/analyze", auth, analyzeUrl);
 seoRouter.get("/analyses", auth, getAnalyses);
 seoRouter.get("/analysis/:id", auth, getAnalysis);
-router.post("/analyze-bulk", protect, analyzeBulk);
-router.get("/score-history", protect, getScoreHistory);
-router.post("/:id/share", protect, generateShareLink);
-router.get("/share/:token", getSharedReport);
-router.get("/sitemap-check", protect, checkSitemapRobots);
-router.get("/pagespeed", protect, getPageSpeed);
+seoRouter.post("/analyze-bulk", auth, analyzeBulk);
+seoRouter.get("/score-history", auth, getScoreHistory);
+seoRouter.post("/:id/share", auth, generateShareLink);
+seoRouter.get("/share/:token", getSharedReport);
+seoRouter.get("/sitemap-check", auth, checkSitemapRobots);
+seoRouter.get("/pagespeed", auth, getPageSpeed);
 
 export default seoRouter;

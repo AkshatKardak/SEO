@@ -8,8 +8,8 @@ const seoAnalysisSchema = new mongoose.Schema({
         accessibility: {type: Number, default:0},
         seo: {type: Number, default: 0},
         bestPractices: {type: Number, default: 0},
-        shareToken: { type: String, default: null, unique: true, sparse: true },
     },
+    shareToken: { type: String, default: null, unique: true, sparse: true },
     metaTags: {
         title: String,
         description: String,
