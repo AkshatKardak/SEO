@@ -1,7 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { homefooterLinks } from "../../assets/assets";
+
 import { SiX, SiInstagram, SiFacebook, SiTwitch } from "@icons-pack/react-simple-icons";
 import Logo from "../../assets/Logo.png";
+
+const homefooterLinks = [
+    {
+        title: "Product",
+        links: ["Features", "Pricing", "Security", "Roadmap"]
+    },
+    {
+        title: "Company",
+        links: ["About", "Blog", "Careers", "Contact"]
+    },
+    {
+        title: "Resources",
+        links: ["Documentation", "API", "Support", "Status"]
+    },
+    {
+        title: "Legal",
+        links: ["Privacy", "Terms", "Cookies", "License"]
+    }
+];
 
 export default function Footer() {
     return (

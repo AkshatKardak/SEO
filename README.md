@@ -235,17 +235,6 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## ⚠️ Common Issues
-
-| Error | Cause | Fix |
-|---|---|---|
-| `ERR_MODULE_NOT_FOUND: ./config/db` | Missing `.js` in ESM import | Add `.js` to all local imports |
-| `router is not defined` in authRoutes | Used `router`/`protect` instead of `authRouter`/`auth` | Fix variable names |
-| Rank always `null` | Google scraping is CAPTCHA-blocked | Use Google Custom Search API |
-| CORS error in production | Missing `CLIENT_URL` env var | Set `CLIENT_URL` in Render env vars |
-| PageSpeed scores all `0` | Missing `PAGESPEED_API_KEY` | Add key to `.env` |
-
----
 
 ## 👤 Author
 
