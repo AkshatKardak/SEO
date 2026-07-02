@@ -1,185 +1,170 @@
-<div align="center">
-  <img src="./client/src/assets/Logo.png" alt="SerpoAI Logo" width="160">
+# SerpoAI — SEO Rank Tracker & Analyzer
 
-  # SerpoAI — AI-Powered SEO Rank Tracker
-  ### Analyze, Track & Dominate Search Rankings
+> AI-powered SEO analysis, rank tracking, and performance reporting platform built with the MERN stack.
 
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://serpoai.vercel.app/)
-  [![Backend API](https://img.shields.io/badge/Backend-API-orange?style=for-the-badge)](https://serpoai-server.onrender.com/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-
-</div>
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://seo-rank-tracker.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## Overview
+## Features
 
-**SerpoAI** is a full-stack SEO analysis and keyword rank tracking platform. Analyze any website's SEO health with AI-powered audits powered by Google Gemini & BrowserBase, track keyword positions on Google daily via Custom Search API, and receive email alerts on rank changes — all in one clean dashboard.
-
----
-
-## ✨ Features
-
-- 🔍 **AI SEO Audit** — Deep page analysis powered by Gemini AI via BrowserBase headless browser
-- 📈 **Keyword Rank Tracker** — Track Google positions via Google Custom Search API (top 30 results)
-- 🏆 **Competitor Analysis** — See who's outranking you and where
-- 📊 **Score Dashboard** — SEO, Performance, Accessibility & Best Practices scores
-- 📂 **Analysis History** — Browse all past audits with filtering
-- 📧 **Email Alerts** — Rank drop notifications via Resend
-- 📄 **PDF Export** — Export any SEO report as a PDF
-- 🔗 **Shareable Reports** — Generate public share links for any report
-- ⚡ **PageSpeed Integration** — Real Core Web Vitals via Google PageSpeed API
-- 🗺️ **Sitemap & Robots Checker** — Validate sitemap.xml and robots.txt
-- 🔐 **JWT Auth** — Secure register/login with bcrypt-hashed passwords
-- 🌗 **Dark / Light Mode** — System-aware theme with manual toggle
-- 🚫 **Free Plan Limit** — 5 analyses/day on free tier, unlimited on Pro
+| Feature | Free | Pro |
+|---|---|---|
+| AI SEO Audit (Groq / Llama 3.3) | 3/month | Unlimited |
+| PageSpeed & Core Web Vitals | ✓ | ✓ |
+| Sitemap & robots.txt check | ✓ | ✓ |
+| Rank Tracker (keyword positions) | ✓ | ✓ |
+| Score History & trend charts | ✓ | ✓ |
+| Shareable public report links | ✓ | ✓ |
+| Bulk URL analysis (up to 5) | ✗ | ✓ |
+| JWT authentication | ✓ | ✓ |
+| Aurora gradient dark/light theme | ✓ | ✓ |
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend (`client/`)
 
-| Technology | Purpose |
-|---|---|
-| React 18 + TypeScript | UI framework |
-| Vite 5 | Build tool & dev server |
-| React Router DOM 6 | Client-side routing |
-| Tailwind CSS 3 | Utility-first styling |
-| Lucide React | Icons |
-| html2pdf.js | PDF export |
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 18 | UI framework |
+| TypeScript | 5 | Type safety |
+| Vite | 5 | Build tool |
+| Tailwind CSS | 4 | Styling |
+| React Router | 6 | Client-side routing |
+| Lucide React | latest | Icons |
+| Recharts | latest | Score history charts |
 
 ### Backend (`server/`)
 
-| Technology | Purpose |
-|---|---|
-| Node.js 24 + Express 4 | HTTP server (ESM mode) |
-| MongoDB + Mongoose 8 | Database & ODM |
-| JWT + bcryptjs | Auth tokens & password hashing |
-| Google Gemini AI | SEO analysis generation |
-| BrowserBase + Stagehand | Headless browser scraping |
-| Google Custom Search API | Keyword rank checking |
-| Google PageSpeed API | Core Web Vitals scores |
-| Resend | Transactional email alerts |
-| node-cron | Daily rank check scheduler |
+| Technology | Version | Purpose |
+|---|---|---|
+| Node.js | 24 | Runtime |
+| Express | 5 | HTTP server |
+| MongoDB + Mongoose | 9 | Database |
+| JWT | 9 | Authentication |
+| Groq SDK | 0.9 | AI SEO report generation |
+| BrowserBase + Stagehand | latest | Headless browser scraping |
+| Google PageSpeed API | v5 | Performance scores |
+| node-cron | 4 | Scheduled rank checks |
+| bcrypt | 6 | Password hashing |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 SEO/
-├── client/
-│   ├── public/
-│   │   └── favicon.png
-│   └── src/
-│       ├── assets/
-│       │   └── Logo.png
-│       ├── components/
-│       │   ├── home/           # Hero, Features, HowItWorks, Pricing, Footer
-│       │   ├── Navbar.tsx
-│       │   ├── ScoreGauge.tsx
-│       │   ├── IssueCard.tsx
-│       │   └── ProtectedRoute.tsx
-│       ├── context/
-│       │   └── ThemeContext.tsx
-│       ├── pages/
-│       │   ├── Home.tsx
-│       │   ├── Login.tsx
-│       │   ├── Analyze.tsx
-│       │   ├── Dashboard.tsx
-│       │   ├── Report.tsx
-│       │   ├── History.tsx
-│       │   ├── RankTracker.tsx
-│       │   └── RankDetail.tsx
-│       └── services/
-│           └── api.ts
-│
-└── server/
-    ├── config/db.js
+├── client/                        # React + TypeScript frontend
+│   ├── src/
+│   │   ├── assets/                  # Logo, static images
+│   │   ├── components/
+│   │   │   └── Navbar.tsx           # Top nav with theme toggle
+│   │   ├── context/
+│   │   │   ├── AuthContext.tsx      # JWT auth state
+│   │   │   └── ThemeContext.tsx     # Dark/light theme state
+│   │   ├── pages/
+│   │   │   ├── Home.tsx             # Landing / hero page
+│   │   │   ├── Login.tsx            # Login form
+│   │   │   ├── Dashboard.tsx        # User dashboard & KPIs
+│   │   │   ├── Analyze.tsx          # Single URL SEO analyzer
+│   │   │   ├── BulkAnalyze.tsx      # Bulk URL analyzer (Pro)
+│   │   │   ├── Report.tsx           # Full SEO report view
+│   │   │   ├── RankTracker.tsx      # Keyword rank tracker
+│   │   │   ├── RankDetail.tsx       # Per-keyword detail view
+│   │   │   └── History.tsx          # Score history & charts
+│   │   ├── services/              # Axios API service calls
+│   │   ├── App.tsx               # Routes definition
+│   │   ├── main.tsx              # React entry point
+│   │   └── index.css             # Aurora gradient theme + Tailwind
+│   ├── index.html
+│   └── package.json
+└── server/                        # Express + Node.js backend
+    ├── config/
+    │   └── db.js                    # MongoDB connection
     ├── controllers/
-    │   ├── authController.js
-    │   ├── seoController.js
-    │   └── rankController.js
-    ├── cron/rankChecker.js
-    ├── middleware/auth.js
+    │   ├── authController.js        # Register / Login / JWT
+    │   ├── seoController.js         # SEO analysis + Groq AI report
+    │   └── rankController.js        # Rank tracking CRUD
+    ├── cron/                        # Scheduled rank refresh jobs
+    ├── middleware/
+    │   └── auth.js                  # JWT verification middleware
     ├── models/
-    │   ├── User.js
-    │   ├── SeoAnalysis.js
-    │   └── RankTracker.js
-    ├── routes/
-    │   ├── authRoutes.js
-    │   ├── seoRoutes.js
-    │   └── rankRoutes.js
-    └── server.js
+    │   ├── User.js                  # User schema (name, email, plan)
+    │   └── SeoAnalysis.js           # SEO analysis schema
+    ├── routes/                      # Express route definitions
+    ├── server.js                    # App entry point
+    └── package.json
 ```
 
 ---
 
-## ⚙️ Local Setup
+## Local Setup
 
 ### Prerequisites
+
 - Node.js v18+
-- MongoDB Atlas URI
-- Google Gemini API key
-- BrowserBase account (API key + Project ID)
-- Google Custom Search Engine (API key + CX ID)
-- Google PageSpeed API key
-- Resend API key
+- MongoDB Atlas account (or local MongoDB)
+- [Groq API key](https://console.groq.com) — free tier available
+- [BrowserBase](https://browserbase.com) API key + Project ID
+- [Google PageSpeed API key](https://developers.google.com/speed/docs/insights/v5/get-started)
 
 ### 1. Clone
+
 ```bash
 git clone https://github.com/AkshatKardak/SEO.git
 cd SEO
 ```
 
-### 2. Backend
+### 2. Server setup
+
 ```bash
 cd server
 npm install
 ```
 
 Create `server/.env`:
+
 ```env
-PORT=5000
 MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/serpoai
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_super_secret_key
+
+# Groq AI (replaces Gemini) — get free key at console.groq.com
+GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# BrowserBase headless scraping
+BROWSERBASE_API_KEY=your_browserbase_key
+BROWSERBASE_PROJECT_ID=your_project_id
+
+# Google PageSpeed Insights
+PAGESPEED_API_KEY=your_pagespeed_key
+
+# Frontend URL (for share links)
 CLIENT_URL=http://localhost:5173
 
-# BrowserBase
-BROWSERBASE_API_KEY=bb_live_xxxxxxxx
-BROWSERBASE_PROJECT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-
-# Google APIs
-GEMINI_API_KEY=AIzaSy...
-GOOGLE_CSE_API_KEY=AIzaSy...
-GOOGLE_CSE_CX=xxxxxxxxxxxxxxxxx
-PAGESPEED_API_KEY=AIzaSy...
-
-# Email
-RESEND_API_KEY=re_xxxxxxxxx
+PORT=5000
 ```
 
-> ⚠️ **ESM Rule** — Every local import MUST include `.js` extension:
-> ```js
-> import connectDB from "./config/db.js";  // ✅
-> import connectDB from "./config/db";     // ❌ crashes
-> ```
+> **ESM note:** All local imports in server files **must include `.js` extension**
+> e.g. `import connectDB from "./config/db.js"` — Node.js v18+ ESM requires this.
 
 ```bash
 npm run server
 ```
 
-### 3. Frontend
+### 3. Client setup
+
 ```bash
 cd ../client
 npm install
 ```
 
 Create `client/.env`:
+
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ```bash
@@ -190,60 +175,140 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Auth — `/api/auth`
-| Method | Route | Auth | Description |
-|---|---|---|---|
-| POST | `/register` | ❌ | Create account |
-| POST | `/login` | ❌ | Login, returns JWT |
-| GET | `/user` | ✅ | Get current user |
-| PUT | `/schedule` | ✅ | Update email alert schedule |
 
-### SEO — `/api/seo`
-| Method | Route | Auth | Description |
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/analyze` | ✅ | Analyze a URL |
-| GET | `/analyses` | ✅ | Get all analyses for user |
-| GET | `/analysis/:id` | ✅ | Get single analysis |
-| POST | `/:id/share` | ✅ | Generate public share token |
-| GET | `/share/:token` | ❌ | View shared report publicly |
-| GET | `/pagespeed` | ✅ | Google PageSpeed scores |
+| POST | `/register` | No | Register new user |
+| POST | `/login` | No | Login, returns JWT |
+
+### SEO Analysis — `/api/seo`
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/analyze` | Yes | Analyze single URL (Groq AI report) |
+| GET | `/analyses` | Yes | Get all analyses for user |
+| GET | `/analysis/:id` | Yes | Get single analysis |
+| POST | `/bulk` | Yes (Pro) | Analyze up to 5 URLs |
+| GET | `/history` | Yes | Score history for chart |
+| POST | `/share/:id` | Yes | Generate public share link |
+| GET | `/share/:token` | No | View shared report |
+| GET | `/sitemap-robots` | Yes | Check sitemap & robots.txt |
+| GET | `/pagespeed` | Yes | Google PageSpeed scores |
 
 ### Rank Tracker — `/api/rank`
-| Method | Route | Auth | Description |
+
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/` | ✅ | Add keyword to track |
-| GET | `/` | ✅ | List all tracked keywords |
-| DELETE | `/:id` | ✅ | Remove keyword |
-| POST | `/:id/refresh` | ✅ | Manually refresh rank |
+| POST | `/` | Yes | Add keyword to track |
+| GET | `/` | Yes | List all tracked keywords |
+| GET | `/:id` | Yes | Get keyword detail + history |
+| DELETE | `/:id` | Yes | Delete tracked keyword |
 
 ---
 
-## 🚀 Deployment
+## AI Integration (Groq)
 
-### Backend → Render
-1. New Web Service → connect GitHub repo → set **Root Directory** to `server`
-2. Build Command: `npm install`
-3. Start Command: `npm run server`
-4. Add all `.env` variables in Render's Environment tab
+Groq powers the AI SEO report generation via **Llama 3.3 70B Versatile** — one of the fastest and most capable open models available.
+
+**How it works:**
+1. BrowserBase scrapes the target URL (title, meta, h1, images, links)
+2. SEO scores are calculated server-side
+3. Groq generates a structured 400-word report covering:
+   - Overall Assessment
+   - Top 3 Critical Issues with specific fixes
+   - Top 3 Quick Wins
+   - Priority Action Plan
+
+**Why Groq over Gemini:**
+- ~10x faster inference (LPU hardware)
+- Generous free tier (no credit card required)
+- Better instruction-following for structured output
+- No 429 rate-limit issues at typical usage volumes
+
+**Model config:**
+```js
+model: "llama-3.3-70b-versatile"
+max_tokens: 700
+temperature: 0.4
+```
+
+---
+
+## Deployment
 
 ### Frontend → Vercel
-1. Import repo → set **Root Directory** to `client`
-2. Framework: Vite
-3. Add `VITE_API_URL=https://your-render-url.onrender.com`
+
+```bash
+cd client
+npx vercel --prod
+```
+
+Set env var in Vercel dashboard:
+```
+VITE_API_URL=https://your-backend.onrender.com/api
+```
+
+### Backend → Render
+
+1. Connect GitHub repo to Render
+2. Root directory: `server`
+3. Build command: `npm install`
+4. Start command: `npm start`
+5. Add all `.env` variables in Render dashboard
 
 ---
 
+## Environment Variables Reference
 
-## 👤 Author
+### `server/.env`
 
-**Akshat Kardak** — [GitHub](https://github.com/AkshatKardak)
+| Variable | Required | Description |
+|---|---|---|
+| `MONGO_URI` | Yes | MongoDB Atlas connection string |
+| `JWT_SECRET` | Yes | Secret for signing JWTs |
+| `GROQ_API_KEY` | Yes | Groq API key — [console.groq.com](https://console.groq.com) |
+| `BROWSERBASE_API_KEY` | Yes | BrowserBase scraping key |
+| `BROWSERBASE_PROJECT_ID` | Yes | BrowserBase project ID |
+| `PAGESPEED_API_KEY` | Yes | Google PageSpeed Insights key |
+| `CLIENT_URL` | Yes | Frontend URL for share links |
+| `PORT` | No | Defaults to 5000 |
 
-📧 kardakakshat@gmail.com
+### `client/.env`
+
+| Variable | Required | Description |
+|---|---|---|
+| `VITE_API_URL` | Yes | Backend base URL (e.g. `http://localhost:5000/api`) |
 
 ---
 
-## 📄 License
+## Theme
 
-MIT License © 2026 Akshat Kardak
+SerpoAI uses an **Aurora Gradient** design system across all pages:
+
+- **Dark mode:** `#0F172A → #1E3A8A → #2563EB` base with `#38BDF8` cyan highlights
+- **Light mode:** Soft sky palette `#EFF6FF → #DBEAFE → #BFDBFE`
+- SVG lightning shimmer overlay in dark mode
+- Dot grid + scanline grid for depth
+- Fully CSS-variable driven — no page files modified
+
+---
+
+## Common Issues
+
+| Problem | Fix |
+|---|---|
+| `ERR_MODULE_NOT_FOUND: ./config/db` | Add `.js` extension: `import ... from "./config/db.js"` |
+| `GROQ_API_KEY` missing | Get free key at [console.groq.com](https://console.groq.com) |
+| BrowserBase timeout | Check `BROWSERBASE_API_KEY` and `BROWSERBASE_PROJECT_ID` are correct |
+| MongoDB connection refused | Check `MONGO_URI` whitelist in Atlas Network Access |
+| Vercel blank page | Ensure `VITE_API_URL` is set and backend is running |
+| PageSpeed returns 400 | `PAGESPEED_API_KEY` invalid or URL is not publicly accessible |
+
+---
+
+## License
+
+MIT © [Akshat Kardak](https://github.com/AkshatKardak)

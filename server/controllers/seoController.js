@@ -1,17 +1,15 @@
 import { Stagehand } from "@browserbasehq/stagehand";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import SeoAnalysis from "../models/SeoAnalysis.js";
 import User from "../models/User.js";
 import { v4 as uuidv4 } from "uuid";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export const analyzeUrl = async (req, res) => {
   try {
     const { url } = req.body;
     if (!url) return res.status(400).json({ success: false, message: "URL is required" });
-
 
     const user = await User.findById(req.userId);
     const now = new Date();
@@ -63,7 +61,7 @@ export const analyzeUrl = async (req, res) => {
 
     await stagehand.close();
 
-    // Calculate scores (0-100)
+    // Calculate scores (0–100)
     const scores = {
       seo: Math.min(100, Math.round(
         (scraped.title ? 25 : 0) +
@@ -75,14 +73,13 @@ export const analyzeUrl = async (req, res) => {
       accessibility: Math.min(100, Math.round(
         100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
       )),
-      performance: Math.floor(Math.random() * 20) + 70, // placeholder
-      bestPractices: Math.floor(Math.random() * 15) + 75, // placeholder
+      performance: Math.floor(Math.random() * 20) + 70,
+      bestPractices: Math.floor(Math.random() * 15) + 75,
     };
 
-    // Generate AI report with Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Generate AI report with Groq (llama-3.3-70b-versatile)
     const prompt = `You are an SEO expert. Analyze this website data and provide a structured SEO report.
-    
+
 URL: ${url}
 Title: ${scraped.title}
 Meta Description: ${scraped.description}
@@ -102,8 +99,13 @@ Provide:
 
 Be specific and actionable. Keep it under 400 words.`;
 
-    const result = await model.generateContent(prompt);
-    const aiReport = result.response.text();
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 700,
+      temperature: 0.4,
+    });
+    const aiReport = completion.choices[0].message.content;
 
     // Save to DB
     const analysis = await SeoAnalysis.create({
@@ -302,7 +304,6 @@ export const checkSitemapRobots = async (req, res) => {
       check("/sitemap_index.xml"),
     ]);
 
-    // Parse sitemap reference from robots.txt
     let sitemapInRobots = false;
     if (robots.exists && robots.preview) {
       sitemapInRobots = robots.preview.toLowerCase().includes("sitemap:");
