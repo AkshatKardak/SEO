@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -12,14 +12,10 @@ import RankDetail from "./pages/RankDetail";
 import { Toaster } from "react-hot-toast";
 
 export default function App() {
-    const location = useLocation();
-
-    const hideNavbar = ["/login", "/register"].includes(location.pathname);
-
     return (
         <>
             <Toaster />
-            {!hideNavbar && <Navbar />}
+            <Navbar />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login state="login" />} />
