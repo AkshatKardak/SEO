@@ -5,9 +5,12 @@ const connectDB = async () => {
   mongoose.connection.on("error", (err) => console.error("❌ MongoDB error:", err.message));
 
   const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
-  if (!uri) throw new Error("No MongoDB URI found. Set MONGODB_URI or MONGO_URI in .env");
+  if (!uri) throw new Error("No MongoDB URI found.");
 
-  await mongoose.connect(uri);
+  await mongoose.connect(uri, {
+    tls: true,
+    serverSelectionTimeoutMS: 10000,
+  });
 };
 
 export default connectDB;
