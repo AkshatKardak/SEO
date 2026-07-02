@@ -1,16 +1,46 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Loader2, User2Icon } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { authAPI } from "../services/api";
 
 export default function Login({ state }: { state: string }) {
     const [isLoginState, setIsLoginState] = useState(state === "login");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError("");
+        setLoading(true);
+
+        try {
+            let data;
+            if (isLoginState) {
+                data = await authAPI.login({ email, password });
+            } else {
+                data = await authAPI.register({ name, email, password });
+            }
+
+            if (data.token) {
+                await login(data.token);
+                navigate("/dashboard");
+            } else {
+                setError(data.message || "Something went wrong");
+            }
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error ? err.message : "Something went wrong";
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -28,6 +58,13 @@ export default function Login({ state }: { state: string }) {
                                 {isLoginState ? "Sign in to your" : "Sign up for your"} SerpoAI account
                             </p>
                         </div>
+
+                        {/* Error Message */}
+                        {error && (
+                            <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+                                {error}
+                            </div>
+                        )}
 
                         {!isLoginState && (
                             <label>
@@ -94,7 +131,7 @@ export default function Login({ state }: { state: string }) {
                 <p className="text-center text-sm text-muted-foreground mt-6">
                     {isLoginState ? "Don't have an account?" : "Already have an account?"}
                     <button
-                        onClick={() => setIsLoginState((prev) => !prev)}
+                        onClick={() => { setIsLoginState((prev) => !prev); setError(""); }}
                         className="text-primary hover:underline font-medium pl-1"
                     >
                         {isLoginState ? "Sign up" : "Sign in"}
