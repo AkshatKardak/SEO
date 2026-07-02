@@ -26,19 +26,25 @@ const request = async (endpoint: string, options: RequestInit = {}) => {
 
 // ─── Auth ─────────────────────────────────────────────────
 export const authAPI = {
-  register: (name: string, email: string, password: string) =>
+  register: ({ name, email, password }: { name: string; email: string; password: string }) =>
     request("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     }),
 
-  login: (email: string, password: string) =>
+  login: ({ email, password }: { email: string; password: string }) =>
     request("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
 
   getUser: () => request("/api/auth/user"),
+
+  updateSchedule: (schedulePreference: string) =>
+    request("/api/auth/schedule", {
+      method: "PUT",
+      body: JSON.stringify({ schedulePreference }),
+    }),
 };
 
 // ─── SEO Analysis ─────────────────────────────────────────
@@ -52,6 +58,26 @@ export const seoAPI = {
   getAnalyses: () => request("/api/seo/analyses"),
 
   getAnalysis: (id: string) => request(`/api/seo/analysis/${id}`),
+
+  getScoreHistory: (url?: string) =>
+    request(`/api/seo/score-history${url ? `?url=${encodeURIComponent(url)}` : ""}`),
+
+  generateShareLink: (id: string) =>
+    request(`/api/seo/${id}/share`, { method: "POST" }),
+
+  getSharedReport: (token: string) => request(`/api/seo/share/${token}`),
+
+  checkSitemap: (url: string) =>
+    request(`/api/seo/sitemap-check?url=${encodeURIComponent(url)}`),
+
+  getPageSpeed: (url: string, strategy: "mobile" | "desktop" = "mobile") =>
+    request(`/api/seo/pagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`),
+
+  analyzeBulk: (urls: string[]) =>
+    request("/api/seo/analyze-bulk", {
+      method: "POST",
+      body: JSON.stringify({ urls }),
+    }),
 };
 
 // ─── Rank Tracker ─────────────────────────────────────────
