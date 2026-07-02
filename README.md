@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/SerpoAI-SEO%20Intelligence-0F172A?style=for-the-badge&logo=google&logoColor=38BDF8" alt="SerpoAI Logo" width="300"/>
+  <img src="https://raw.githubusercontent.com/AkshatKardak/SEO/main/client/src/assets/Logo.png" alt="SerpoAI Logo" width="180"/>
 </p>
 
 <p align="center">
@@ -309,21 +309,6 @@ VITE_API_URL=https://your-backend.onrender.com/api
 3. **Build command:** `npm install`
 4. **Start command:** `npm start`
 5. Add all `.env` variables under **Environment** in the Render dashboard
-
----
-
-## Common Issues
-
-| Problem | Fix |
-|---|---|
-| `Missing script: "dev"` | Use `npm run server` — there is no `dev` script in `server/package.json` |
-| `Cannot find package '@browserbasehq/stagehand'` | Run `npm install` inside the `server/` directory |
-| `ERR_MODULE_NOT_FOUND: ./config/db` | Add `.js` extension to all local ESM imports |
-| `GROQ_API_KEY` missing | Get a free key at [console.groq.com](https://console.groq.com) |
-| BrowserBase timeout | Verify both `BROWSERBASE_API_KEY` and `BROWSERBASE_PROJECT_ID` are set |
-| MongoDB connection refused | Whitelist your IP in Atlas → Network Access |
-| Vercel blank page | Ensure `VITE_API_URL` points to a running backend |
-| PageSpeed returns 400 | Key is invalid or the target URL is not publicly accessible |
 
 ---
 
