@@ -27,13 +27,23 @@ export default function Navbar() {
         { path: "/history", label: "History", icon: <History size={18} /> },
     ];
 
+    // Invert logo for dark mode so dark-colored logo stays visible
+    const logoStyle = theme === "dark"
+        ? { filter: "invert(1) brightness(1.8)" }
+        : {};
+
     return (
         <nav className="fixed top-0 w-full bg-background/70 backdrop-blur-lg z-50 border-b border-border/40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain" />
+                        <img
+                            src={Logo}
+                            alt="SerpoAI Logo"
+                            className="h-8 w-auto object-contain transition-all duration-300"
+                            style={logoStyle}
+                        />
                     </Link>
 
                     {/* Desktop nav */}
