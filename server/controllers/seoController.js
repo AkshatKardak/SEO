@@ -1,10 +1,72 @@
-import { Stagehand } from "@browserbasehq/stagehand";
 import Groq from "groq-sdk";
 import SeoAnalysis from "../models/SeoAnalysis.js";
 import User from "../models/User.js";
 import { v4 as uuidv4 } from "uuid";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+/**
+ * Lightweight HTML scraper using native fetch.
+ * Replaces @browserbasehq/stagehand — no BrowserBase account needed.
+ */
+async function scrapeUrl(url) {
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(15000),
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      Accept: "text/html,application/xhtml+xml",
+    },
+  });
+
+  if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
+  const html = await response.text();
+
+  const get = (pattern) => (html.match(pattern) || [])[1]?.trim() || "";
+
+  const title = get(/<title[^>]*>([^<]{1,200})<\/title>/i);
+  const description =
+    get(/meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,500})["']/i) ||
+    get(/meta[^>]+content=["']([^"']{1,500})["'][^>]+name=["']description["']/i) ||
+    get(/meta[^>]+property=["']og:description["'][^>]+content=["']([^"']{1,500})["']/i) ||
+    get(/meta[^>]+content=["']([^"']{1,500})["'][^>]+property=["']og:description["']/i);
+
+  const hasViewport = /meta[^>]+name=["']viewport["']/i.test(html);
+  const hasCanonical = /link[^>]+rel=["']canonical["']/i.test(html);
+
+  const h1Matches = html.match(/<h1[\s>]/gi) || [];
+  const h1Count = h1Matches.length;
+
+  const imgTags = html.match(/<img[^>]+>/gi) || [];
+  const totalImages = imgTags.length;
+  const imagesMissingAlt = imgTags.filter(
+    (tag) => !/alt=["'][^"']+["']/i.test(tag)
+  ).length;
+
+  const linkTags = html.match(/<a[^>]+href/gi) || [];
+  const totalLinks = linkTags.length;
+
+  // Strip tags for body text preview
+  const bodyText = html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 3000);
+
+  return {
+    title,
+    description,
+    hasViewport,
+    hasCanonical,
+    imagesMissingAlt,
+    totalImages,
+    totalLinks,
+    h1Count,
+    bodyText,
+  };
+}
 
 export const analyzeUrl = async (req, res) => {
   try {
@@ -29,55 +91,31 @@ export const analyzeUrl = async (req, res) => {
       }
     }
 
-    const stagehand = new Stagehand({
-      env: "BROWSERBASE",
-      apiKey: process.env.BROWSERBASE_API_KEY,
-      projectId: process.env.BROWSERBASE_PROJECT_ID,
-    });
-    await stagehand.init();
-    const page = stagehand.page;
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
-
-    const scraped = await page.evaluate(() => {
-      const getMeta = (name) =>
-        document.querySelector(`meta[name="${name}"]`)?.content ||
-        document.querySelector(`meta[property="og:${name}"]`)?.content || "";
-
-      const images = Array.from(document.querySelectorAll("img"));
-      const links = Array.from(document.querySelectorAll("a[href]"));
-
-      return {
-        title: document.title || "",
-        description: getMeta("description"),
-        hasViewport: !!document.querySelector('meta[name="viewport"]'),
-        hasCanonical: !!document.querySelector('link[rel="canonical"]'),
-        imagesMissingAlt: images.filter((img) => !img.alt).length,
-        totalImages: images.length,
-        totalLinks: links.length,
-        h1Count: document.querySelectorAll("h1").length,
-        bodyText: document.body?.innerText?.slice(0, 3000) || "",
-      };
-    });
-
-    await stagehand.close();
+    const scraped = await scrapeUrl(url);
 
     // Calculate scores (0–100)
     const scores = {
-      seo: Math.min(100, Math.round(
-        (scraped.title ? 25 : 0) +
-        (scraped.description ? 25 : 0) +
-        (scraped.hasViewport ? 20 : 0) +
-        (scraped.hasCanonical ? 15 : 0) +
-        (scraped.h1Count === 1 ? 15 : 0)
-      )),
-      accessibility: Math.min(100, Math.round(
-        100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
-      )),
+      seo: Math.min(
+        100,
+        Math.round(
+          (scraped.title ? 25 : 0) +
+          (scraped.description ? 25 : 0) +
+          (scraped.hasViewport ? 20 : 0) +
+          (scraped.hasCanonical ? 15 : 0) +
+          (scraped.h1Count === 1 ? 15 : 0)
+        )
+      ),
+      accessibility: Math.min(
+        100,
+        Math.round(
+          100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
+        )
+      ),
       performance: Math.floor(Math.random() * 20) + 70,
       bestPractices: Math.floor(Math.random() * 15) + 75,
     };
 
-    // Generate AI report with Groq (llama-3.3-70b-versatile)
+    // Generate AI report with Groq
     const prompt = `You are an SEO expert. Analyze this website data and provide a structured SEO report.
 
 URL: ${url}
@@ -107,7 +145,6 @@ Be specific and actionable. Keep it under 400 words.`;
     });
     const aiReport = completion.choices[0].message.content;
 
-    // Save to DB
     const analysis = await SeoAnalysis.create({
       userId: req.userId,
       url,
@@ -124,14 +161,12 @@ Be specific and actionable. Keep it under 400 words.`;
     });
 
     res.status(201).json({ success: true, analysis });
-
   } catch (error) {
     console.error("Analyze error:", error.message);
     res.status(500).json({ success: false, message: "Analysis failed: " + error.message });
   }
 };
 
-// Get all analyses for current user
 export const getAnalyses = async (req, res) => {
   try {
     const analyses = await SeoAnalysis.find({ userId: req.userId })
@@ -143,7 +178,6 @@ export const getAnalyses = async (req, res) => {
   }
 };
 
-// Get single analysis
 export const getAnalysis = async (req, res) => {
   try {
     const analysis = await SeoAnalysis.findOne({
@@ -171,45 +205,23 @@ export const analyzeBulk = async (req, res) => {
 
     const results = await Promise.allSettled(
       urls.map(async (url) => {
-        const stagehand = new Stagehand({
-          env: "BROWSERBASE",
-          apiKey: process.env.BROWSERBASE_API_KEY,
-          projectId: process.env.BROWSERBASE_PROJECT_ID,
-        });
-        await stagehand.init();
-        const page = stagehand.page;
-        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
-
-        const scraped = await page.evaluate(() => {
-          const getMeta = (name) =>
-            document.querySelector(`meta[name="${name}"]`)?.content ||
-            document.querySelector(`meta[property="og:${name}"]`)?.content || "";
-          const images = Array.from(document.querySelectorAll("img"));
-          return {
-            title: document.title || "",
-            description: getMeta("description"),
-            hasViewport: !!document.querySelector('meta[name="viewport"]'),
-            hasCanonical: !!document.querySelector('link[rel="canonical"]'),
-            imagesMissingAlt: images.filter((img) => !img.alt).length,
-            totalImages: images.length,
-            h1Count: document.querySelectorAll("h1").length,
-          };
-        });
-
-        await stagehand.close();
-
-        const seoScore = Math.min(100, Math.round(
-          (scraped.title ? 25 : 0) +
-          (scraped.description ? 25 : 0) +
-          (scraped.hasViewport ? 20 : 0) +
-          (scraped.hasCanonical ? 15 : 0) +
-          (scraped.h1Count === 1 ? 15 : 0)
-        ));
-
-        const accessibilityScore = Math.min(100, Math.round(
-          100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
-        ));
-
+        const scraped = await scrapeUrl(url);
+        const seoScore = Math.min(
+          100,
+          Math.round(
+            (scraped.title ? 25 : 0) +
+            (scraped.description ? 25 : 0) +
+            (scraped.hasViewport ? 20 : 0) +
+            (scraped.hasCanonical ? 15 : 0) +
+            (scraped.h1Count === 1 ? 15 : 0)
+          )
+        );
+        const accessibilityScore = Math.min(
+          100,
+          Math.round(
+            100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
+          )
+        );
         return {
           url,
           title: scraped.title,
@@ -240,12 +252,10 @@ export const getScoreHistory = async (req, res) => {
     const { url } = req.query;
     const filter = { userId: req.userId };
     if (url) filter.url = { $regex: url, $options: "i" };
-
     const analyses = await SeoAnalysis.find(filter)
       .sort({ createdAt: 1 })
       .select("url scores createdAt")
       .limit(30);
-
     res.json({ success: true, history: analyses });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
@@ -256,12 +266,10 @@ export const generateShareLink = async (req, res) => {
   try {
     const analysis = await SeoAnalysis.findOne({ _id: req.params.id, userId: req.userId });
     if (!analysis) return res.status(404).json({ success: false, message: "Not found" });
-
     if (!analysis.shareToken) {
       analysis.shareToken = uuidv4();
       await analysis.save();
     }
-
     res.json({
       success: true,
       shareUrl: `${process.env.CLIENT_URL}/report/share/${analysis.shareToken}`,
@@ -285,9 +293,7 @@ export const checkSitemapRobots = async (req, res) => {
   try {
     const { url } = req.query;
     if (!url) return res.status(400).json({ success: false, message: "URL required" });
-
     const base = new URL(url).origin;
-
     const check = async (path) => {
       try {
         const r = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(8000) });
@@ -297,18 +303,15 @@ export const checkSitemapRobots = async (req, res) => {
         return { exists: false, status: null, preview: null };
       }
     };
-
     const [robots, sitemap, sitemapXml] = await Promise.all([
       check("/robots.txt"),
       check("/sitemap.xml"),
       check("/sitemap_index.xml"),
     ]);
-
     let sitemapInRobots = false;
     if (robots.exists && robots.preview) {
       sitemapInRobots = robots.preview.toLowerCase().includes("sitemap:");
     }
-
     res.json({
       success: true,
       result: {
@@ -316,8 +319,11 @@ export const checkSitemapRobots = async (req, res) => {
         sitemap: sitemap.exists ? sitemap : sitemapXml,
         recommendations: [
           !robots.exists && "robots.txt is missing — add one to control crawler access",
-          !(sitemap.exists || sitemapXml.exists) && "sitemap.xml is missing — submit one to Google Search Console",
-          robots.exists && !sitemapInRobots && "Your robots.txt doesn't reference your sitemap",
+          !(sitemap.exists || sitemapXml.exists) &&
+            "sitemap.xml is missing — submit one to Google Search Console",
+          robots.exists &&
+            !sitemapInRobots &&
+            "Your robots.txt doesn't reference your sitemap",
         ].filter(Boolean),
       },
     });
@@ -330,23 +336,17 @@ export const getPageSpeed = async (req, res) => {
   try {
     const { url, strategy = "mobile" } = req.query;
     if (!url) return res.status(400).json({ success: false, message: "URL required" });
-
-    // PAGESPEED_API_KEY is optional — keyless mode works up to ~400 req/day (fine for dev/hobby)
     const baseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`;
     const apiUrl = process.env.PAGESPEED_API_KEY
       ? `${baseUrl}&key=${process.env.PAGESPEED_API_KEY}`
       : baseUrl;
-
     const response = await fetch(apiUrl);
     const data = await response.json();
-
     if (data.error) {
       return res.status(400).json({ success: false, message: data.error.message });
     }
-
     const cats = data.lighthouseResult?.categories || {};
     const audits = data.lighthouseResult?.audits || {};
-
     res.json({
       success: true,
       scores: {
