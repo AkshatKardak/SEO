@@ -34,7 +34,6 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
                         <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain" />
-                        <span className="text-xl tracking-tight text-foreground font-semibold">SerpoAI</span>
                     </Link>
 
                     {/* Desktop nav */}
