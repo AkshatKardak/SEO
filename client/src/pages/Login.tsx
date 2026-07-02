@@ -21,7 +21,6 @@ export default function Login({ state }: { state: string }) {
                 <div className="text-center mb-8">
                     <Link to="/" className="flex items-center justify-center gap-2 group mb-10">
                         <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80" />
-                        <span className="text-xl font-semibold tracking-tight text-foreground">SerpoAI</span>
                     </Link>
                 </div>
 

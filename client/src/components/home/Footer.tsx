@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
-import Logo from "../assets/Logo.png";
+import Logo from "../../assets/Logo.png";
 
 const links = {
     Product: [
@@ -28,7 +28,6 @@ export default function Footer() {
                                 alt="SerpoAI Logo"
                                 className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80"
                             />
-                            <span className="text-lg font-semibold tracking-tight text-foreground">SerpoAI</span>
                         </Link>
 
                         <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-6">
