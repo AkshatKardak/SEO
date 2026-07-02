@@ -50,11 +50,11 @@
 
 .dark {
     /* ── Dark Mode — Deep Charcoal + Electric Green ── */
-    --background: #111110;
+    --background: #0b0d0f;
     --foreground: #e8e6e1;
-    --card: #1a1917;
+    --card: #141618;
     --border: rgba(255, 255, 255, 0.07);
-    --muted: #1f1e1c;
+    --muted: #1a1c1f;
     --muted-foreground: #7c7a75;
 
     --primary: #00e5a0;
@@ -69,7 +69,7 @@
     --glass-bg: rgba(255, 255, 255, 0.025);
     --glass-border: rgba(255, 255, 255, 0.06);
 
-    --scroll-track: #111110;
+    --scroll-track: #0b0d0f;
     --scroll-thumb: #2a2926;
     --scroll-thumb-hover: #3a3835;
 }
@@ -78,10 +78,75 @@ html {
     color-scheme: light dark;
 }
 
+/* ── THUNDEROUS BACKGROUND ── */
+/* Applied to body — static electric atmosphere, no animation */
 body {
     font-family: "Outfit", sans-serif;
-    background-color: var(--background);
     color: var(--foreground);
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Light mode background */
+body {
+    background-color: var(--background);
+    background-image:
+        /* Top-left soft blue orb */
+        radial-gradient(ellipse 80vw 60vh at 10% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 70%),
+        /* Center-right green orb */
+        radial-gradient(ellipse 60vw 50vh at 90% 40%, rgba(0, 184, 125, 0.08) 0%, transparent 65%),
+        /* Bottom-left warm glow */
+        radial-gradient(ellipse 50vw 40vh at 5% 100%, rgba(59, 130, 246, 0.06) 0%, transparent 60%),
+        /* Fine dot grid */
+        radial-gradient(rgba(0, 184, 125, 0.18) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+    background-attachment: fixed;
+}
+
+/* Dark mode background — thunderous electric */
+.dark body {
+    background-color: #0b0d0f;
+    background-image:
+        /* Top-left electric green thunder glow */
+        radial-gradient(ellipse 90vw 55vh at -5% -10%, rgba(0, 229, 160, 0.13) 0%, transparent 60%),
+        /* Mid-right deep electric blue flash */
+        radial-gradient(ellipse 70vw 60vh at 110% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 65%),
+        /* Bottom-center secondary green pulse */
+        radial-gradient(ellipse 80vw 40vh at 50% 110%, rgba(0, 229, 160, 0.07) 0%, transparent 55%),
+        /* Top-right subtle violet */
+        radial-gradient(ellipse 50vw 40vh at 100% 0%, rgba(139, 92, 246, 0.07) 0%, transparent 55%),
+        /* Fine electric dot grid */
+        radial-gradient(rgba(0, 229, 160, 0.09) 1px, transparent 1px),
+        /* Thin scanline grid */
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size:
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        28px 28px,
+        40px 40px,
+        40px 40px;
+    background-attachment: fixed;
+}
+
+/* Thunder crack lines — SVG overlay via pseudo-element on dark mode */
+.dark body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cg opacity='0.06'%3E%3Cpolyline points='120,0 105,90 130,90 95,210' stroke='%2300e5a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='680,0 660,120 690,120 640,300' stroke='%2300e5a0' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='350,0 330,70 360,70 310,180 340,180 280,320' stroke='%233b82f6' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='800,150 760,220 790,220 730,360' stroke='%2300e5a0' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='0,200 40,280 20,280 70,420' stroke='%233b82f6' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 800px 600px;
+}
+
+/* Ensure all page content sits above the bg layers */
+#root {
+    position: relative;
+    z-index: 1;
 }
 
 button {
