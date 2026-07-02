@@ -331,7 +331,12 @@ export const getPageSpeed = async (req, res) => {
     const { url, strategy = "mobile" } = req.query;
     if (!url) return res.status(400).json({ success: false, message: "URL required" });
 
-    const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}&key=${process.env.PAGESPEED_API_KEY}`;
+    // PAGESPEED_API_KEY is optional — keyless mode works up to ~400 req/day (fine for dev/hobby)
+    const baseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`;
+    const apiUrl = process.env.PAGESPEED_API_KEY
+      ? `${baseUrl}&key=${process.env.PAGESPEED_API_KEY}`
+      : baseUrl;
+
     const response = await fetch(apiUrl);
     const data = await response.json();
 
