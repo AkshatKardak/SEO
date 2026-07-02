@@ -2,6 +2,7 @@ import Groq from "groq-sdk";
 import SeoAnalysis from "../models/SeoAnalysis.js";
 import User from "../models/User.js";
 import { v4 as uuidv4 } from "uuid";
+import { sendAnalysisCompleteEmail } from "../services/emailService.js";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -46,7 +47,6 @@ async function scrapeUrl(url) {
   const linkTags = html.match(/<a[^>]+href/gi) || [];
   const totalLinks = linkTags.length;
 
-  // Strip tags for body text preview
   const bodyText = html
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
@@ -93,7 +93,6 @@ export const analyzeUrl = async (req, res) => {
 
     const scraped = await scrapeUrl(url);
 
-    // Calculate scores (0–100)
     const scores = {
       seo: Math.min(
         100,
@@ -115,7 +114,6 @@ export const analyzeUrl = async (req, res) => {
       bestPractices: Math.floor(Math.random() * 15) + 75,
     };
 
-    // Generate AI report with Groq
     const prompt = `You are an SEO expert. Analyze this website data and provide a structured SEO report.
 
 URL: ${url}
@@ -157,6 +155,15 @@ Be specific and actionable. Keep it under 400 words.`;
       },
       imagesMissingAlt: scraped.imagesMissingAlt,
       brokenLinks: 0,
+      aiReport,
+    });
+
+    // Send analysis complete email — non-blocking, won't delay API response
+    sendAnalysisCompleteEmail({
+      name: user.name,
+      email: user.email,
+      url,
+      scores,
       aiReport,
     });
 
