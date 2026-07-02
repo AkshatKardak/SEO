@@ -49,29 +49,29 @@
 }
 
 .dark {
-    /* ── Dark Mode — Navy + Electric Green ── */
-    --background: #0a0e1a;
-    --foreground: #e8eeff;
-    --card: #111827;
-    --border: rgba(59, 130, 246, 0.12);
-    --muted: #1a2235;
-    --muted-foreground: #7b8db0;
+    /* ── Dark Mode — Deep Charcoal + Electric Green ── */
+    --background: #111110;
+    --foreground: #e8e6e1;
+    --card: #1a1917;
+    --border: rgba(255, 255, 255, 0.07);
+    --muted: #1f1e1c;
+    --muted-foreground: #7c7a75;
 
     --primary: #00e5a0;
     --primary-dark: #00b87d;
-    --primary-foreground: #0a0e1a;
+    --primary-foreground: #0d0d0b;
     --accent: #3b82f6;
 
     --success: #00e5a0;
     --warning: #f59e0b;
     --danger: #ef4444;
 
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(59, 130, 246, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.025);
+    --glass-border: rgba(255, 255, 255, 0.06);
 
-    --scroll-track: #0a0e1a;
-    --scroll-thumb: #1e2d45;
-    --scroll-thumb-hover: #2a3f60;
+    --scroll-track: #111110;
+    --scroll-thumb: #2a2926;
+    --scroll-thumb-hover: #3a3835;
 }
 
 html {
@@ -107,7 +107,7 @@ button {
 
 .glass:hover {
     border-color: rgba(0, 229, 160, 0.2);
-    box-shadow: 0 0 0 1px rgba(0, 229, 160, 0.06), 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(0, 229, 160, 0.06), 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .dark .glass {
@@ -161,8 +161,8 @@ button {
 /* ── Animated Background Grid ── */
 .bg-grid {
     background-image:
-        linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
@@ -234,7 +234,7 @@ button {
 
 /* ── Background Patterns ── */
 .bg-dot-pattern {
-    background-image: radial-gradient(rgba(0, 229, 160, 0.15) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(0, 229, 160, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
 }
 
