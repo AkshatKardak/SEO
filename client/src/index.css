@@ -22,64 +22,83 @@
     --color-glass-border: var(--glass-border);
 }
 
+/* ═══════════════════════════════════════════
+   AURORA GRADIENT PALETTE
+   Dark  : #0F172A → #1E3A8A → #2563EB → #38BDF8
+   Light : soft sky — #EFF6FF → #DBEAFE → #BFDBFE
+   ═══════════════════════════════════════════ */
+
 :root {
-    /* ── Light Mode ── */
-    --background: #f0f4ff;
-    --foreground: #0a0e1a;
-    --card: #ffffff;
-    --border: #d4ddf7;
-    --muted: #e8edf8;
-    --muted-foreground: #5a6a8a;
+    /* ── Aurora Light Mode ── */
+    --background: #EFF6FF;
+    --foreground: #0F172A;
+    --card: #FFFFFF;
+    --border: rgba(37, 99, 235, 0.15);
+    --muted: #DBEAFE;
+    --muted-foreground: #1E3A8A;
 
-    --primary: #00b87d;
-    --primary-dark: #007a52;
-    --primary-foreground: #ffffff;
-    --accent: #3b82f6;
+    --primary: #2563EB;
+    --primary-dark: #1E3A8A;
+    --primary-foreground: #FFFFFF;
+    --accent: #38BDF8;
 
-    --success: #00b87d;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+    --success: #059669;
+    --warning: #D97706;
+    --danger: #DC2626;
 
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(37, 99, 235, 0.18);
 
-    --scroll-track: #e8edf8;
-    --scroll-thumb: #b0bcdc;
-    --scroll-thumb-hover: #8095c8;
+    --scroll-track: #DBEAFE;
+    --scroll-thumb: #93C5FD;
+    --scroll-thumb-hover: #3B82F6;
+
+    --aurora-1: #0F172A;
+    --aurora-2: #1E3A8A;
+    --aurora-3: #2563EB;
+    --aurora-4: #38BDF8;
 }
 
 .dark {
-    /* ── Dark Mode — Deep Charcoal + Electric Green ── */
-    --background: #0b0d0f;
-    --foreground: #e8e6e1;
-    --card: #141618;
-    --border: rgba(255, 255, 255, 0.07);
-    --muted: #1a1c1f;
-    --muted-foreground: #7c7a75;
+    /* ── Aurora Dark Mode ── */
+    --background: #0F172A;
+    --foreground: #E2E8F0;
+    --card: #1a2540;
+    --border: rgba(56, 189, 248, 0.10);
+    --muted: #1E3A8A;
+    --muted-foreground: #94A3B8;
 
-    --primary: #00e5a0;
-    --primary-dark: #00b87d;
-    --primary-foreground: #0d0d0b;
-    --accent: #3b82f6;
+    --primary: #38BDF8;
+    --primary-dark: #2563EB;
+    --primary-foreground: #0F172A;
+    --accent: #60A5FA;
 
-    --success: #00e5a0;
-    --warning: #f59e0b;
-    --danger: #ef4444;
+    --success: #34D399;
+    --warning: #FBBF24;
+    --danger: #F87171;
 
-    --glass-bg: rgba(255, 255, 255, 0.025);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-bg: rgba(15, 23, 42, 0.55);
+    --glass-border: rgba(56, 189, 248, 0.12);
 
-    --scroll-track: #0b0d0f;
-    --scroll-thumb: #2a2926;
-    --scroll-thumb-hover: #3a3835;
+    --scroll-track: #0F172A;
+    --scroll-thumb: #1E3A8A;
+    --scroll-thumb-hover: #2563EB;
+
+    --aurora-1: #0F172A;
+    --aurora-2: #1E3A8A;
+    --aurora-3: #2563EB;
+    --aurora-4: #38BDF8;
 }
 
 html {
     color-scheme: light dark;
 }
 
-/* ── THUNDEROUS BACKGROUND ── */
-/* Applied to body — static electric atmosphere, no animation */
+/* ═══════════════════════════════════════════
+   BODY — AURORA GRADIENT BACKGROUND
+   Covers every page/section automatically
+   ═══════════════════════════════════════════ */
+
 body {
     font-family: "Outfit", sans-serif;
     color: var(--foreground);
@@ -87,39 +106,33 @@ body {
     min-height: 100vh;
 }
 
-/* Light mode background */
+/* ── LIGHT MODE background ── */
 body {
-    background-color: var(--background);
+    background-color: #EFF6FF;
     background-image:
-        /* Top-left soft blue orb */
-        radial-gradient(ellipse 80vw 60vh at 10% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 70%),
-        /* Center-right green orb */
-        radial-gradient(ellipse 60vw 50vh at 90% 40%, rgba(0, 184, 125, 0.08) 0%, transparent 65%),
-        /* Bottom-left warm glow */
-        radial-gradient(ellipse 50vw 40vh at 5% 100%, rgba(59, 130, 246, 0.06) 0%, transparent 60%),
-        /* Fine dot grid */
-        radial-gradient(rgba(0, 184, 125, 0.18) 1px, transparent 1px);
+        radial-gradient(ellipse 100vw 70vh at 0%   0%,   rgba(37,  99, 235, 0.10) 0%, transparent 65%),
+        radial-gradient(ellipse  80vw 60vh at 100% 30%,  rgba(56, 189, 248, 0.13) 0%, transparent 60%),
+        radial-gradient(ellipse  70vw 50vh at 30%  100%, rgba(30,  58, 138, 0.08) 0%, transparent 55%),
+        radial-gradient(rgba(37, 99, 235, 0.12) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
     background-attachment: fixed;
 }
 
-/* Dark mode background — thunderous electric */
+/* ── DARK MODE background — full Aurora sweep ── */
 .dark body {
-    background-color: #0b0d0f;
+    background-color: #0F172A;
     background-image:
-        /* Top-left electric green thunder glow */
-        radial-gradient(ellipse 90vw 55vh at -5% -10%, rgba(0, 229, 160, 0.13) 0%, transparent 60%),
-        /* Mid-right deep electric blue flash */
-        radial-gradient(ellipse 70vw 60vh at 110% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 65%),
-        /* Bottom-center secondary green pulse */
-        radial-gradient(ellipse 80vw 40vh at 50% 110%, rgba(0, 229, 160, 0.07) 0%, transparent 55%),
-        /* Top-right subtle violet */
-        radial-gradient(ellipse 50vw 40vh at 100% 0%, rgba(139, 92, 246, 0.07) 0%, transparent 55%),
-        /* Fine electric dot grid */
-        radial-gradient(rgba(0, 229, 160, 0.09) 1px, transparent 1px),
-        /* Thin scanline grid */
-        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+        linear-gradient(135deg,
+            #0F172A  0%,
+            #1a2d5a 35%,
+            #1e3a8a 65%,
+            #172d6e 100%),
+        radial-gradient(ellipse 75vw 55vh at 100% 0%,   rgba(56, 189, 248, 0.20) 0%, transparent 60%),
+        radial-gradient(ellipse 60vw 50vh at 0%   60%,  rgba(37,  99, 235, 0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 80vw 40vh at 50%  110%, rgba(56, 189, 248, 0.10) 0%, transparent 50%),
+        radial-gradient(rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
     background-size:
         100% 100%,
         100% 100%,
@@ -131,35 +144,37 @@ body {
     background-attachment: fixed;
 }
 
-/* Thunder crack lines — SVG overlay via pseudo-element on dark mode */
+/* Aurora shimmer cracks in dark mode */
 .dark body::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cg opacity='0.06'%3E%3Cpolyline points='120,0 105,90 130,90 95,210' stroke='%2300e5a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='680,0 660,120 690,120 640,300' stroke='%2300e5a0' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='350,0 330,70 360,70 310,180 340,180 280,320' stroke='%233b82f6' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='800,150 760,220 790,220 730,360' stroke='%2300e5a0' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='0,200 40,280 20,280 70,420' stroke='%233b82f6' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cg opacity='0.055'%3E%3Cpolyline points='120,0 105,90 130,90 95,210' stroke='%2338BDF8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='680,0 660,120 690,120 640,300' stroke='%2360A5FA' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='350,0 330,70 360,70 310,180 340,180 280,320' stroke='%2338BDF8' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='800,150 760,220 790,220 730,360' stroke='%2360A5FA' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3Cpolyline points='0,200 40,280 20,280 70,420' stroke='%2338BDF8' stroke-width='0.8' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 800px 600px;
 }
 
-/* Ensure all page content sits above the bg layers */
+/* All content above bg layers */
 #root {
     position: relative;
     z-index: 1;
 }
 
-button {
-    cursor: pointer;
-}
+button { cursor: pointer; }
 
 /* ── Font Helpers ── */
-.dm-serif {
-    font-family: "DM Serif Display", serif;
-}
+.dm-serif { font-family: "DM Serif Display", serif; }
+.outfit   { font-family: "Outfit", sans-serif; }
 
-.outfit {
-    font-family: "Outfit", sans-serif;
+/* ── Aurora Gradient Utility class ── */
+.aurora-gradient {
+    background: linear-gradient(135deg,
+        var(--aurora-1)  0%,
+        var(--aurora-2) 40%,
+        var(--aurora-3) 70%,
+        var(--aurora-4) 100%);
 }
 
 /* ── Glass Cards ── */
@@ -171,8 +186,8 @@ button {
 }
 
 .glass:hover {
-    border-color: rgba(0, 229, 160, 0.2);
-    box-shadow: 0 0 0 1px rgba(0, 229, 160, 0.06), 0 4px 20px rgba(0, 0, 0, 0.4);
+    border-color: rgba(56, 189, 248, 0.28);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08), 0 4px 24px rgba(37, 99, 235, 0.28);
 }
 
 .dark .glass {
@@ -187,9 +202,16 @@ button {
     border: 1px solid var(--glass-border);
 }
 
-/* ── Gradient Text — Green → Blue ── */
+/* ── Gradient Text — Aurora ── */
 .gradient-text {
-    background: linear-gradient(135deg, #00e5a0 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #38BDF8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark .gradient-text {
+    background: linear-gradient(135deg, #38BDF8 0%, #60A5FA 55%, #93C5FD 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -203,18 +225,16 @@ button {
 .btn-glow {
     background: var(--primary);
     color: var(--primary-foreground);
-    box-shadow: 0 0 16px rgba(0, 229, 160, 0.25);
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.35);
     transition: box-shadow 0.2s, transform 0.15s;
 }
 
 .btn-glow:hover {
-    box-shadow: 0 0 28px rgba(0, 229, 160, 0.45);
+    box-shadow: 0 0 32px rgba(56, 189, 248, 0.55);
     transform: translateY(-1px);
 }
 
-.btn-glow:active {
-    transform: translateY(0);
-}
+.btn-glow:active  { transform: translateY(0); }
 
 .btn-glow:disabled {
     opacity: 0.4;
@@ -223,11 +243,11 @@ button {
     box-shadow: none;
 }
 
-/* ── Animated Background Grid ── */
+/* ── Background Grid Helper ── */
 .bg-grid {
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
@@ -237,77 +257,69 @@ button {
     100% { transform: translate3d(85px, 0, 0); }
 }
 
-.parallax > use {
-    animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
-}
-.parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+.parallax > use { animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite; }
+.parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s;  }
 .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
 .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
 .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
 
 @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 8px rgba(0, 229, 160, 0.2); }
-    50%       { box-shadow: 0 0 24px rgba(0, 229, 160, 0.5); }
+    0%, 100% { box-shadow: 0 0 8px  rgba(37, 99, 235, 0.25); }
+    50%       { box-shadow: 0 0 28px rgba(56, 189, 248, 0.55); }
 }
-
-.pulse-glow {
-    animation: pulse-glow 2.5s ease-in-out infinite;
-}
+.pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
 
 /* ── Score Colors ── */
 .score-good   { color: var(--success); }
 .score-medium { color: var(--warning); }
-.score-poor   { color: var(--danger); }
+.score-poor   { color: var(--danger);  }
 
 .score-bg-good {
-    background-color: rgba(0, 229, 160, 0.1);
-    border-color: rgba(0, 229, 160, 0.25);
+    background-color: rgba(5, 150, 105, 0.10);
+    border-color: rgba(5, 150, 105, 0.25);
     border-width: 1px;
 }
 .score-bg-medium {
-    background-color: rgba(245, 158, 11, 0.1);
-    border-color: rgba(245, 158, 11, 0.2);
+    background-color: rgba(217, 119, 6, 0.10);
+    border-color: rgba(217, 119, 6, 0.22);
     border-width: 1px;
 }
 .score-bg-poor {
-    background-color: rgba(239, 68, 68, 0.1);
-    border-color: rgba(239, 68, 68, 0.2);
+    background-color: rgba(220, 38, 38, 0.10);
+    border-color: rgba(220, 38, 38, 0.22);
     border-width: 1px;
 }
 
 /* ── Alert Severities ── */
 .severity-critical {
-    background: rgba(239, 68, 68, 0.08);
+    background: rgba(220, 38, 38, 0.08);
     color: var(--danger);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(220, 38, 38, 0.20);
 }
 .severity-warning {
-    background: rgba(245, 158, 11, 0.08);
+    background: rgba(217, 119, 6, 0.08);
     color: var(--warning);
-    border: 1px solid rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(217, 119, 6, 0.20);
 }
 .severity-info {
-    background: rgba(59, 130, 246, 0.08);
+    background: rgba(56, 189, 248, 0.08);
     color: var(--accent);
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.20);
 }
 .severity-success {
-    background: rgba(0, 229, 160, 0.08);
+    background: rgba(5, 150, 105, 0.08);
     color: var(--success);
-    border: 1px solid rgba(0, 229, 160, 0.2);
+    border: 1px solid rgba(5, 150, 105, 0.20);
 }
 
-/* ── Background Patterns ── */
+/* ── Dot Pattern ── */
 .bg-dot-pattern {
-    background-image: radial-gradient(rgba(0, 229, 160, 0.12) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(56, 189, 248, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
 }
 
 /* ── Custom Scrollbar ── */
 ::-webkit-scrollbar        { width: 5px; }
 ::-webkit-scrollbar-track  { background: var(--scroll-track); }
-::-webkit-scrollbar-thumb  {
-    background: var(--scroll-thumb);
-    border-radius: 3px;
-}
+::-webkit-scrollbar-thumb  { background: var(--scroll-thumb); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
