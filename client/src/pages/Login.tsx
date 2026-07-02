@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, Loader2, User2Icon } from "lucide-react";
-import Logo from "../assets/Logo.png";
 
 export default function Login({ state }: { state: string }) {
     const [isLoginState, setIsLoginState] = useState(state === "login");
@@ -15,22 +14,16 @@ export default function Login({ state }: { state: string }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="min-h-screen flex items-center justify-center px-4 pt-24">
             <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <Link to="/" className="flex items-center justify-center gap-2 group mb-10">
-                        <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80" />
-                        <span className="text-xl font-semibold tracking-tight text-foreground">SerpoAI</span>
-                    </Link>
-                </div>
-
                 {/* Form Card */}
                 <div className="bg-card border border-border rounded-2xl p-8">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="text-center py-5">
                             <h1 className="text-2xl text-foreground">Welcome back</h1>
-                            <p className="text-muted-foreground text-sm mt-1">{isLoginState ? "Sign in to your" : "Create an"} SerpoAI account</p>
+                            <p className="text-muted-foreground text-sm mt-1">
+                                {isLoginState ? "Sign in to your" : "Create an"} SerpoAI account
+                            </p>
                         </div>
 
                         {!isLoginState && (
@@ -49,6 +42,7 @@ export default function Login({ state }: { state: string }) {
                                 </div>
                             </label>
                         )}
+
                         <label>
                             <div className="block text-sm text-foreground mb-1.5 mt-4">Email</div>
                             <div className="relative">
@@ -93,9 +87,16 @@ export default function Login({ state }: { state: string }) {
 
                 <p className="text-center text-sm text-muted-foreground mt-6">
                     {isLoginState ? "Don't have an account?" : "Already have an account?"}
-                    <button onClick={() => setIsLoginState((prev) => !prev)} className="text-primary hover:underline font-medium pl-1">
+                    <button
+                        onClick={() => setIsLoginState((prev) => !prev)}
+                        className="text-primary hover:underline font-medium pl-1"
+                    >
                         {isLoginState ? "Sign up" : "Sign in"}
                     </button>
+                </p>
+
+                <p className="text-center text-xs text-muted-foreground mt-4">
+                    <Link to="/" className="hover:underline">← Back to home</Link>
                 </p>
             </div>
         </div>
