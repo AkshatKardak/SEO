@@ -14,23 +14,18 @@ export default function Login({ state }: { state: string }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 pt-24">
+        <div className="min-h-screen flex items-center justify-center px-4 pt-24 pb-12">
             <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <Link to="/" className="flex items-center justify-center gap-2 group mb-10">
-                        <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80" />
-                        <span className="text-xl font-semibold tracking-tight text-foreground">SerpoAI</span>
-                    </Link>
-                </div>
 
                 {/* Form Card */}
-                <div className="bg-card border border-border rounded-2xl p-8">
+                <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="text-center py-5">
-                            <h1 className="text-2xl text-foreground">Welcome back</h1>
+                        <div className="text-center py-4">
+                            <h1 className="text-2xl font-semibold text-foreground">
+                                {isLoginState ? "Welcome back" : "Create account"}
+                            </h1>
                             <p className="text-muted-foreground text-sm mt-1">
-                                {isLoginState ? "Sign in to your" : "Create an"} SerpoAI account
+                                {isLoginState ? "Sign in to your" : "Sign up for your"} SerpoAI account
                             </p>
                         </div>
 
@@ -84,11 +79,14 @@ export default function Login({ state }: { state: string }) {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 mt-5 rounded-lg bg-primary text-sm text-primary-foreground flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+                            className="w-full py-3 mt-5 rounded-lg bg-primary text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
                             id="login-submit-btn"
                             style={{ color: "var(--background)" }}
                         >
-                            {loading ? <Loader2 size={18} className="animate-spin" /> : isLoginState ? "Sign In" : "Create Account"}
+                            {loading
+                                ? <Loader2 size={18} className="animate-spin" />
+                                : isLoginState ? "Sign In" : "Create Account"
+                            }
                         </button>
                     </form>
                 </div>
@@ -103,9 +101,12 @@ export default function Login({ state }: { state: string }) {
                     </button>
                 </p>
 
-                <p className="text-center text-xs text-muted-foreground mt-4">
-                    <Link to="/" className="hover:underline">← Back to home</Link>
+                <p className="text-center text-xs text-muted-foreground mt-3">
+                    <Link to="/" className="hover:underline hover:text-foreground transition-colors">
+                        ← Back to home
+                    </Link>
                 </p>
+
             </div>
         </div>
     );
