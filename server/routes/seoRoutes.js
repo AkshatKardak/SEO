@@ -1,10 +1,16 @@
 import express from "express";
-import { analyzeUrl, getAnalyses, getAnalysis } from "../controllers/seoController.js";
+import {
+  analyzeUrl,
+  getAnalyses,
+  getAnalysis,
+  analyzeBulk,
+  getScoreHistory,
+  generateShareLink,
+  getSharedReport,
+  checkSitemapRobots,
+  getPageSpeed,
+} from "../controllers/seoController.js";
 import auth from "../middleware/auth.js";
-import { analyzeBulk } from "../controllers/seoController.js";
-import { generateShareLink, getSharedReport } from "../controllers/seoController.js";
-import { checkSitemapRobots } from "../controllers/seoController.js";
-import { getPageSpeed } from "../controllers/seoController.js";
 
 const seoRouter = express.Router();
 
