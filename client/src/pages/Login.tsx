@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Mail, Lock, Loader2, ChartNoAxesColumnIcon, User2Icon } from "lucide-react";
+import { Mail, Lock, Loader2, User2Icon } from "lucide-react";
+import Logo from "../assets/Logo.png";
 
 export default function Login({ state }: { state: string }) {
     const [isLoginState, setIsLoginState] = useState(state === "login");
@@ -19,8 +20,8 @@ export default function Login({ state }: { state: string }) {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link to="/" className="flex items-center justify-center gap-2 group mb-10">
-                        <ChartNoAxesColumnIcon />
-                        <span className="text-xl tracking-tight text-foreground">Rank Pilot</span>
+                        <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80" />
+                        <span className="text-xl font-semibold tracking-tight text-foreground">SerpoAI</span>
                     </Link>
                 </div>
 
@@ -29,7 +30,7 @@ export default function Login({ state }: { state: string }) {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="text-center py-5">
                             <h1 className="text-2xl text-foreground">Welcome back</h1>
-                            <p className="text-muted-foreground text-sm mt-1">{isLoginState ? "Sign in to your" : "Create an"} Rank Pilot account</p>
+                            <p className="text-muted-foreground text-sm mt-1">{isLoginState ? "Sign in to your" : "Create an"} SerpoAI account</p>
                         </div>
 
                         {!isLoginState && (
