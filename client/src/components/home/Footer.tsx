@@ -1,62 +1,58 @@
+import { Link } from "react-router-dom";
+import { Github, Twitter, Mail, Zap } from "lucide-react";
 
-import { SiX, SiInstagram, SiFacebook, SiTwitch } from "@icons-pack/react-simple-icons";
-import Logo from "../../assets/Logo.png";
-
-const homefooterLinks = [
-    {
-        title: "Product",
-        links: ["Features", "Pricing", "Security", "Roadmap"]
-    },
-    {
-        title: "Company",
-        links: ["About", "Blog", "Careers", "Contact"]
-    },
-    {
-        title: "Resources",
-        links: ["Documentation", "API", "Support", "Status"]
-    },
-    {
-        title: "Legal",
-        links: ["Privacy", "Terms", "Cookies", "License"]
-    }
-];
+const links = {
+    Product: [
+        { label: "Features", to: "/#features" },
+        { label: "Pricing", to: "/#pricing" },
+        { label: "Changelog", to: "/" },
+    ],
+    Legal: [
+        { label: "Privacy Policy", to: "/" },
+        { label: "Terms of Service", to: "/" },
+    ],
+};
 
 export default function Footer() {
     return (
-        <footer className="border-t border-border py-12 bg-card text-foreground">
-            <div className="max-w-7xl mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-6 gap-12 mb-12">
-                    <div className="col-span-2">
-                        <div className="flex items-center gap-2 mb-4">
-                            <img src={Logo} alt="SerpoAI Logo" className="h-8 w-auto object-contain" />
-                            <span className="text-xl font-semibold">SerpoAI</span>
+        <footer className="bg-background border-t border-border/60 pt-14 pb-8 px-4">
+            <div className="max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                    {/* Brand */}
+                    <div className="md:col-span-2">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
+                                <Zap size={14} className="fill-current" style={{ color: "var(--background)" }} />
+                            </div>
+                            <span className="font-bold text-foreground text-lg">SerpoAI</span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-6 w-5/6">Optimize your website for search engines with AI-powered insights and real-time tracking.</p>
-                        <div className="flex items-center gap-4">
-                            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <SiX size={20} />
+                        <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+                            AI-powered SEO analysis that turns raw Lighthouse data into clear, prioritised action plans.
+                        </p>
+                        <div className="flex items-center gap-3 mt-5">
+                            <a href="https://github.com/AkshatKardak/SEO" target="_blank" rel="noopener noreferrer"
+                                className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-all">
+                                <Github size={15} />
                             </a>
-                            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <SiInstagram size={20} />
+                            <a href="#" className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-all">
+                                <Twitter size={15} />
                             </a>
-                            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <SiFacebook size={20} />
-                            </a>
-                            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                                <SiTwitch size={20} />
+                            <a href="mailto:hello@serpoai.dev" className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-all">
+                                <Mail size={15} />
                             </a>
                         </div>
                     </div>
 
-                    {homefooterLinks.map((section: any) => (
-                        <div key={section.title}>
-                            <h3 className="mb-4">{section.title}</h3>
-                            <ul className="space-y-1">
-                                {section.links.map((link: any) => (
-                                    <li key={link}>
-                                        <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                            {link}
-                                        </a>
+                    {/* Links */}
+                    {Object.entries(links).map(([section, items]) => (
+                        <div key={section}>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">{section}</p>
+                            <ul className="space-y-3">
+                                {items.map((item) => (
+                                    <li key={item.label}>
+                                        <Link to={item.to} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                            {item.label}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -64,11 +60,10 @@ export default function Footer() {
                     ))}
                 </div>
 
-                <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-                    <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} SerpoAI. All rights reserved.</p>
-                    <div className="flex items-center gap-6">
-                        <span className="text-xs text-muted-foreground">Status: All Systems Operational</span>
-                    </div>
+                {/* Bottom bar */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-8 border-t border-border/60">
+                    <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} SerpoAI. All rights reserved.</p>
+                    <p className="text-xs text-muted-foreground">Built with ❤️ by <a href="https://github.com/AkshatKardak" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Akshat Kardak</a></p>
                 </div>
             </div>
         </footer>

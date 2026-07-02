@@ -1,18 +1,21 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import { Search, BarChart3, History, LogOut, Menu, X, Target, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import Logo from "../assets/Logo.png";
 
 export default function Navbar() {
-    const { user } = { user: { name: "John", email: "john@example.com", plan: "PRO" } };
+    const { user, logout } = useAuth();
     const { theme, setTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleLogout = () => {
+        logout();
         navigate("/");
+        setMobileOpen(false);
     };
 
     const isActive = (path: string) => location.pathname === path;
@@ -25,7 +28,7 @@ export default function Navbar() {
     ];
 
     return (
-        <nav className="fixed top-0 w-full bg-background/70 backdrop-blur-lg z-50">
+        <nav className="fixed top-0 w-full bg-background/70 backdrop-blur-lg z-50 border-b border-border/40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -38,9 +41,13 @@ export default function Navbar() {
                     {user && (
                         <div className="hidden md:flex items-center gap-1">
                             {navLinks.map((link) => (
-                                <Link key={link.path} to={link.path} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${isActive(link.path) ? "bg-accent/5 text-accent font-medium" : "text-muted-foreground hover:text-foreground hover:bg-muted/80"}`}>
-                                    {link.icon}
-                                    {link.label}
+                                <Link key={link.path} to={link.path}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+                                        isActive(link.path)
+                                            ? "bg-accent/5 text-accent font-medium"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-muted/80"
+                                    }`}>
+                                    {link.icon}{link.label}
                                 </Link>
                             ))}
                         </div>
@@ -48,7 +55,11 @@ export default function Navbar() {
 
                     {/* Right side */}
                     <div className="hidden md:flex items-center gap-3">
-                        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors flex items-center justify-center" aria-label="Toggle theme">
+                        <button
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors"
+                            aria-label="Toggle theme"
+                        >
                             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
 
@@ -61,24 +72,22 @@ export default function Navbar() {
                                     <span className="text-foreground font-medium">{user.name}</span>
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-medium uppercase bg-accent/10 border border-accent/15 text-accent">{user.plan}</span>
                                 </div>
-                                <button onClick={handleLogout} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-all">
-                                    <LogOut size={16} />
-                                    Logout
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+                                >
+                                    <LogOut size={16} /> Logout
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                                    Log In
-                                </Link>
-                                <Link to="/register" className="px-5 py-2 rounded-full bg-primary text-sm transition-opacity" style={{ color: "var(--background)" }}>
-                                    Get Started
-                                </Link>
+                                <Link to="/login" className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Log In</Link>
+                                <Link to="/register" className="px-5 py-2 rounded-full bg-primary text-sm font-medium transition-opacity hover:opacity-90" style={{ color: "var(--background)" }}>Get Started</Link>
                             </>
                         )}
                     </div>
 
-                    {/* Mobile toggle container */}
+                    {/* Mobile toggle */}
                     <div className="flex items-center gap-2 md:hidden">
                         <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors">
                             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
@@ -92,7 +101,7 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             {mobileOpen && (
-                <div className="md:hidden border-b border-border bg-background origin-top">
+                <div className="md:hidden border-b border-border bg-background">
                     <div className="px-4 py-3 space-y-1">
                         {user ? (
                             <>
@@ -107,36 +116,22 @@ export default function Navbar() {
                                 </div>
                                 <div className="py-2 space-y-1">
                                     {navLinks.map((link) => (
-                                        <Link
-                                            key={link.path}
-                                            to={link.path}
-                                            onClick={() => setMobileOpen(false)}
-                                            className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all ${isActive(link.path) ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`}
-                                        >
-                                            {link.icon}
-                                            {link.label}
+                                        <Link key={link.path} to={link.path} onClick={() => setMobileOpen(false)}
+                                            className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all ${
+                                                isActive(link.path) ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                                            }`}>
+                                            {link.icon}{link.label}
                                         </Link>
                                     ))}
                                 </div>
-                                <button
-                                    onClick={() => {
-                                        handleLogout();
-                                        setMobileOpen(false);
-                                    }}
-                                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-danger hover:bg-danger/10 w-full mt-2"
-                                >
-                                    <LogOut size={18} />
-                                    Logout
+                                <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-danger hover:bg-danger/10 w-full mt-2">
+                                    <LogOut size={18} /> Logout
                                 </button>
                             </>
                         ) : (
                             <div className="py-2 space-y-2">
-                                <Link to="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-3 text-sm font-medium text-foreground text-center rounded-lg hover:bg-muted">
-                                    Log In
-                                </Link>
-                                <Link to="/register" onClick={() => setMobileOpen(false)} className="block px-3 py-3 text-sm font-semibold text-center rounded-lg bg-primary" style={{ color: "var(--background)" }}>
-                                    Get Started
-                                </Link>
+                                <Link to="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-3 text-sm font-medium text-foreground text-center rounded-lg hover:bg-muted">Log In</Link>
+                                <Link to="/register" onClick={() => setMobileOpen(false)} className="block px-3 py-3 text-sm font-semibold text-center rounded-lg bg-primary" style={{ color: "var(--background)" }}>Get Started</Link>
                             </div>
                         )}
                     </div>

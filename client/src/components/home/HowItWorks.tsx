@@ -1,30 +1,69 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { homeHowItWorksData } from "../../assets/assets";
+import { Search, Cpu, TrendingUp } from "lucide-react";
+
+const steps = [
+    {
+        number: "01",
+        icon: <Search size={24} />,
+        title: "Enter Your URL",
+        desc: "Paste any public URL — homepage, blog post, product page. SerpoAI accepts anything.",
+        accent: "text-primary",
+        bg: "bg-primary/10",
+        line: "bg-primary/30",
+    },
+    {
+        number: "02",
+        icon: <Cpu size={24} />,
+        title: "AI Runs the Audit",
+        desc: "Gemini AI + Lighthouse analyse 60+ signals in real time — performance, SEO, a11y and more.",
+        accent: "text-violet-400",
+        bg: "bg-violet-500/10",
+        line: "bg-violet-400/30",
+    },
+    {
+        number: "03",
+        icon: <TrendingUp size={24} />,
+        title: "Act on Insights",
+        desc: "Get a prioritised action plan with exact fixes. Re-audit anytime to verify your progress.",
+        accent: "text-emerald-400",
+        bg: "bg-emerald-500/10",
+        line: "",
+    },
+];
 
 export default function HowItWorks() {
     return (
-        <section className="relative max-w-5xl md:min-h-[80vh] mx-auto px-4 py-24 overflow-hidden">
-            <div className="text-center mb-16 animate-slide-up">
-                <h2 className="text-3xl sm:text-4xl font-semibold mb-6 text-foreground">
-                    How It <span className="gradient-text">Works</span>
-                </h2>
-                <p className="text-muted-foreground max-w-xl mx-auto">Rank Pilot uses advanced browser automation and AI to simulate a real user experience and provide deep SEO insights.</p>
-            </div>
+        <section className="py-24 px-4 bg-background">
+            <div className="max-w-5xl mx-auto">
+                {/* Header */}
+                <div className="text-center mb-16">
+                    <span className="text-xs font-semibold uppercase tracking-widest text-primary">Simple process</span>
+                    <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-foreground">
+                        From URL to insight in <span className="gradient-text">3 steps</span>
+                    </h2>
+                </div>
 
-            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Connecting Line (Desktop) */}
-                <div className="hidden md:block absolute top-[110px] left-[15%] right-[15%] h-px border-t border-dashed border-border pointer-events-none z-0"></div>
+                {/* Steps */}
+                <div className="relative flex flex-col md:flex-row items-start gap-0 md:gap-0">
+                    {steps.map((step, i) => (
+                        <div key={step.number} className="relative flex flex-1 flex-col items-center text-center px-6">
+                            {/* Connector line */}
+                            {i < steps.length - 1 && (
+                                <div className="hidden md:block absolute top-10 left-[calc(50%+3rem)] right-0 h-px bg-border" />
+                            )}
 
-                {homeHowItWorksData.map((step: any, i: number) => (
-                    <div key={step.num} className="relative z-10 animate-slide-up" style={{ animationDelay: `${i * 100}ms` }}>
-                        <div className="bg-card border border-border rounded-2xl p-8 text-center h-full hover:bg-muted transition-all group/step">
-                            <div className="text-5xl font-bold text-primary/10 mb-4 group-hover/step:text-primary/20 transition-colors">{step.num}</div>
-                            <div className="size-14 rounded-xl flex items-center justify-center mx-auto mb-5 text-primary/80 border border-primary/20 bg-muted/40 group-hover/step:border-primary/40 transition-all">{step.icon}</div>
-                            <h3 className=" mb-2 text-foreground">{step.title}</h3>
-                            <p className="text-sm text-muted-foreground">{step.desc}</p>
+                            {/* Step icon */}
+                            <div className={`relative z-10 w-20 h-20 rounded-2xl ${step.bg} ${step.accent} flex items-center justify-center mb-5 border border-border/60`}>
+                                {step.icon}
+                                <span className="absolute -top-2 -right-2 text-[10px] font-black text-muted-foreground bg-background border border-border rounded-full w-5 h-5 flex items-center justify-center">
+                                    {step.number}
+                                </span>
+                            </div>
+
+                            <h3 className="text-base font-bold text-foreground mb-2">{step.title}</h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">{step.desc}</p>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </section>
     );
