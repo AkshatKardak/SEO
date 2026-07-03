@@ -15,21 +15,19 @@ const USER_AGENTS = [
 const randomAgent = () => USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
 
 /**
- * 4-attempt waterfall to fetch raw HTML from ANY website:
- *
- * 1. Jina AI Reader  — renders JS, bypasses Cloudflare, returns full HTML. No API key needed.
- * 2. Direct fetch    — works for most unprotected sites, fast.
- * 3. allorigins.win  — public proxy fallback.
- * 4. corsproxy.io    — last-resort proxy.
+ * 4-attempt waterfall:
+ * 1. Jina AI Reader  - renders JS, bypasses Cloudflare (no API key needed)
+ * 2. Direct fetch    - fast for simple sites
+ * 3. allorigins.win  - proxy fallback
+ * 4. corsproxy.io    - last resort
  */
 async function fetchHtml(url) {
-  // --- Attempt 1: Jina AI Reader (handles Cloudflare + JS-rendered sites) ---
+  // Attempt 1: Jina AI Reader
   try {
     const jinaUrl = `https://r.jina.ai/${url}`;
     const res = await fetch(jinaUrl, {
       signal: AbortSignal.timeout(25000),
       headers: {
-        // Ask Jina to return raw HTML instead of Markdown
         "X-Return-Format": "html",
         "Accept": "text/html",
         "User-Agent": randomAgent(),
@@ -39,9 +37,9 @@ async function fetchHtml(url) {
       const html = await res.text();
       if (html.length > 300) return { html, source: "jina" };
     }
-  } catch (_) { /* fall through */ }
+  } catch (_) {}
 
-  // --- Attempt 2: Direct fetch with realistic browser headers ---
+  // Attempt 2: Direct fetch
   try {
     const res = await fetch(url, {
       signal: AbortSignal.timeout(15000),
@@ -57,23 +55,23 @@ async function fetchHtml(url) {
       const html = await res.text();
       if (html.length > 500 && /<html/i.test(html)) return { html, source: "direct" };
     }
-  } catch (_) { /* fall through */ }
+  } catch (_) {}
 
-  // --- Attempt 3: allorigins.win proxy ---
+  // Attempt 3: allorigins.win
   try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(20000) });
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+      signal: AbortSignal.timeout(20000),
+    });
     if (res.ok) {
       const json = await res.json();
       const html = json.contents || "";
       if (html.length > 500 && /<html/i.test(html)) return { html, source: "allorigins" };
     }
-  } catch (_) { /* fall through */ }
+  } catch (_) {}
 
-  // --- Attempt 4: corsproxy.io ---
+  // Attempt 4: corsproxy.io
   try {
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-    const res = await fetch(proxyUrl, {
+    const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
       signal: AbortSignal.timeout(20000),
       headers: { "User-Agent": randomAgent() },
     });
@@ -81,28 +79,30 @@ async function fetchHtml(url) {
       const html = await res.text();
       if (html.length > 500 && /<html/i.test(html)) return { html, source: "corsproxy" };
     }
-  } catch (_) { /* fall through */ }
+  } catch (_) {}
 
   return { html: "", source: "none" };
 }
 
-/**
- * Parse HTML into SEO signals.
- * Jina sometimes returns markdown-flavoured text instead of HTML —
- * we gracefully handle both by extracting what we can.
- */
+/** Extract all SEO signals from raw HTML */
 function parseHtml({ html, source }) {
   if (!html || html.length < 100) {
     return {
-      title: "", description: "", hasViewport: false, hasCanonical: false,
-      imagesMissingAlt: 0, totalImages: 0, totalLinks: 0, h1Count: 0,
-      bodyText: "", scraped: false,
+      scraped: false, source,
+      title: "", description: "", canonical: "", robots: "",
+      ogTitle: "", ogDescription: "", ogImage: "", twitterCard: "",
+      viewport: "", charset: "",
+      h1: 0, h2: 0, h3: 0, h4: 0, h5: 0, h6: 0, h1Texts: [],
+      internalLinks: 0, externalLinks: 0, totalLinks: 0,
+      totalImages: 0, missingAlt: 0, withAlt: 0,
+      wordCount: 0, pageSize: 0, bodyText: "",
     };
   }
 
   const get = (pattern) => (html.match(pattern) || [])[1]?.trim() || "";
+  const getAll = (pattern) => html.match(pattern) || [];
 
-  // Title: try HTML <title> tag first, then Jina markdown heading (# Title)
+  // --- Meta ---
   const title =
     get(/<title[^>]*>([^<]{1,200})<\/title>/i) ||
     get(/^#\s+(.{1,200})$/m);
@@ -113,56 +113,195 @@ function parseHtml({ html, source }) {
     get(/meta[^>]+property=["']og:description["'][^>]+content=["']([^"']{1,500})["']/i) ||
     get(/meta[^>]+content=["']([^"']{1,500})["'][^>]+property=["']og:description["']/i);
 
-  const hasViewport = /meta[^>]+name=["']viewport["']/i.test(html);
-  const hasCanonical = /link[^>]+rel=["']canonical["']/i.test(html);
+  const canonical =
+    get(/link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i) ||
+    get(/link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i);
 
-  const h1Count = (html.match(/<h1[\s>]/gi) || []).length ||
-                  (html.match(/^##?\s/gm) || []).length; // markdown headings fallback
+  const robots =
+    get(/meta[^>]+name=["']robots["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+name=["']robots["']/i);
 
-  const imgTags = html.match(/<img[^>]+>/gi) || [];
+  const ogTitle =
+    get(/meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']/i);
+
+  const ogDescription =
+    get(/meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:description["']/i);
+
+  const ogImage =
+    get(/meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+
+  const twitterCard =
+    get(/meta[^>]+name=["']twitter:card["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:card["']/i);
+
+  const viewport =
+    get(/meta[^>]+name=["']viewport["'][^>]+content=["']([^"']+)["']/i) ||
+    get(/meta[^>]+content=["']([^"']+)["'][^>]+name=["']viewport["']/i);
+
+  const charset =
+    get(/meta[^>]+charset=["']([^"']+)["']/i) ||
+    get(/<meta[^>]+charset=([^\s>"']+)/i);
+
+  // --- Headings ---
+  const h1Tags = getAll(/<h1[^>]*>(.*?)<\/h1>/gis);
+  const h1Texts = h1Tags.map(t => t.replace(/<[^>]+>/g, "").trim()).filter(Boolean).slice(0, 5);
+
+  const h1 = h1Tags.length || (html.match(/^#[^#]/gm) || []).length;
+  const h2 = (getAll(/<h2[\s>]/gi)).length || (html.match(/^##[^#]/gm) || []).length;
+  const h3 = (getAll(/<h3[\s>]/gi)).length;
+  const h4 = (getAll(/<h4[\s>]/gi)).length;
+  const h5 = (getAll(/<h5[\s>]/gi)).length;
+  const h6 = (getAll(/<h6[\s>]/gi)).length;
+
+  // --- Images ---
+  const imgTags = getAll(/<img[^>]+>/gi);
   const totalImages = imgTags.length;
-  const imagesMissingAlt = imgTags.filter((tag) => !/alt=["'][^"']+["']/i.test(tag)).length;
+  const missingAlt = imgTags.filter(t => !/alt=["'][^"']+["']/i.test(t)).length;
+  const withAlt = totalImages - missingAlt;
 
-  const totalLinks = (html.match(/<a[^>]+href/gi) || []).length;
+  // --- Links ---
+  const allLinks = getAll(/<a[^>]+href=["']([^"']+)["']/gi);
+  const totalLinks = allLinks.length;
+  let externalLinks = 0;
+  try {
+    const origin = new URL(html.match(/https?:\/\/[^/"'\s]+/)?.[0] || "http://x").origin;
+    externalLinks = allLinks.filter(l => {
+      const href = (l.match(/href=["']([^"']+)["']/i) || [])[1] || "";
+      return href.startsWith("http") && !href.startsWith(origin);
+    }).length;
+  } catch (_) {}
+  const internalLinks = totalLinks - externalLinks;
 
+  // --- Body text + word count ---
   const bodyText = html
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .slice(0, 3000);
+    .slice(0, 5000);
+
+  const wordCount = bodyText.split(/\s+/).filter(Boolean).length;
+  const pageSize = html.length;
 
   return {
-    title, description, hasViewport, hasCanonical,
-    imagesMissingAlt, totalImages, totalLinks, h1Count,
-    bodyText, scraped: true, source,
+    scraped: true, source,
+    title, description, canonical, robots,
+    ogTitle, ogDescription, ogImage, twitterCard, viewport, charset,
+    h1, h2, h3, h4, h5, h6, h1Texts,
+    internalLinks, externalLinks, totalLinks,
+    totalImages, missingAlt, withAlt,
+    wordCount, pageSize, bodyText,
   };
 }
 
-function calcScores(scraped) {
-  if (!scraped.scraped) {
+/** Generate issues array based on parsed data */
+function buildIssues(p) {
+  const issues = [];
+
+  if (!p.title)
+    issues.push({ severity: "critical", category: "SEO", message: "Missing page title", recommendation: "Add a <title> tag with 50-60 characters describing the page." });
+  else if (p.title.length < 30)
+    issues.push({ severity: "warning", category: "SEO", message: "Title is too short", recommendation: `Current title (${p.title.length} chars) should be 50-60 characters for best CTR.` });
+  else if (p.title.length > 60)
+    issues.push({ severity: "warning", category: "SEO", message: "Title is too long", recommendation: `Current title (${p.title.length} chars) may be truncated in search results. Aim for 50-60 characters.` });
+
+  if (!p.description)
+    issues.push({ severity: "critical", category: "SEO", message: "Missing meta description", recommendation: "Add a meta description of 150-160 characters to improve click-through rate." });
+  else if (p.description.length < 70)
+    issues.push({ severity: "warning", category: "SEO", message: "Meta description too short", recommendation: `Current description (${p.description.length} chars) should be 150-160 characters.` });
+  else if (p.description.length > 160)
+    issues.push({ severity: "warning", category: "SEO", message: "Meta description too long", recommendation: `Current description (${p.description.length} chars) may be truncated. Keep it under 160 characters.` });
+
+  if (!p.viewport)
+    issues.push({ severity: "critical", category: "Performance", message: "Missing viewport meta tag", recommendation: "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> for mobile compatibility." });
+
+  if (!p.canonical)
+    issues.push({ severity: "warning", category: "SEO", message: "Missing canonical tag", recommendation: "Add a <link rel=\"canonical\"> tag to prevent duplicate content issues." });
+
+  if (p.h1 === 0)
+    issues.push({ severity: "critical", category: "SEO", message: "No H1 heading found", recommendation: "Add exactly one H1 heading that describes the main topic of the page." });
+  else if (p.h1 > 1)
+    issues.push({ severity: "warning", category: "SEO", message: `Multiple H1 tags found (${p.h1})`, recommendation: "Use only one H1 tag per page for clear content hierarchy." });
+
+  if (p.missingAlt > 0)
+    issues.push({ severity: p.missingAlt > 3 ? "critical" : "warning", category: "Accessibility", message: `${p.missingAlt} image(s) missing alt text`, recommendation: "Add descriptive alt attributes to all images for accessibility and SEO." });
+
+  if (!p.ogTitle)
+    issues.push({ severity: "info", category: "Social", message: "Missing Open Graph title", recommendation: "Add <meta property=\"og:title\"> for better social media sharing previews." });
+
+  if (!p.ogImage)
+    issues.push({ severity: "info", category: "Social", message: "Missing Open Graph image", recommendation: "Add <meta property=\"og:image\"> so your page shows a preview image when shared." });
+
+  if (!p.twitterCard)
+    issues.push({ severity: "info", category: "Social", message: "Missing Twitter Card meta tag", recommendation: "Add <meta name=\"twitter:card\"> to control how your page appears on Twitter/X." });
+
+  if (p.wordCount < 300)
+    issues.push({ severity: "warning", category: "Content", message: "Low word count", recommendation: `Page has only ${p.wordCount} words. Aim for at least 300 words for better SEO.` });
+
+  return issues;
+}
+
+/** Extract top keywords from body text */
+function extractKeywords(bodyText) {
+  const stopWords = new Set(["the","be","to","of","and","a","in","that","have","it","for","not","on","with","he","as","you","do","at","this","but","his","by","from","they","we","say","her","she","or","an","will","my","one","all","would","there","their","what","so","up","out","if","about","who","get","which","go","me","when","make","can","like","time","no","just","him","know","take","people","into","year","your","good","some","could","them","see","other","than","then","now","look","only","come","its","over","think","also","back","after","use","two","how","our","work","first","well","way","even","new","want","because","any","these","give","day","most","us","is","are","was","were","has","had","been","being","am"]);
+
+  const words = bodyText.toLowerCase()
+    .replace(/[^a-z\s]/g, " ")
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !stopWords.has(w));
+
+  const freq = {};
+  words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+
+  const total = words.length || 1;
+  return Object.entries(freq)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([word, count]) => ({
+      word,
+      count,
+      density: parseFloat(((count / total) * 100).toFixed(2)),
+    }));
+}
+
+/** Calculate all 4 category scores from parsed data */
+function calcScores(p) {
+  if (!p.scraped) {
     return {
-      seo: 50,
-      accessibility: 60,
+      seo: 50, accessibility: 60,
       performance: Math.floor(Math.random() * 20) + 60,
       bestPractices: Math.floor(Math.random() * 15) + 65,
     };
   }
-  return {
-    seo: Math.min(100, Math.round(
-      (scraped.title ? 25 : 0) +
-      (scraped.description ? 25 : 0) +
-      (scraped.hasViewport ? 20 : 0) +
-      (scraped.hasCanonical ? 15 : 0) +
-      (scraped.h1Count === 1 ? 15 : 0)
-    )),
-    accessibility: Math.min(100, Math.round(
-      100 - (scraped.imagesMissingAlt / Math.max(scraped.totalImages, 1)) * 60
-    )),
-    performance: Math.floor(Math.random() * 20) + 70,
-    bestPractices: Math.floor(Math.random() * 15) + 75,
-  };
+
+  const seo = Math.min(100, Math.round(
+    (p.title ? 20 : 0) +
+    (p.description ? 20 : 0) +
+    (p.viewport ? 15 : 0) +
+    (p.canonical ? 10 : 0) +
+    (p.h1 === 1 ? 15 : 0) +
+    (p.ogTitle ? 10 : 0) +
+    (p.robots ? 5 : 0) +
+    (p.twitterCard ? 5 : 0)
+  ));
+
+  const accessibility = Math.min(100, Math.round(
+    100 - (p.missingAlt / Math.max(p.totalImages, 1)) * 60
+  ));
+
+  const performance = Math.floor(Math.random() * 20) + 70;
+  const bestPractices = Math.min(100, Math.round(
+    (p.canonical ? 25 : 0) +
+    (p.robots ? 25 : 0) +
+    (p.charset ? 25 : 0) +
+    (p.viewport ? 25 : 0)
+  ));
+
+  return { seo, accessibility, performance, bestPractices };
 }
 
 export const analyzeUrl = async (req, res) => {
@@ -172,26 +311,40 @@ export const analyzeUrl = async (req, res) => {
 
     const user = await User.findById(req.userId);
 
+    const startTime = Date.now();
     const fetched = await fetchHtml(url);
-    const scraped = parseHtml(fetched);
-    const scores = calcScores(scraped);
+    const loadTime = Date.now() - startTime;
 
-    const scrapingNote = scraped.scraped
-      ? `(Data fetched via: ${scraped.source})`
-      : "Note: The website could not be scraped. Scores are estimated and the AI report is based on general SEO best practices for this domain.";
+    const p = parseHtml(fetched);
+    const scores = calcScores(p);
+    const issues = buildIssues(p);
+    const keywords = p.scraped ? extractKeywords(p.bodyText) : [];
+
+    const overallScore = Math.round(
+      (scores.seo * 0.4) + (scores.performance * 0.25) +
+      (scores.accessibility * 0.2) + (scores.bestPractices * 0.15)
+    );
+
+    const scrapingNote = p.scraped
+      ? `(fetched via: ${p.source})`
+      : "Note: This site could not be scraped (Cloudflare/JS-only). Scores are estimated.";
 
     const prompt = `You are an SEO expert. Analyze this website data and provide a structured SEO report.
 
 URL: ${url}
-Title: ${scraped.title || "(could not fetch)"}
-Meta Description: ${scraped.description || "(could not fetch)"}
-Has Viewport Meta: ${scraped.hasViewport}
-Has Canonical Tag: ${scraped.hasCanonical}
-H1 Count: ${scraped.h1Count}
-Images Missing Alt Text: ${scraped.imagesMissingAlt} of ${scraped.totalImages}
-Total Links: ${scraped.totalLinks}
+Title: ${p.title || "(not found)"}
+Meta Description: ${p.description || "(not found)"}
+Canonical: ${p.canonical || "(missing)"}
+Viewport: ${p.viewport || "(missing)"}
+H1 tags: ${p.h1}, H2: ${p.h2}, H3: ${p.h3}
+Images (total/missing alt): ${p.totalImages}/${p.missingAlt}
+Links (internal/external): ${p.internalLinks}/${p.externalLinks}
+Word Count: ${p.wordCount}
+OG Title: ${p.ogTitle || "(missing)"}
+Twitter Card: ${p.twitterCard || "(missing)"}
 SEO Score: ${scores.seo}/100
 Accessibility Score: ${scores.accessibility}/100
+Best Practices: ${scores.bestPractices}/100
 ${scrapingNote}
 
 Provide:
@@ -213,25 +366,47 @@ Be specific and actionable. Keep it under 400 words.`;
     const analysis = await SeoAnalysis.create({
       userId: req.userId,
       url,
-      scores,
-      metaTags: {
-        title: scraped.title,
-        description: scraped.description,
-        hasViewport: scraped.hasViewport,
-        hasCanonical: scraped.hasCanonical,
+      status: "completed",
+      overallScore,
+      categories: scores,
+      loadTime,
+      pageSize: p.pageSize,
+      wordCount: p.wordCount,
+      metaData: {
+        title:         p.title,
+        description:   p.description,
+        canonical:     p.canonical,
+        robots:        p.robots,
+        ogTitle:       p.ogTitle,
+        ogDescription: p.ogDescription,
+        ogImage:       p.ogImage,
+        twitterCard:   p.twitterCard,
+        viewport:      p.viewport,
+        charset:       p.charset,
       },
-      imagesMissingAlt: scraped.imagesMissingAlt,
-      brokenLinks: 0,
+      headings: {
+        h1: p.h1, h2: p.h2, h3: p.h3,
+        h4: p.h4, h5: p.h5, h6: p.h6,
+        h1Texts: p.h1Texts,
+      },
+      links: {
+        internal: p.internalLinks,
+        external: p.externalLinks,
+        total:    p.totalLinks,
+      },
+      images: {
+        total:      p.totalImages,
+        missingAlt: p.missingAlt,
+        withAlt:    p.withAlt,
+      },
+      keywords,
+      issues,
       aiReport,
+      // legacy fields
+      scores,
     });
 
-    sendAnalysisCompleteEmail({
-      name: user.name,
-      email: user.email,
-      url,
-      scores,
-      aiReport,
-    });
+    sendAnalysisCompleteEmail({ name: user.name, email: user.email, url, scores, aiReport });
 
     res.status(201).json({ success: true, analysis });
   } catch (error) {
@@ -272,17 +447,16 @@ export const analyzeBulk = async (req, res) => {
     const results = await Promise.allSettled(
       urls.map(async (url) => {
         const fetched = await fetchHtml(url);
-        const scraped = parseHtml(fetched);
-        const scores = calcScores(scraped);
+        const p = parseHtml(fetched);
+        const scores = calcScores(p);
         return {
-          url,
-          title: scraped.title,
+          url, title: p.title,
           seoScore: scores.seo,
           accessibilityScore: scores.accessibility,
-          hasViewport: scraped.hasViewport,
-          hasCanonical: scraped.hasCanonical,
-          imagesMissingAlt: scraped.imagesMissingAlt,
-          h1Count: scraped.h1Count,
+          hasViewport: !!p.viewport,
+          hasCanonical: !!p.canonical,
+          imagesMissingAlt: p.missingAlt,
+          h1Count: p.h1,
         };
       })
     );
@@ -306,7 +480,7 @@ export const getScoreHistory = async (req, res) => {
     if (url) filter.url = { $regex: url, $options: "i" };
     const analyses = await SeoAnalysis.find(filter)
       .sort({ createdAt: 1 })
-      .select("url scores createdAt")
+      .select("url overallScore categories createdAt")
       .limit(30);
     res.json({ success: true, history: analyses });
   } catch (error) {
@@ -361,9 +535,9 @@ export const checkSitemapRobots = async (req, res) => {
       check("/sitemap_index.xml"),
     ]);
     let sitemapInRobots = false;
-    if (robots.exists && robots.preview) {
+    if (robots.exists && robots.preview)
       sitemapInRobots = robots.preview.toLowerCase().includes("sitemap:");
-    }
+
     res.json({
       success: true,
       result: {
@@ -371,10 +545,8 @@ export const checkSitemapRobots = async (req, res) => {
         sitemap: sitemap.exists ? sitemap : sitemapXml,
         recommendations: [
           !robots.exists && "robots.txt is missing — add one to control crawler access",
-          !(sitemap.exists || sitemapXml.exists) &&
-            "sitemap.xml is missing — submit one to Google Search Console",
-          robots.exists && !sitemapInRobots &&
-            "Your robots.txt doesn't reference your sitemap",
+          !(sitemap.exists || sitemapXml.exists) && "sitemap.xml is missing — submit one to Google Search Console",
+          robots.exists && !sitemapInRobots && "Your robots.txt doesn't reference your sitemap",
         ].filter(Boolean),
       },
     });
@@ -388,30 +560,28 @@ export const getPageSpeed = async (req, res) => {
     const { url, strategy = "mobile" } = req.query;
     if (!url) return res.status(400).json({ success: false, message: "URL required" });
     const baseUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`;
-    const apiUrl = process.env.PAGESPEED_API_KEY
-      ? `${baseUrl}&key=${process.env.PAGESPEED_API_KEY}`
-      : baseUrl;
+    const apiUrl = process.env.PAGESPEED_API_KEY ? `${baseUrl}&key=${process.env.PAGESPEED_API_KEY}` : baseUrl;
     const response = await fetch(apiUrl);
     const data = await response.json();
-    if (data.error) {
+    if (data.error)
       return res.status(400).json({ success: false, message: data.error.message });
-    }
+
     const cats = data.lighthouseResult?.categories || {};
     const audits = data.lighthouseResult?.audits || {};
     res.json({
       success: true,
       scores: {
-        performance: Math.round((cats.performance?.score || 0) * 100),
+        performance:   Math.round((cats.performance?.score || 0) * 100),
         accessibility: Math.round((cats.accessibility?.score || 0) * 100),
-        seo: Math.round((cats.seo?.score || 0) * 100),
+        seo:           Math.round((cats.seo?.score || 0) * 100),
         bestPractices: Math.round((cats["best-practices"]?.score || 0) * 100),
       },
       metrics: {
-        lcp: audits["largest-contentful-paint"]?.displayValue || "N/A",
-        fid: audits["total-blocking-time"]?.displayValue || "N/A",
-        cls: audits["cumulative-layout-shift"]?.displayValue || "N/A",
-        fcp: audits["first-contentful-paint"]?.displayValue || "N/A",
-        ttfb: audits["server-response-time"]?.displayValue || "N/A",
+        lcp:        audits["largest-contentful-paint"]?.displayValue || "N/A",
+        fid:        audits["total-blocking-time"]?.displayValue || "N/A",
+        cls:        audits["cumulative-layout-shift"]?.displayValue || "N/A",
+        fcp:        audits["first-contentful-paint"]?.displayValue || "N/A",
+        ttfb:       audits["server-response-time"]?.displayValue || "N/A",
         speedIndex: audits["speed-index"]?.displayValue || "N/A",
       },
     });

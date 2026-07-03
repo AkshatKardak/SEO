@@ -1,30 +1,83 @@
 import mongoose from "mongoose";
 
 const seoAnalysisSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    url: { type: String, required: true },
-    scores: {
-        performance: { type: Number, default: 0 },
-        accessibility: { type: Number, default: 0 },
-        seo: { type: Number, default: 0 },
-        bestPractices: { type: Number, default: 0 },
-    },
-    // unique + sparse defined at schema index level below — NOT inline
-    // This prevents E11000 duplicate key error for multiple null shareTokens
-    shareToken: { type: String, default: null },
-    metaTags: {
-        title: String,
-        description: String,
-        hasViewport: Boolean,
-        hasCanonical: Boolean,
-    },
-    imagesMissingAlt: { type: Number, default: 0 },
-    brokenLinks: { type: Number, default: 0 },
-    aiReport: { type: String, default: "" },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  url: { type: String, required: true },
+
+  overallScore: { type: Number, default: 0 },
+  status: { type: String, default: "completed" },
+
+  categories: {
+    seo:           { type: Number, default: 0 },
+    performance:   { type: Number, default: 0 },
+    accessibility: { type: Number, default: 0 },
+    bestPractices: { type: Number, default: 0 },
+  },
+
+  loadTime:  { type: Number, default: 0 },
+  pageSize:  { type: Number, default: 0 },
+  wordCount: { type: Number, default: 0 },
+
+  metaData: {
+    title:         { type: String, default: "" },
+    description:   { type: String, default: "" },
+    canonical:     { type: String, default: "" },
+    robots:        { type: String, default: "" },
+    ogTitle:       { type: String, default: "" },
+    ogDescription: { type: String, default: "" },
+    ogImage:       { type: String, default: "" },
+    twitterCard:   { type: String, default: "" },
+    viewport:      { type: String, default: "" },
+    charset:       { type: String, default: "" },
+  },
+
+  headings: {
+    h1: { type: Number, default: 0 },
+    h2: { type: Number, default: 0 },
+    h3: { type: Number, default: 0 },
+    h4: { type: Number, default: 0 },
+    h5: { type: Number, default: 0 },
+    h6: { type: Number, default: 0 },
+    h1Texts: [{ type: String }],
+  },
+
+  links: {
+    internal: { type: Number, default: 0 },
+    external: { type: Number, default: 0 },
+    total:    { type: Number, default: 0 },
+  },
+
+  images: {
+    total:      { type: Number, default: 0 },
+    missingAlt: { type: Number, default: 0 },
+    withAlt:    { type: Number, default: 0 },
+  },
+
+  keywords: [{
+    word:    String,
+    count:   Number,
+    density: Number,
+  }],
+
+  issues: [{
+    severity:       String,
+    category:       String,
+    message:        String,
+    recommendation: String,
+  }],
+
+  aiReport:   { type: String, default: "" },
+  shareToken: { type: String, default: null },
+
+  // legacy fields kept for backward compat
+  scores: {
+    seo:           { type: Number, default: 0 },
+    performance:   { type: Number, default: 0 },
+    accessibility: { type: Number, default: 0 },
+    bestPractices: { type: Number, default: 0 },
+  },
 }, { timestamps: true });
 
-// sparse: true means null values are excluded from the index entirely
-// so multiple documents with shareToken: null do NOT conflict
 seoAnalysisSchema.index({ shareToken: 1 }, { unique: true, sparse: true });
 
 const SeoAnalysis = mongoose.model("SeoAnalysis", seoAnalysisSchema);
