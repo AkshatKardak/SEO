@@ -50,7 +50,7 @@ export default function BulkAnalyze() {
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Bulk URL Analyzer</h1>
-      <p className="text-gray-500 text-sm mb-6">Analyze up to 5 URLs side-by-side (Pro only)</p>
+      <p className="text-gray-500 text-sm mb-6">Analyze up to 5 URLs side-by-side</p>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
         <div className="flex flex-col gap-3">

@@ -8,7 +8,6 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 /**
  * Lightweight HTML scraper using native fetch.
- * Replaces @browserbasehq/stagehand — no BrowserBase account needed.
  */
 async function scrapeUrl(url) {
   const response = await fetch(url, {
@@ -74,22 +73,6 @@ export const analyzeUrl = async (req, res) => {
     if (!url) return res.status(400).json({ success: false, message: "URL is required" });
 
     const user = await User.findById(req.userId);
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-    if (user.plan === "free") {
-      const monthlyCount = await SeoAnalysis.countDocuments({
-        userId: req.userId,
-        createdAt: { $gte: startOfMonth },
-      });
-      if (monthlyCount >= 3) {
-        return res.status(403).json({
-          success: false,
-          message: "Free plan limit reached (3/month). Upgrade to Pro.",
-          limitReached: true,
-        });
-      }
-    }
 
     const scraped = await scrapeUrl(url);
 
@@ -158,7 +141,6 @@ Be specific and actionable. Keep it under 400 words.`;
       aiReport,
     });
 
-    // Send analysis complete email — non-blocking, won't delay API response
     sendAnalysisCompleteEmail({
       name: user.name,
       email: user.email,
@@ -205,10 +187,6 @@ export const analyzeBulk = async (req, res) => {
       return res.status(400).json({ success: false, message: "URLs array required" });
     if (urls.length > 5)
       return res.status(400).json({ success: false, message: "Maximum 5 URLs allowed" });
-
-    const user = await User.findById(req.userId);
-    if (user.plan === "free")
-      return res.status(403).json({ success: false, message: "Bulk analysis is a Pro feature" });
 
     const results = await Promise.allSettled(
       urls.map(async (url) => {

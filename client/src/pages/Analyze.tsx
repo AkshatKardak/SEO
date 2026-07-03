@@ -39,7 +39,6 @@ export default function Analyze() {
   const [analyzing, setAnalyzing] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState("");
-  const [limitReached, setLimitReached] = useState(false);
   const [searchParams] = useSearchParams();
   const stepTimers = useRef<any[]>([]);
   const navigate = useNavigate();
@@ -53,15 +52,12 @@ export default function Analyze() {
     const targetUrl = submitUrl || url;
     if (!targetUrl.trim()) return;
 
-    // Prepend https:// if missing
     const fullUrl = targetUrl.startsWith("http") ? targetUrl : `https://${targetUrl}`;
 
     setError("");
-    setLimitReached(false);
     setAnalyzing(true);
     setCurrentStep(0);
 
-    // Animate steps
     stepTimers.current.push(setTimeout(() => setCurrentStep(1), 2000));
     stepTimers.current.push(setTimeout(() => setCurrentStep(2), 6000));
     stepTimers.current.push(setTimeout(() => setCurrentStep(3), 12000));
@@ -69,14 +65,6 @@ export default function Analyze() {
     try {
       const data = await seoAPI.analyze(fullUrl);
 
-      if (data.limitReached) {
-        setLimitReached(true);
-        setAnalyzing(false);
-        clearTimers();
-        return;
-      }
-
-      // Wait for the step animation to finish naturally, then navigate
       stepTimers.current.push(
         setTimeout(() => {
           setAnalyzing(false);
@@ -87,11 +75,7 @@ export default function Analyze() {
       clearTimers();
       setAnalyzing(false);
       const msg = err.message || "Analysis failed. Please try again.";
-      if (msg.includes("limit")) {
-        setLimitReached(true);
-      } else {
-        setError(msg);
-      }
+      setError(msg);
       toast.error(msg);
     }
   };
@@ -130,19 +114,8 @@ export default function Analyze() {
               </p>
             </div>
 
-            {/* Limit Reached Banner */}
-            {limitReached && (
-              <div className="mb-6 px-4 py-4 rounded-xl severity-warning text-sm flex items-start gap-3 max-w-xl mx-auto">
-                <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold">Free plan limit reached (3 analyses/month)</p>
-                  <p className="text-xs mt-0.5 opacity-80">Upgrade to Pro for unlimited analyses.</p>
-                </div>
-              </div>
-            )}
-
             {/* Error Banner */}
-            {error && !limitReached && (
+            {error && (
               <div className="mb-6 px-4 py-3 rounded-xl severity-critical text-sm flex items-center gap-2 max-w-xl mx-auto">
                 <AlertCircle size={18} className="shrink-0" />
                 {error}
@@ -234,7 +207,6 @@ export default function Analyze() {
                         : "bg-card border-border opacity-30"
                     }`}
                   >
-                    {/* Step Icon */}
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                         isComplete
