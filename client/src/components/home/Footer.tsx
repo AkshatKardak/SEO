@@ -5,7 +5,6 @@ import Logo from "../../assets/Logo.png";
 const links = {
     Product: [
         { label: "Features", to: "/#features" },
-        { label: "Pricing", to: "/#pricing" },
         { label: "Changelog", to: "/" },
     ],
     Legal: [

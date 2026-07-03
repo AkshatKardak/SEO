@@ -29,12 +29,8 @@ interface AnalysisSummary {
 interface UserData {
   name: string;
   email: string;
-  plan: string;
   analysisCount: number;
-  dailyAnalysisCount: number;
 }
-
-const DAILY_FREE_LIMIT = 5;
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -46,14 +42,12 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Fetch logged-in user info
   const fetchUser = useCallback(async () => {
     try {
       setUserLoading(true);
       const data = await authAPI.getUser();
       setUser(data.user ?? data);
     } catch (err: any) {
-      // Token expired / invalid → redirect to login
       if (err.message?.includes("401") || err.message?.toLowerCase().includes("unauthorized")) {
         localStorage.removeItem("token");
         navigate("/login");
@@ -63,7 +57,6 @@ export default function Dashboard() {
     }
   }, [navigate]);
 
-  // Fetch recent analyses
   const fetchAnalyses = useCallback(async (silent = false) => {
     try {
       if (!silent) setLoading(true);
@@ -71,9 +64,7 @@ export default function Dashboard() {
       setError(null);
 
       const data = await seoAPI.getAnalyses();
-      // API returns { analyses: [...] } or direct array
       const list: AnalysisSummary[] = Array.isArray(data) ? data : data.analyses ?? [];
-      // Show only the 6 most recent on dashboard
       setAnalyses(list.slice(0, 6));
     } catch (err: any) {
       setError(err.message || "Failed to load analyses");
@@ -93,7 +84,6 @@ export default function Dashboard() {
     fetchAnalyses();
   }, [fetchUser, fetchAnalyses, navigate]);
 
-  // Auto-refresh every 30s to catch in-progress analyses
   useEffect(() => {
     const hasProcessing = analyses.some((a) => a.status === "processing");
     if (!hasProcessing) return;
@@ -115,11 +105,6 @@ export default function Dashboard() {
           completedAnalyses.length
       )
     : 0;
-
-  const scansLeft =
-    user?.plan === "free"
-      ? Math.max(0, DAILY_FREE_LIMIT - (user?.dailyAnalysisCount ?? 0))
-      : null; // null = unlimited
 
   const getScoreClass = (s: number) => {
     if (s >= 80) return "score-good";
@@ -145,7 +130,6 @@ export default function Dashboard() {
             </p>
           </div>
 
-          {/* Manual refresh */}
           <button
             onClick={() => fetchAnalyses(true)}
             disabled={refreshing}
@@ -173,7 +157,7 @@ export default function Dashboard() {
             </div>
             <button
               type="submit"
-              disabled={!url.trim() || (user?.plan === "free" && scansLeft === 0)}
+              disabled={!url.trim()}
               className="bg-primary px-5 py-3 rounded-full text-primary-foreground text-sm hover:opacity-90 transition-opacity shrink-0 flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ color: "var(--background)" }}
               id="dashboard-analyze-btn"
@@ -182,11 +166,6 @@ export default function Dashboard() {
               <ArrowRightIcon size={16} />
             </button>
           </div>
-          {user?.plan === "free" && scansLeft === 0 && (
-            <p className="text-xs text-danger mt-2 ml-4">
-              Daily limit reached. Upgrade to Pro for unlimited scans.
-            </p>
-          )}
         </form>
 
         {/* ── Stats Cards ────────────────────────────────── */}
@@ -221,22 +200,18 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Scans left */}
+          {/* Completed analyses */}
           <div className="glass rounded-2xl p-5 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent">
               <BarChart3Icon size={22} />
             </div>
             <div>
-              {userLoading ? (
+              {loading ? (
                 <div className="skeleton skeleton-text w-8 h-7 mb-1" />
               ) : (
-                <p className="text-2xl font-bold text-foreground">
-                  {user?.plan === "free" ? scansLeft : "∞"}
-                </p>
+                <p className="text-2xl font-bold text-foreground">{completedAnalyses.length}</p>
               )}
-              <p className="text-xs text-muted-foreground">
-                {user?.plan === "free" ? "Scans Left Today" : "Unlimited (Pro)"}
-              </p>
+              <p className="text-xs text-muted-foreground">Completed</p>
             </div>
           </div>
         </div>
@@ -255,7 +230,6 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Error */}
           {error && (
             <div className="flex items-center gap-3 p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-sm mb-4">
               <AlertCircleIcon size={16} className="shrink-0" />
@@ -269,7 +243,6 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Loading skeleton */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
@@ -291,7 +264,6 @@ export default function Dashboard() {
               ))}
             </div>
           ) : analyses.length === 0 ? (
-            /* Empty state */
             <div className="glass rounded-2xl p-12 text-center">
               <SearchIcon size={48} className="mx-auto text-muted-foreground mb-4 opacity-50" />
               <h3 className="text-lg font-semibold text-foreground mb-2">No analyses yet</h3>
@@ -300,7 +272,6 @@ export default function Dashboard() {
               </p>
             </div>
           ) : (
-            /* Real data grid */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {analyses.map((a) => (
                 <AnalysesCard key={a._id} analysis={a} />

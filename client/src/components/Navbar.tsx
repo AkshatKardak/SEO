@@ -31,7 +31,6 @@ export default function Navbar() {
         <nav className="fixed top-0 w-full bg-background/70 backdrop-blur-lg z-50 border-b border-border/40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex items-center justify-between h-16">
-                    {/* Logo — no filter, natural colors */}
                     <Link to="/" className="flex items-center gap-2 group">
                         <img
                             src={Logo}
@@ -40,7 +39,6 @@ export default function Navbar() {
                         />
                     </Link>
 
-                    {/* Desktop nav */}
                     {user && (
                         <div className="hidden md:flex items-center gap-1">
                             {navLinks.map((link) => (
@@ -56,7 +54,6 @@ export default function Navbar() {
                         </div>
                     )}
 
-                    {/* Right side */}
                     <div className="hidden md:flex items-center gap-3">
                         <button
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -73,7 +70,6 @@ export default function Navbar() {
                                         {user.name.charAt(0).toUpperCase()}
                                     </div>
                                     <span className="text-foreground font-medium">{user.name}</span>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium uppercase bg-accent/10 border border-accent/15 text-accent">{user.plan}</span>
                                 </div>
                                 <button
                                     onClick={handleLogout}
@@ -90,7 +86,6 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    {/* Mobile toggle */}
                     <div className="flex items-center gap-2 md:hidden">
                         <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors">
                             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
@@ -102,7 +97,6 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile menu */}
             {mobileOpen && (
                 <div className="md:hidden border-b border-border bg-background">
                     <div className="px-4 py-3 space-y-1">
