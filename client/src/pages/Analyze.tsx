@@ -12,8 +12,8 @@ import toast from "react-hot-toast";
 const STEPS = [
   {
     icon: <GlobeIcon size={22} />,
-    label: "Connecting to browser",
-    desc: "Creating cloud browser session via Browserbase...",
+    label: "Fetching website",
+    desc: "Sending request to the target URL...",
   },
   {
     icon: <FileSearchIcon size={22} />,
@@ -23,7 +23,7 @@ const STEPS = [
   {
     icon: <BrainIcon size={22} />,
     label: "AI Analysis",
-    desc: "Gemini is generating your SEO report...",
+    desc: "Groq AI is generating your SEO report...",
   },
   {
     icon: <CheckCircleIcon size={22} />,
@@ -166,9 +166,9 @@ export default function Analyze() {
             {/* Feature Hints */}
             <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto">
               {[
-                { icon: "🔍", label: "Meta tag analysis" },
-                { icon: "🤖", label: "Gemini AI report" },
-                { icon: "📊", label: "Score breakdown" },
+                { icon: "\uD83D\uDD0D", label: "Meta tag analysis" },
+                { icon: "\uD83E\uDD16", label: "Groq AI report" },
+                { icon: "\uD83D\uDCCA", label: "Score breakdown" },
               ].map((f) => (
                 <div key={f.label} className="glass p-3 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
                   <span>{f.icon}</span>
