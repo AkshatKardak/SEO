@@ -158,7 +158,6 @@ export default function RankTracker() {
   });
 
   // Stats for summary bar
-  const ranked = keywords.filter((k) => currentPosition(k) !== null).length;
   const top10 = keywords.filter((k) => { const p = currentPosition(k); return p !== null && p <= 10; }).length;
   const improved = keywords.filter((k) => positionChange(k) > 0).length;
 

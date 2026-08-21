@@ -304,15 +304,24 @@ function calcScores(p) {
   return { seo, accessibility, performance, bestPractices };
 }
 
+import { isSafeUrl } from "../services/crawlerService.js";
+import llm from "../ai/providers/LLMProvider.js";
+
 export const analyzeUrl = async (req, res) => {
   try {
     const { url } = req.body;
     if (!url) return res.status(400).json({ success: false, message: "URL is required" });
 
+    const safeCheck = await isSafeUrl(url);
+    if (!safeCheck.safe) {
+      return res.status(400).json({ success: false, message: `SSRF Blocked: ${safeCheck.reason}` });
+    }
+
+    const targetUrl = safeCheck.url;
     const user = await User.findById(req.userId);
 
     const startTime = Date.now();
-    const fetched = await fetchHtml(url);
+    const fetched = await fetchHtml(targetUrl);
     const loadTime = Date.now() - startTime;
 
     const p = parseHtml(fetched);
@@ -446,11 +455,15 @@ export const analyzeBulk = async (req, res) => {
 
     const results = await Promise.allSettled(
       urls.map(async (url) => {
-        const fetched = await fetchHtml(url);
+        const safeCheck = await isSafeUrl(url);
+        if (!safeCheck.safe) {
+          throw new Error(`SSRF Blocked: ${safeCheck.reason}`);
+        }
+        const fetched = await fetchHtml(safeCheck.url);
         const p = parseHtml(fetched);
         const scores = calcScores(p);
         return {
-          url, title: p.title,
+          url: safeCheck.url, title: p.title,
           seoScore: scores.seo,
           accessibilityScore: scores.accessibility,
           hasViewport: !!p.viewport,

@@ -47,7 +47,170 @@ export const authAPI = {
     }),
 };
 
-// ─── SEO Analysis ─────────────────────────────────────────
+// ─── AI Growth OS v1 API ──────────────────────────────────
+export const growthAPI = {
+  // Projects & Website Intelligence
+  createProject: (data: { url: string; name?: string; growthGoal?: string }) =>
+    request("/api/v1/projects", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getProjects: () => request("/api/v1/projects"),
+
+  getProject: (id: string) => request(`/api/v1/projects/${id}`),
+
+  updateProjectGoal: (id: string, data: { growthGoal?: string; executionMode?: string }) =>
+    request(`/api/v1/projects/${id}/goal`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  reanalyzeProject: (id: string) =>
+    request(`/api/v1/projects/${id}/analyze`, {
+      method: "POST",
+    }),
+
+  deleteProject: (id: string) =>
+    request(`/api/v1/projects/${id}`, {
+      method: "DELETE",
+    }),
+
+  // Opportunities & Growth Brain
+  getOpportunities: (projectId: string, params?: { category?: string; minImpact?: number }) => {
+    const query = new URLSearchParams(params as any).toString();
+    return request(`/api/v1/opportunities/project/${projectId}${query ? `?${query}` : ""}`);
+  },
+
+  getOpportunity: (id: string) => request(`/api/v1/opportunities/${id}`),
+
+  executeOpportunity: (id: string, executionMode?: string) =>
+    request(`/api/v1/opportunities/${id}/execute`, {
+      method: "POST",
+      body: JSON.stringify({ executionMode }),
+    }),
+
+  dismissOpportunity: (id: string) =>
+    request(`/api/v1/opportunities/${id}/dismiss`, {
+      method: "POST",
+    }),
+
+  // Action Center
+  getActions: (projectId: string) => request(`/api/v1/actions/project/${projectId}`),
+
+  approveAction: (id: string) =>
+    request(`/api/v1/actions/${id}/approve`, {
+      method: "POST",
+    }),
+
+  rejectAction: (id: string, reason?: string) =>
+    request(`/api/v1/actions/${id}/reject`, {
+      method: "POST",
+      body: JSON.stringify({ reason }),
+    }),
+
+  // GEO Intelligence Engine
+  getGEOQueries: (projectId: string) => request(`/api/v1/geo/project/${projectId}`),
+
+  triggerGEOAnalysis: (projectId: string) =>
+    request(`/api/v1/geo/project/${projectId}/analyze`, {
+      method: "POST",
+    }),
+
+  // Agent Activity
+  getAgentActivity: (projectId: string) => request(`/api/v1/agents/project/${projectId}/activity`),
+
+  // Growth Experiments
+  getExperiments: (projectId: string) => request(`/api/v1/experiments/project/${projectId}`),
+
+  createExperiment: (projectId: string, data: {
+    title: string;
+    type: string;
+    hypothesis: string;
+    metric: string;
+    baselineValue: string;
+    targetValue: string;
+    expectedImpact: string;
+  }) =>
+    request(`/api/v1/experiments/project/${projectId}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  evaluateExperiment: (id: string, data: { currentValue: string; winner?: string }) =>
+    request(`/api/v1/experiments/${id}/evaluate`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  // Growth Memory
+  getGrowthMemory: (projectId: string) => request(`/api/v1/memory/project/${projectId}`),
+
+  // Analytics & Closed-Loop Funnel
+  getAnalytics: (projectId: string) => request(`/api/v1/analytics/project/${projectId}`),
+
+  connectIntegration: (projectId: string, data: {
+    provider: string;
+    propertyId?: string;
+    siteUrl?: string;
+    apiKey?: string;
+    projectId?: string;
+  }) =>
+    request(`/api/v1/analytics/project/${projectId}/connect`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  disconnectIntegration: (projectId: string, provider: string) =>
+    request(`/api/v1/analytics/project/${projectId}/disconnect`, {
+      method: "POST",
+      body: JSON.stringify({ provider }),
+    }),
+
+  // Competitor Intelligence & Content Gaps
+  getCompetitors: (projectId: string) => request(`/api/v1/competitors/project/${projectId}`),
+
+  runCompetitorAnalysis: (projectId: string, competitorDomain?: string) =>
+    request(`/api/v1/competitors/project/${projectId}/analyze`, {
+      method: "POST",
+      body: JSON.stringify({ competitorDomain }),
+    }),
+
+  // Strategic Growth Roadmap
+  getStrategy: (projectId: string) => request(`/api/v1/strategy/project/${projectId}`),
+
+  // Technical Site Audit & Core Web Vitals
+  getSiteAudit: (projectId: string) => request(`/api/v1/audit/project/${projectId}`),
+
+  triggerSiteAudit: (projectId: string) =>
+    request(`/api/v1/audit/project/${projectId}/audit`, {
+      method: "POST",
+    }),
+
+  autoFixIssue: (projectId: string, issueId: string) =>
+    request(`/api/v1/audit/project/${projectId}/fix`, {
+      method: "POST",
+      body: JSON.stringify({ issueId }),
+    }),
+
+  // Executive Growth Reports
+  getReports: (projectId: string) => request(`/api/v1/reports/project/${projectId}`),
+
+  generateReport: (projectId: string, period?: string) =>
+    request(`/api/v1/reports/project/${projectId}/generate`, {
+      method: "POST",
+      body: JSON.stringify({ period }),
+    }),
+
+  // AI Growth Co-Pilot Chat
+  chatWithCoPilot: (projectId: string, message: string) =>
+    request(`/api/v1/agents/project/${projectId}/chat`, {
+      method: "POST",
+      body: JSON.stringify({ message }),
+    }),
+};
+
+// ─── SEO Analysis (Preserved) ─────────────────────────────
 export const seoAPI = {
   analyze: (url: string) =>
     request("/api/seo/analyze", {
@@ -80,7 +243,7 @@ export const seoAPI = {
     }),
 };
 
-// ─── Rank Tracker ─────────────────────────────────────────
+// ─── Rank Tracker (Preserved) ─────────────────────────────
 export const rankAPI = {
   addKeyword: (keyword: string, targetUrl: string) =>
     request("/api/rank/add", {

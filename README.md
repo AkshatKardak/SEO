@@ -3,111 +3,246 @@
 </p>
 
 <p align="center">
-  <a href="https://seo-rank-tracker.vercel.app">
-    <img src="https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel" />
+  <a href="https://github.com/AkshatKardak/SEO">
+    <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge&logo=rocket" />
   </a>
-  <a href="https://render.com">
-    <img src="https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render" />
+  <a href="https://github.com/AkshatKardak/SEO/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-8B5CF6?style=for-the-badge" />
   </a>
 </p>
 
 # SerpoAI
 
-### The AI-Powered SEO Rank Tracker & Analyzer
+### Autonomous Growth Engineering, GEO AI Visibility & Closed-Loop Intelligence Platform
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Node.js](https://img.shields.io/badge/Node.js-24-339933?style=flat-square&logo=nodedotjs)](https://nodejs.org)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb)](https://mongodb.com)
-[![Groq](https://img.shields.io/badge/Groq-Llama%203.3-F55036?style=flat-square)](https://console.groq.com)
-[![License](https://img.shields.io/badge/License-MIT-8B5CF6?style=flat-square)](LICENSE)
+[![Groq](https://img.shields.io/badge/Groq-Llama%203.3%2070B-F55036?style=flat-square)](https://console.groq.com)
+[![DeepSeek](https://img.shields.io/badge/DeepSeek-V3%20%2F%20R1-0066FF?style=flat-square)](https://platform.deepseek.com)
+[![Anthropic](https://img.shields.io/badge/Anthropic-Claude%203.5%20%2F%203.7%20Sonnet-D97706?style=flat-square&logo=anthropic)](https://anthropic.com)
+[![OpenRouter](https://img.shields.io/badge/OpenRouter-Unified%20API-6366F1?style=flat-square)](https://openrouter.ai)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=flat-square&logo=openai)](https://platform.openai.com)
+[![Gemini](https://img.shields.io/badge/Google-Gemini%202.0%20Flash-4285F4?style=flat-square&logo=google)](https://ai.google.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS%204-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com)
 
 ---
 
-### The Problem
+## 🎯 The Problem
 
-SEO practitioners and website owners rely on a fragmented set of tools: rank trackers, site auditors, PageSpeed testers, sitemap validators, and AI writing tools — all disconnected, expensive, and requiring separate logins.
-
-Traditional SEO tools are either:
-* **Too shallow:** Basic rank trackers that only show position changes with no context.
-* **Too expensive:** Enterprise platforms like Ahrefs or SEMrush priced for large agencies, not indie developers or small businesses.
-
-This leaves developers and founders guessing on SEO priorities, missing critical site issues, and wasting time stitching together insights from five different dashboards.
+Modern growth, marketing, and SEO teams are bogged down by a fractured toolset:
+1. **Shallow SEO Scanners**: Traditional audit tools dump 80-page lists of low-priority warnings without business context or expected ROI.
+2. **Disconnected Point Solutions**: Separate subscriptions for rank trackers, site crawlers, keyword tools, AI copywriters, and Google Analytics lead to disjointed execution and zero attribution.
+3. **No Closed-Loop Learning**: Marketing teams execute arbitrary changes without measuring baseline vs. post-execution metrics or recording what worked for future campaigns.
+4. **Blindness to AI Answer Engines (GEO)**: As organic search shifts toward modern AI search engines (*ChatGPT Search, Perplexity, Gemini, Google AI Overviews*), traditional tools fail to analyze entity citation authority or AI visibility gaps.
 
 ---
 
-### The Solution: A Unified SEO Intelligence Platform
+## 💡 The Solution: SerpoAI
 
-**SerpoAI** is not just a rank tracker. It is a full-stack SEO intelligence platform that combines real browser scraping, Google PageSpeed Insights, and Groq-powered AI into one streamlined workspace.
+**SerpoAI** is an intelligent growth and SEO operating system that analyzes a company's website, synthesizes its knowledge graph, prioritizes high-leverage growth opportunities using the ICE formula, executes approved actions via specialized AI agents, measures true business impact along the Growth Graph, and continuously learns what works.
 
-With SerpoAI, you can:
-* **Audit & Analyze:** Run a deep SEO audit on any URL — meta tags, headings, images, links — in seconds.
-* **Track Rankings:** Monitor keyword positions over time with automated scheduled checks.
-* **Measure Performance:** Pull real Google PageSpeed & Core Web Vitals scores.
-* **Validate Structure:** Check sitemap.xml and robots.txt health automatically.
-* **Share Reports:** Generate public shareable report links to send to clients.
-* **Get AI Advice:** Receive a structured Groq AI report — issues, quick wins, and an action plan.
+The core product philosophy is:
+
+$$\Large \textbf{Discover} \longrightarrow \textbf{Prioritize} \longrightarrow \textbf{Execute} \longrightarrow \textbf{Measure} \longrightarrow \textbf{Learn} \longrightarrow \textbf{Repeat}$$
 
 ---
 
-### Why SerpoAI is Different
+## 🌟 Core Features
 
-Generic SEO tools answer:
-> *"What is my keyword position today?"*
-
-SerpoAI goes further and answers:
-* **Why is my ranking dropping?** AI-identified critical issues with specific, actionable fixes.
-* **What should I fix first?** A prioritized action plan ordered by impact.
-* **How fast is my site?** Real PageSpeed scores pulled live from Google's API.
-* **Is my site properly indexed?** Sitemap and robots.txt validation in one click.
-* **What changed over time?** Score history charts showing SEO trends across past analyses.
-
----
-
-## Features
-
-| Feature | Description |
-|---|---|
-| 🤖 **AI SEO Audit** | Groq Llama 3.3 generates a structured 400-word report: assessment, critical issues, quick wins, and an action plan. |
-| 📈 **Keyword Rank Tracker** | Add keywords and track their Google positions over time with automated cron-based refresh jobs. |
-| ⚡ **PageSpeed & Core Web Vitals** | Live Google PageSpeed API scores — LCP, CLS, FID — for any URL. |
-| 🗺️ **Sitemap & robots.txt Check** | Validates sitemap.xml existence and robots.txt crawl rules automatically. |
-| 📊 **Score History Charts** | Recharts-powered trend visualizations showing SEO score progression across analyses. |
-| 🔗 **Shareable Public Reports** | Generate a public token-based report URL to share with clients — no login required. |
-| 📦 **Bulk URL Analysis** | Analyze up to 5 URLs in one request (Pro plan). |
-| 🔐 **JWT Authentication** | Secure register/login flow with bcrypt-hashed passwords and signed JWT tokens. |
-| 🌗 **Aurora Gradient Theme** | Premium dark/light theme with CSS-variable-driven Aurora gradient design system. |
+- 🧠 **Growth Brain & Prioritization Engine**: Scores all growth opportunities using the rigorous ICE formula:
+  $$\text{Priority Score} = \frac{\text{Impact (1-10)} \times \text{Confidence (0.1-1.0)}}{\text{Effort (1-10)}} \times 10$$
+- 🛡️ **SSRF-Safe Multi-Page Crawler**: Fast server-side Cheerio scraping with strict DNS-level CIDR filtering that blocks private, loopback, and cloud metadata IPs (`127.0.0.0/8`, `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `169.254.169.254`).
+- 🤖 **5 Specialized AI Agents**:
+  - **Intelligence Agent**: Knowledge graph synthesis, buyer personas, and bottleneck analysis.
+  - **SEO Agent**: Technical fixes, structured JSON-LD schemas, and indexing optimization.
+  - **GEO Agent**: Generative Engine Optimization citation blueprints for Perplexity and ChatGPT.
+  - **Content Agent**: High-intent comparison matrices (`Brand vs Competitor`) and conversion briefs.
+  - **Growth Analyst Agent**: Closed-loop metric evaluation and organizational learning extraction.
+- ⚡ **Action Center & Human-In-The-Loop**: Review proposed code diffs, SEO patches, and metadata with risk classifications (`LOW`, `MEDIUM`, `HIGH`) and one-click authorization.
+- 📊 **Outcome Analytics & Funnel Tracking**: 6-step Growth Graph chain:
+  $$\text{Visibility (Impressions)} \to \text{Traffic (Sessions)} \to \text{Engagement} \to \text{Signup (CVR)} \to \text{Activation} \to \text{Revenue (MRR)}$$
+- ⚔️ **Competitor Intelligence & Content Gaps**: Computes high-ROI opportunities using:
+  $$\text{Competitor Topic Coverage} + \text{Customer Search Demand} - \text{Your Coverage} = \text{Content Opportunities}$$
+- 🧭 **30-60-90 Day Strategic Roadmap**: Milestones organized across 3 growth phases (Conversion Quick Wins $\to$ GEO Authority $\to$ Programmatic Scale) tied to your North Star metric.
+- 🩺 **Technical Site Audit & Core Web Vitals**: Deep crawl inspection of schemas, canonical tags, viewport, image alt coverage, and live Core Web Vitals (LCP, INP, CLS) with 1-click auto-fix dispatching.
+- 📑 **Executive Growth Briefs**: Performance reports summarizing traffic/conversion lift, verified learnings, and next-cycle priorities with 1-click Markdown export.
+- 💬 **Global AI Co-Pilot Drawer**: Slide-over AI Growth Assistant available globally across all views for real-time strategic questions.
+- 🔍 **Preserved Legacy SEO Tooling**: Single URL audit, Google PageSpeed analysis, sitemap validator, and keyword rank tracker with cron jobs.
 
 ---
 
-## Tech Stack
+## 💎 Unique Differentiators
 
-### Frontend
-- **React 18 + TypeScript** (Type-safe UI components)
-- **Vite 5** (Fast builds and HMR dev server)
-- **Tailwind CSS 4** (Utility-first styling)
-- **React Router 6** (Client-side routing)
-- **Recharts** (Score history and trend charts)
-- **Lucide React** (Modern icon system)
-
-### Backend
-- **Node.js 24 + Express 5** (ESM RESTful API)
-- **MongoDB Atlas + Mongoose 9** (NoSQL database and ODM)
-- **JWT + bcrypt** (Authentication and password hashing)
-- **Groq SDK 0.9** (Llama 3.3 70B AI report generation)
-- **BrowserBase + Stagehand** (Headless browser scraping)
-- **Google PageSpeed API v5** (Performance scores)
-- **node-cron 4** (Scheduled keyword rank refresh jobs)
+| Capability | Generic SEO Tools | SerpoAI |
+| :--- | :--- | :--- |
+| **Execution Philosophy** | Dumps long lists of unranked warnings | Ranks by ICE formula: (Impact × Confidence) ÷ Effort |
+| **Generative Engine Optimization (GEO)** | None (keywords only) | Simulates visibility across ChatGPT, Perplexity, Gemini, Google AI |
+| **Safety & Human Control** | Black-box or manual only | 3 modes: Copilot, Autopilot (Diff approval), Autonomous |
+| **Closed-Loop Intelligence** | No outcome tracking | Closed-loop attribution: *"Blog traffic increased 24%, but signups lagged $\to$ pivot to pricing page proof"* |
+| **Organizational Memory** | None (resets every audit) | Stores verified experiment learnings permanently in Growth Memory |
+| **LLM Provider Agnostic** | Single vendor lock-in | Multi-provider fallback cascade (**Groq Llama 3.3** $\to$ **DeepSeek V3/R1** $\to$ **Anthropic Claude 3.5/3.7** $\to$ **OpenRouter** $\to$ **OpenAI GPT-4o** $\to$ **Google Gemini 2.0 Flash**) |
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack
+
+### Frontend Client
+- **Framework**: React 18 + TypeScript + Vite 8
+- **Styling**: Tailwind CSS 4 + Aurora Gradient Glassmorphism design system
+- **State Management**: React Context API (`ProjectContext`, `AuthContext`, `ThemeContext`)
+- **Routing**: React Router 6
+- **Icons & UI**: Lucide React, React Hot Toast, Recharts
+- **Exporting**: `html2pdf.js`, Markdown BLOB generator
+
+### Backend Server
+- **Runtime**: Node.js 24 + Express 5 (Native ES Modules)
+- **Database**: MongoDB Atlas + Mongoose 9
+- **Authentication**: JWT (JSON Web Tokens) + bcryptjs
+- **Multi-Model LLM Layer**:
+  - **Groq SDK**: `llama-3.3-70b-versatile`
+  - **DeepSeek API**: `deepseek-chat` / `deepseek-reasoner`
+  - **Anthropic Claude API**: `claude-3-5-sonnet-20241022` / `claude-3-7-sonnet`
+  - **OpenRouter API**: Access to 200+ global open & proprietary models
+  - **OpenAI REST API**: `gpt-4o` / `gpt-4o-mini` / `o3-mini`
+  - **Google Generative AI REST API**: `gemini-2.0-flash`
+- **DOM & Schema Extraction**: Cheerio (fast server-side scraping) + JSON-LD Microdata parser
+- **Validation**: Zod strict schema enforcement for all LLM structured JSON payloads
+- **Network Security**: Safe DNS resolution and private CIDR block filter against SSRF
+- **Performance & Jobs**: Google PageSpeed Insights API v5, node-cron 4
+
+---
+
+## 📂 Project Structure
+
+```
+SEO/
+├── client/                                 # React 18 + TypeScript Frontend
+│   ├── src/
+│   │   ├── assets/                         # Static assets & branding
+│   │   ├── components/
+│   │   │   ├── GrowthCopilotDrawer.tsx     # Global floating AI Growth Assistant
+│   │   │   ├── Navbar.tsx                  # Project switcher, tools dropdown, navigation
+│   │   │   └── ProtectedRoute.tsx          # Authentication route guard
+│   │   ├── context/
+│   │   │   ├── AuthContext.tsx             # JWT session state
+│   │   │   ├── ProjectContext.tsx          # Multi-project switcher & active domain state
+│   │   │   └── ThemeContext.tsx            # Light/Dark mode state
+│   │   ├── pages/
+│   │   │   ├── Dashboard.tsx               # Growth OS command center (Scores, ICE Actions, Memory)
+│   │   │   ├── Onboarding.tsx              # 4-step crawl, persona synthesis & goal wizard
+│   │   │   ├── Opportunities.tsx           # ICE opportunity backlog & agent dispatcher
+│   │   │   ├── ActionCenter.tsx            # Human-in-the-loop approval & code diff viewer
+│   │   │   ├── GEOIntelligence.tsx         # AI Search visibility (ChatGPT, Perplexity, Gemini)
+│   │   │   ├── AnalyticsView.tsx           # Growth Graph funnel & closed-loop verdicts
+│   │   │   ├── CompetitorIntelligence.tsx  # Content Gap Analysis & competitor teardowns
+│   │   │   ├── CompanyProfileView.tsx      # Knowledge Graph, personas & bottlenecks
+│   │   │   ├── StrategyHub.tsx             # 30-60-90 Day Roadmap & North Star metrics
+│   │   │   ├── SiteAudit.tsx               # Technical health, Core Web Vitals & 1-click auto-fix
+│   │   │   ├── GrowthReports.tsx           # Executive growth briefs with Markdown export
+│   │   │   ├── AgentActivity.tsx           # Agent token accounting, latency & financial costs
+│   │   │   ├── Experiments.tsx             # A/B growth experiment hypothesis tracker
+│   │   │   ├── ContentStudio.tsx           # Comparison pages & GEO citation briefs
+│   │   │   ├── Analyze.tsx                 # (Preserved) Single URL SEO analyzer
+│   │   │   ├── RankTracker.tsx             # (Preserved) Keyword rank tracker
+│   │   │   ├── RankDetail.tsx              # (Preserved) Per-keyword position history
+│   │   │   ├── History.tsx                 # (Preserved) SEO audit score history
+│   │   │   ├── Report.tsx                  # (Preserved) Shareable audit report
+│   │   │   ├── Home.tsx                    # Landing hero page
+│   │   │   └── Login.tsx                   # Auth login & registration
+│   │   ├── services/
+│   │   │   └── api.ts                      # Axios API client (Growth OS v1 + legacy APIs)
+│   │   ├── App.tsx                         # Router configuration
+│   │   └── main.tsx                        # Root mounting with ProjectProvider
+│   └── package.json
+│
+└── server/                                 # Express + Node.js Backend
+    ├── ai/
+    │   ├── providers/
+    │   │   ├── LLMProvider.js              # Master provider coordinator with fallback cascade
+    │   │   ├── GroqProvider.js             # Groq SDK structured JSON provider (Llama 3.3 70B)
+    │   │   ├── DeepSeekProvider.js         # DeepSeek API provider (deepseek-chat / reasoner)
+    │   │   ├── AnthropicProvider.js        # Anthropic Claude API provider (Claude 3.5 / 3.7)
+    │   │   ├── OpenRouterProvider.js       # OpenRouter unified multi-model provider
+    │   │   ├── OpenAIProvider.js           # OpenAI REST structured provider (GPT-4o)
+    │   │   └── GeminiProvider.js           # Google Gemini REST provider (Gemini 2.0 Flash)
+    │   └── schemas/
+    │       └── growthSchemas.js            # Zod validation schemas for AI outputs
+    ├── controllers/
+    │   ├── projectController.js            # Project CRUD & onboarding coordinator
+    │   ├── opportunityController.js        # Opportunity backlog & agent dispatching
+    │   ├── actionController.js             # Action approvals & rejection audit log
+    │   ├── geoController.js                # AI answer visibility simulator
+    │   ├── analyticsController.js          # Growth Funnel & integration connectors
+    │   ├── competitorController.js         # Content Gap discovery engine
+    │   ├── strategyController.js           # 30-60-90 day strategic plan generator
+    │   ├── siteAuditController.js          # Technical SEO & auto-fix action generator
+    │   ├── reportController.js             # Executive growth briefs compiler
+    │   ├── agentController.js              # Observability logs & Co-Pilot chat
+    │   ├── experimentController.js         # A/B tests & learning extractor
+    │   ├── memoryController.js             # Persistent organizational memory
+    │   ├── authController.js               # JWT auth & password hashing
+    │   └── seoController.js                # (Preserved) SSRF-safe SEO analysis
+    ├── models/
+    │   ├── Project.js                      # Project & 5-pillar scores model
+    │   ├── CompanyProfile.js               # Knowledge Graph & personas model
+    │   ├── GrowthOpportunity.js            # ICE-ranked opportunities model
+    │   ├── GrowthAction.js                 # Action approval & code diff model
+    │   ├── GEOQuery.js                     # AI search visibility query model
+    │   ├── AnalyticsSnapshot.js            # Funnel metric snapshot model
+    │   ├── Integration.js                  # Encrypted OAuth tokens model
+    │   ├── CompetitorAnalysis.js           # Content gap analysis model
+    │   ├── GrowthStrategy.js               # 30-60-90 roadmap model
+    │   ├── SiteAuditReport.js              # Technical crawl audit & CWV model
+    │   ├── GrowthReport.js                 # Executive report model
+    │   ├── GrowthExperiment.js             # A/B test model
+    │   ├── GrowthMemory.js                 # Persistent organizational memory model
+    │   ├── AgentRun.js                     # Token & financial cost accounting model
+    │   ├── User.js                         # User account model
+    │   ├── SeoAnalysis.js                  # (Preserved) Audit records model
+    │   └── RankTracker.js                  # (Preserved) Keyword tracker model
+    ├── routes/
+    │   ├── apiV1Router.js                  # Master API v1 mount (/api/v1/*)
+    │   ├── projectRoutes.js
+    │   ├── opportunityRoutes.js
+    │   ├── actionRoutes.js
+    │   ├── geoRoutes.js
+    │   ├── analyticsRoutes.js
+    │   ├── competitorRoutes.js
+    │   ├── strategyRoutes.js
+    │   ├── siteAuditRoutes.js
+    │   ├── reportRoutes.js
+    │   ├── agentRoutes.js
+    │   ├── experimentRoutes.js
+    │   └── memoryRoutes.js
+    ├── services/
+    │   ├── crawlerService.js               # SSRF DNS protection & Cheerio DOM parser
+    │   ├── growthBrainService.js           # Knowledge graph synthesis & ICE ranking
+    │   ├── geoService.js                   # Generative engine optimization queries
+    │   ├── agentService.js                 # Specialized agent execution engine
+    │   ├── analyticsService.js             # Closed-loop attribution & funnel snapshots
+    │   ├── competitorService.js            # Content gap calculation service
+    │   ├── strategyService.js              # 30-60-90 strategic roadmap service
+    │   ├── siteAuditService.js             # Technical diagnostics & auto-fix service
+    │   ├── reportService.js                # Executive brief synthesis service
+    │   └── experimentService.js            # A/B testing & learning extraction
+    ├── test-growth-os.js                   # Automated test verification suite
+    ├── server.js                           # Express entry point
+    └── package.json
+```
+
+---
+
+## 🚀 Installation & Setup
 
 ### Prerequisites
-- Node.js ≥ 18
-- MongoDB Atlas connection string
-- [Groq API Key](https://console.groq.com) — free tier, no credit card required
-- [BrowserBase](https://browserbase.com) API Key + Project ID
-- [Google PageSpeed API Key](https://developers.google.com/speed/docs/insights/v5/get-started)
+- **Node.js**: Version ≥ 18.0.0
+- **MongoDB**: Local MongoDB instance or free [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster
+- **Groq API Key**: Free tier at [console.groq.com](https://console.groq.com)
+- *(Optional)* **OpenAI API Key** or **Google Gemini API Key** for multi-provider fallback
+
+---
 
 ### 1. Clone the Repository
 ```bash
@@ -115,7 +250,9 @@ git clone https://github.com/AkshatKardak/SEO.git
 cd SEO
 ```
 
-### 2. Configure & Start Backend Server
+---
+
+### 2. Configure & Start the Backend Server
 ```bash
 cd server
 npm install
@@ -123,45 +260,51 @@ npm install
 
 Create a `server/.env` file:
 ```env
-# MongoDB
-MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/serpoai
+# MongoDB Connection
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/growth_os?retryWrites=true&w=majority
 
-# Auth
-JWT_SECRET=your_super_secret_key
+# JWT Authentication Secret
+JWT_SECRET=your_super_secret_jwt_key_2026
 
-# Groq AI — free at console.groq.com
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# Primary LLM Provider (Groq Llama 3.3 70B - Free at console.groq.com)
+GROQ_API_KEY=gsk_your_groq_api_key_here
 
-# BrowserBase headless scraping
-BROWSERBASE_API_KEY=your_browserbase_key
-BROWSERBASE_PROJECT_ID=your_project_id
+# Multi-Model AI Providers (Configure any/all for auto-fallback)
+DEEPSEEK_API_KEY=sk-your_deepseek_key_here
+ANTHROPIC_API_KEY=sk-ant-api-your_anthropic_key_here
+OPENROUTER_API_KEY=sk-or-v1-your_openrouter_key_here
+OPENAI_API_KEY=sk-proj-your_openai_key_here
+GEMINI_API_KEY=AIzaSy_your_gemini_key_here
 
-# Google PageSpeed Insights
-PAGESPEED_API_KEY=your_pagespeed_key
+# Model Overrides (Optional - defaults to latest modern versions)
+# OPENAI_MODEL=gpt-4o
+# GEMINI_MODEL=gemini-2.0-flash
+# DEEPSEEK_MODEL=deepseek-chat
+# ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+# OPENROUTER_MODEL=deepseek/deepseek-chat
 
-# Frontend origin (for CORS + share links)
-CLIENT_URL=http://localhost:5173
-
+# Server Port & CORS Client URL
 PORT=5000
+CLIENT_URL=http://localhost:5173
 ```
 
-> **ESM Note:** This project uses `"type": "module"`. All local imports **must include the `.js` extension**:
-> ```js
-> // ✅ Correct
-> import connectDB from "./config/db.js";
-> // ❌ Wrong — throws ERR_MODULE_NOT_FOUND
-> import connectDB from "./config/db";
-> ```
-
-Run the server locally:
+Run the backend server:
 ```bash
 npm run server
 ```
-*The API server will listen on `http://localhost:5000`.*
+*Backend API will run on `http://localhost:5000` with routes mounted at `/api/v1/*`.*
 
-> ⚠️ There is no `dev` script in `server/package.json`. Use `npm run server` for local development with nodemon.
+---
 
-### 3. Configure & Start Frontend Client
+### 3. Run the Automated Verification Suite
+To verify SSRF filtering, Cheerio DOM parsing, ICE prioritization math, and LLM coordinator connectivity:
+```bash
+node test-growth-os.js
+```
+
+---
+
+### 4. Configure & Start the Frontend Client
 ```bash
 cd ../client
 npm install
@@ -172,7 +315,7 @@ Create a `client/.env` file:
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Run the client app:
+Start the Vite development server:
 ```bash
 npm run dev
 ```
@@ -180,143 +323,18 @@ npm run dev
 
 ---
 
-## 📂 Project Structure
-
-```
-SEO/
-├── client/                         # React + TypeScript frontend
-│   ├── src/
-│   │   ├── assets/                 # Logo, static images
-│   │   ├── components/
-│   │   │   └── Navbar.tsx          # Top nav with theme toggle
-│   │   ├── context/
-│   │   │   ├── AuthContext.tsx     # JWT auth state
-│   │   │   └── ThemeContext.tsx    # Dark/light theme state
-│   │   ├── pages/
-│   │   │   ├── Home.tsx            # Landing / hero page
-│   │   │   ├── Login.tsx           # Login form
-│   │   │   ├── Dashboard.tsx       # User dashboard & KPIs
-│   │   │   ├── Analyze.tsx         # Single URL SEO analyzer
-│   │   │   ├── BulkAnalyze.tsx     # Bulk URL analyzer (Pro)
-│   │   │   ├── Report.tsx          # Full SEO report view
-│   │   │   ├── RankTracker.tsx     # Keyword rank tracker
-│   │   │   ├── RankDetail.tsx      # Per-keyword detail view
-│   │   │   └── History.tsx         # Score history & charts
-│   │   ├── services/               # Axios API service layer
-│   │   ├── App.tsx                 # Route definitions
-│   │   ├── main.tsx                # React entry point
-│   │   └── index.css               # Aurora theme + Tailwind
-│   ├── index.html
-│   └── package.json
-│
-└── server/                         # Express + Node.js backend
-    ├── config/
-    │   └── db.js                   # MongoDB Atlas connection
-    ├── controllers/
-    │   ├── authController.js       # Register / Login / JWT
-    │   ├── seoController.js        # SEO analysis + Groq AI report
-    │   └── rankController.js       # Rank tracking CRUD
-    ├── cron/                       # Scheduled rank refresh jobs
-    ├── middleware/
-    │   └── auth.js                 # JWT verification middleware
-    ├── models/
-    │   ├── User.js                 # User schema (name, email, plan)
-    │   └── SeoAnalysis.js          # SEO analysis schema
-    ├── routes/                     # Express route definitions
-    ├── server.js                   # App entry point
-    └── package.json
-```
-
----
-
-## API Reference
-
-### Auth — `/api/auth`
-
-| Method | Endpoint | Auth | Description |
-|---|---|:---:|---|
-| POST | `/register` | ❌ | Register new user |
-| POST | `/login` | ❌ | Login, returns JWT |
-
-### SEO Analysis — `/api/seo`
-
-| Method | Endpoint | Auth | Description |
-|---|---|:---:|---|
-| POST | `/analyze` | ✅ | Analyze single URL (+ Groq AI report) |
-| GET | `/analyses` | ✅ | Get all analyses for user |
-| GET | `/analysis/:id` | ✅ | Get single analysis |
-| POST | `/bulk` | ✅ Pro | Analyze up to 5 URLs |
-| GET | `/history` | ✅ | Score history for chart |
-| POST | `/share/:id` | ✅ | Generate public share link |
-| GET | `/share/:token` | ❌ | View shared report (public) |
-| GET | `/sitemap-robots` | ✅ | Check sitemap & robots.txt |
-| GET | `/pagespeed` | ✅ | Google PageSpeed scores |
-
-### Rank Tracker — `/api/rank`
-
-| Method | Endpoint | Auth | Description |
-|---|---|:---:|---|
-| POST | `/` | ✅ | Add keyword to track |
-| GET | `/` | ✅ | List all tracked keywords |
-| GET | `/:id` | ✅ | Keyword detail + position history |
-| DELETE | `/:id` | ✅ | Remove tracked keyword |
-
----
-
-## 🤖 AI Integration — Groq + Llama 3.3
-
-Groq powers all AI-generated SEO reports using **Llama 3.3 70B Versatile** on LPU hardware — near-instant responses even on the free tier.
-
-**How it works:**
-1. BrowserBase scrapes the target URL (title, meta tags, h1, images, internal/external links)
-2. Server calculates SEO scores across multiple dimensions
-3. Groq generates a structured ~400-word report covering:
-   - **Overall Assessment** — score summary with context
-   - **Top 3 Critical Issues** — specific, actionable fixes
-   - **Top 3 Quick Wins** — low-effort, high-impact improvements
-   - **Priority Action Plan** — ordered next steps
-
-**Model config:**
-```js
-model: "llama-3.3-70b-versatile"
-max_tokens: 700
-temperature: 0.4
-```
-
-**Why Groq over Gemini:**
-* ~10× faster inference (LPU hardware)
-* Generous free tier — no credit card required
-* Consistent structured output for report parsing
-* Virtually no 429 rate-limit issues at typical usage volumes
-
----
-
-## Deployment
-
-### Frontend → Vercel
-```bash
-cd client
-npx vercel --prod
-```
-Set in Vercel dashboard:
-```
-VITE_API_URL=https://your-backend.onrender.com/api
-```
-
-### Backend → Render
-1. Connect `AkshatKardak/SEO` to Render
-2. **Root directory:** `server`
-3. **Build command:** `npm install`
-4. **Start command:** `npm start`
-5. Add all `.env` variables under **Environment** in the Render dashboard
-
----
-
 ## 📄 License
-Distributed under the MIT License. See `LICENSE` for details.
+This project is open-source software licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more information.
+
+---
+
+## 👤 Author & Contributor
+**Akshat Kardak**
+- **GitHub**: [@AkshatKardak](https://github.com/AkshatKardak)
+- **Repository**: [https://github.com/AkshatKardak/SEO](https://github.com/AkshatKardak/SEO)
 
 ---
 
 <div align="center">
-Built with ❤️ for developers who want fast, AI-driven SEO insights without the enterprise price tag.
+  <sub>Built with ❤️ for founders and growth engineers who prioritize business outcomes, conversion rate lift, and generative search visibility.</sub>
 </div>
