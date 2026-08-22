@@ -243,6 +243,17 @@ export const seoAPI = {
     }),
 };
 
+// ─── Multi-Analysis (URL) ─────────────────────────────────
+export const analysisAPI = {
+  analyzeUrl: (url: string, analyses?: string[]) =>
+    request("/api/analysis/url", {
+      method: "POST",
+      body: JSON.stringify(analyses && analyses.length ? { url, analyses } : { url }),
+    }),
+
+  getProviderStatus: () => request("/api/analysis/status"),
+};
+
 // ─── Rank Tracker (Preserved) ─────────────────────────────
 export const rankAPI = {
   addKeyword: (keyword: string, targetUrl: string) =>

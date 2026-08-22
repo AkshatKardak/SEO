@@ -225,7 +225,7 @@ Recommended Action: ${opportunity.recommendedAction}`;
     status: "completed",
     input: { opportunityTitle: opportunity.title, action: opportunity.recommendedAction },
     output: runResult?.data || {},
-    modelUsed: runResult?.meta?.model || "llama-3.3-70b-versatile",
+    modelUsed: runResult?.meta?.model || "unknown",
     provider: runResult?.meta?.provider || "Groq",
     tokensUsed: {
       input: runResult?.meta?.inputTokens || 0,

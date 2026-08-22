@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import seoRouter from "./routes/seoRoutes.js";
 import rankRouter from "./routes/rankRoutes.js";
+import analysisRouter from "./routes/analysisRoutes.js";
 import { startRankCron } from "./cron/rankChecker.js";
 
 import apiV1Router from "./routes/apiV1Router.js";
@@ -21,6 +22,7 @@ app.get("/", (req, res) => res.send("AI Growth OS Server is running ✅"));
 app.use("/api/auth", authRouter);
 app.use("/api/seo", seoRouter);
 app.use("/api/rank", rankRouter);
+app.use("/api/analysis", analysisRouter);
 app.use("/api/v1", apiV1Router);
 
 const PORT = process.env.PORT || 5000;

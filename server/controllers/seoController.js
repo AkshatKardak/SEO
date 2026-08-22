@@ -1,10 +1,7 @@
-import Groq from "groq-sdk";
 import SeoAnalysis from "../models/SeoAnalysis.js";
 import User from "../models/User.js";
 import { v4 as uuidv4 } from "uuid";
 import { sendAnalysisCompleteEmail } from "../services/emailService.js";
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const USER_AGENTS = [
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
@@ -364,13 +361,16 @@ Provide:
 
 Be specific and actionable. Keep it under 400 words.`;
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 700,
-      temperature: 0.4,
-    });
-    const aiReport = completion.choices[0].message.content;
+    // Route through the provider router (Groq -> Gemini -> OpenRouter). A
+    // provider outage degrades to a saved deterministic report rather than a 500.
+    let aiReport;
+    try {
+      const result = await llm.generateText({ prompt, maxTokens: 700, temperature: 0.4 });
+      aiReport = result.text;
+    } catch (aiErr) {
+      console.warn("[analyzeUrl] AI narrative unavailable:", aiErr.message);
+      aiReport = `AI narrative is temporarily unavailable (${aiErr.message}). The scores, issues, and metadata above were computed directly from the page and remain valid.`;
+    }
 
     const analysis = await SeoAnalysis.create({
       userId: req.userId,

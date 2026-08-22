@@ -35,7 +35,7 @@ const agentRunSchema = new mongoose.Schema(
     },
     input: { type: mongoose.Schema.Types.Mixed },
     output: { type: mongoose.Schema.Types.Mixed },
-    modelUsed: { type: String, default: "llama-3.3-70b-versatile" },
+    modelUsed: { type: String, default: "unknown" },
     provider: { type: String, default: "Groq" },
     tokensUsed: {
       input: { type: Number, default: 0 },

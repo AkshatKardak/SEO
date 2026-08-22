@@ -1,8 +1,19 @@
+import { ProviderError, normalizeProviderError, parseStructuredResponse, validateStructured } from "./providerUtils.js";
+
 export class GeminiProvider {
-  constructor(apiKey = process.env.GEMINI_API_KEY) {
+  /**
+   * @param {object} [opts]
+   * @param {string}   [opts.apiKey]    - defaults to process.env.GEMINI_API_KEY
+   * @param {string}   [opts.model]     - defaults to process.env.GEMINI_MODEL || "gemini-2.0-flash"
+   * @param {Function} [opts.fetchImpl] - injected fetch for tests
+   */
+  constructor({ apiKey = process.env.GEMINI_API_KEY, model, fetchImpl } = {}) {
     this.apiKey = apiKey;
     this.name = "Gemini";
-    this.defaultModel = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    this.keyEnv = "GEMINI_API_KEY";
+    this.modelEnv = "GEMINI_MODEL";
+    this.defaultModel = model || process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    this.fetchImpl = fetchImpl || fetch;
     this.costPer1kInput = 0.0001;
     this.costPer1kOutput = 0.0004;
   }
@@ -11,75 +22,62 @@ export class GeminiProvider {
     return Boolean(this.apiKey && this.apiKey.trim().length > 5);
   }
 
+  /** Perform the REST call, mapping any failure to a normalized ProviderError. */
+  async _call({ model, body }) {
+    // The key travels in the query string; never surface the endpoint in errors.
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+    let res;
+    try {
+      res = await this.fetchImpl(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+    }
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const synthetic = new Error(errBody?.error?.message || res.statusText || "Gemini request failed");
+      synthetic.status = res.status;
+      synthetic.code = errBody?.error?.status;
+      throw normalizeProviderError(synthetic, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+    }
+
+    return res.json();
+  }
+
   async generateStructured({ systemPrompt, prompt, schema, model = this.defaultModel, maxTokens = 2000, temperature = 0.2 }) {
     if (!this.isAvailable()) {
-      throw new Error("Gemini API key not configured");
+      throw new ProviderError("Gemini API key not configured.", { code: "auth", retryable: false, provider: this.name, envVar: this.keyEnv });
     }
 
     const startTime = Date.now();
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
-
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `${systemPrompt}\n\nTask:\n${prompt}` }],
-          },
-        ],
-        generationConfig: {
-          temperature,
-          maxOutputTokens: maxTokens,
-          responseMimeType: "application/json",
-        },
-      }),
+    const completion = await this._call({
+      model,
+      body: {
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nTask:\n${prompt}` }] }],
+        generationConfig: { temperature, maxOutputTokens: maxTokens, responseMimeType: "application/json" },
+      },
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(`Gemini API error: ${err.error?.message || res.statusText}`);
-    }
-
-    const completion = await res.json();
     const duration = Date.now() - startTime;
-    const rawContent = completion.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const rawContent = completion.candidates?.[0]?.content?.parts?.[0]?.text || "";
     const usageMetadata = completion.usageMetadata || {};
-
     const inputTokens = usageMetadata.promptTokenCount || 0;
     const outputTokens = usageMetadata.candidatesTokenCount || 0;
-    const totalTokens = usageMetadata.totalTokenCount || (inputTokens + outputTokens);
+    const totalTokens = usageMetadata.totalTokenCount || inputTokens + outputTokens;
+    const estimatedCost = (inputTokens / 1000) * this.costPer1kInput + (outputTokens / 1000) * this.costPer1kOutput;
 
-    const estimatedCost = (
-      (inputTokens / 1000) * this.costPer1kInput +
-      (outputTokens / 1000) * this.costPer1kOutput
-    );
-
-    let parsed;
-    try {
-      parsed = JSON.parse(rawContent);
-    } catch (e) {
-      const cleaned = rawContent.replace(/^[^{[]*/, "").replace(/[^}\]]*$/, "");
-      parsed = JSON.parse(cleaned);
-    }
-
-    let validated = parsed;
-    if (schema) {
-      const result = schema.safeParse(parsed);
-      if (result.success) {
-        validated = result.data;
-      } else {
-        console.warn("[GeminiProvider] Schema warning:", result.error.format());
-        validated = parsed;
-      }
-    }
+    const parsed = parseStructuredResponse(rawContent);
+    const validated = validateStructured(schema, parsed, this.name);
 
     return {
       data: validated,
       raw: rawContent,
       meta: {
-        provider: "Gemini",
+        provider: this.name,
         model,
         inputTokens,
         outputTokens,
@@ -92,52 +90,30 @@ export class GeminiProvider {
 
   async generateText({ systemPrompt, prompt, model = this.defaultModel, maxTokens = 1500, temperature = 0.4 }) {
     if (!this.isAvailable()) {
-      throw new Error("Gemini API key not configured");
+      throw new ProviderError("Gemini API key not configured.", { code: "auth", retryable: false, provider: this.name, envVar: this.keyEnv });
     }
 
     const startTime = Date.now();
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
-
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: `${systemPrompt ? systemPrompt + "\n\n" : ""}${prompt}` }],
-          },
-        ],
-        generationConfig: {
-          temperature,
-          maxOutputTokens: maxTokens,
-        },
-      }),
+    const completion = await this._call({
+      model,
+      body: {
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt ? systemPrompt + "\n\n" : ""}${prompt}` }] }],
+        generationConfig: { temperature, maxOutputTokens: maxTokens },
+      },
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(`Gemini API error: ${err.error?.message || res.statusText}`);
-    }
-
-    const completion = await res.json();
     const duration = Date.now() - startTime;
     const content = completion.candidates?.[0]?.content?.parts?.[0]?.text || "";
     const usageMetadata = completion.usageMetadata || {};
-
     const inputTokens = usageMetadata.promptTokenCount || 0;
     const outputTokens = usageMetadata.candidatesTokenCount || 0;
-    const totalTokens = usageMetadata.totalTokenCount || (inputTokens + outputTokens);
-
-    const estimatedCost = (
-      (inputTokens / 1000) * this.costPer1kInput +
-      (outputTokens / 1000) * this.costPer1kOutput
-    );
+    const totalTokens = usageMetadata.totalTokenCount || inputTokens + outputTokens;
+    const estimatedCost = (inputTokens / 1000) * this.costPer1kInput + (outputTokens / 1000) * this.costPer1kOutput;
 
     return {
       text: content,
       meta: {
-        provider: "Gemini",
+        provider: this.name,
         model,
         inputTokens,
         outputTokens,

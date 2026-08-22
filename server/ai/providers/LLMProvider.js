@@ -1,105 +1,205 @@
 import { GroqProvider } from "./GroqProvider.js";
-import { OpenAIProvider } from "./OpenAIProvider.js";
 import { GeminiProvider } from "./GeminiProvider.js";
-import { DeepSeekProvider } from "./DeepSeekProvider.js";
 import { OpenRouterProvider } from "./OpenRouterProvider.js";
-import { AnthropicProvider } from "./AnthropicProvider.js";
+import { ProviderError, normalizeProviderError } from "./providerUtils.js";
 
-class LLMService {
-  constructor() {
-    this.groq = new GroqProvider();
-    this.deepseek = new DeepSeekProvider();
-    this.anthropic = new AnthropicProvider();
-    this.openrouter = new OpenRouterProvider();
-    this.openai = new OpenAIProvider();
-    this.gemini = new GeminiProvider();
+/**
+ * Router across the three supported providers: Groq -> Gemini -> OpenRouter.
+ *
+ * Design (plan §C / §D):
+ *  - Only providers whose key is present are ever used. DeepSeek / Anthropic /
+ *    OpenAI are never imported or instantiated.
+ *  - Fallback happens ONLY for retryable transport errors (rate_limit / server /
+ *    network). A fatal config error (auth / model / bad_request / unknown) is
+ *    surfaced immediately with an actionable message and does NOT cascade.
+ *  - schema_validation / parse failures get one repair retry on the same
+ *    provider, then fall through to the next provider; invalid data is never
+ *    returned.
+ *  - Logs carry provider + code/status only. Never keys, headers, or prompts.
+ */
+export class LLMService {
+  /**
+   * @param {object} [opts]
+   * @param {Array}   [opts.providers]       - injected providers (test seam); defaults to Groq/Gemini/OpenRouter
+   * @param {string}  [opts.primary]         - preferred primary provider name; defaults to AI_PRIMARY_PROVIDER || "groq"
+   * @param {boolean} [opts.fallbackEnabled] - defaults to AI_FALLBACK_ENABLED !== "false"
+   * @param {number}  [opts.backoffMs]       - optional backoff before a post-429 retry; defaults to AI_RETRY_BACKOFF_MS || 0
+   */
+  constructor({ providers, primary, fallbackEnabled, backoffMs } = {}) {
+    // Construct all three kept providers (cheap, no network / no key needed).
+    // isAvailable() gates actual use, so a keyless provider is simply reported
+    // disabled rather than attempted.
+    this.allProviders = providers || [new GroqProvider(), new GeminiProvider(), new OpenRouterProvider()];
+
+    this.defaultPrimary = (primary || process.env.AI_PRIMARY_PROVIDER || "groq").toString().toLowerCase();
+    this.fallbackEnabled =
+      typeof fallbackEnabled === "boolean"
+        ? fallbackEnabled
+        : String(process.env.AI_FALLBACK_ENABLED ?? "true").toLowerCase() !== "false";
+    this.backoffMs = typeof backoffMs === "number" ? backoffMs : Number(process.env.AI_RETRY_BACKOFF_MS ?? 0);
+  }
+
+  /** Enabled providers, in fixed priority order. */
+  _enabled() {
+    return this.allProviders.filter((p) => p && typeof p.isAvailable === "function" && p.isAvailable());
+  }
+
+  /** Choose the primary provider from the enabled set, honoring the preference. */
+  _pickPrimary(enabled, preferred) {
+    const want = (preferred || this.defaultPrimary || "").toString().toLowerCase();
+    if (want) {
+      const match = enabled.find((p) => (p.name || "").toLowerCase() === want);
+      if (match) return match;
+    }
+    return enabled[0];
+  }
+
+  /** Ordered attempt chain: primary first, then the other enabled providers. */
+  _providerChain(preferred) {
+    const enabled = this._enabled();
+    if (enabled.length === 0) return [];
+    const primary = this._pickPrimary(enabled, preferred);
+    return [primary, ...enabled.filter((p) => p !== primary)];
+  }
+
+  _sleep(ms) {
+    if (!ms || ms <= 0) return Promise.resolve();
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /** Guarantee a fatal config error names the env var to check (plan §D). */
+  _enrich(norm) {
+    if (norm && norm.envVar && typeof norm.message === "string" && !norm.message.includes(norm.envVar)) {
+      norm.message = `${norm.message} (check ${norm.envVar})`;
+    }
+    return norm;
   }
 
   /**
-   * Returns list of currently configured and available providers
+   * Public: provider status for a status endpoint / UI. No secrets.
+   * @returns {Array<{ provider: string, enabled: boolean, model: string }>}
    */
+  getProviderStatus() {
+    return this.allProviders.map((p) => ({
+      provider: p.name,
+      enabled: typeof p.isAvailable === "function" ? p.isAvailable() : false,
+      model: p.defaultModel || null,
+    }));
+  }
+
+  /** Back-compat: list of enabled provider names. */
   getAvailableProviders() {
-    const list = [];
-    if (this.groq.isAvailable()) list.push("Groq");
-    if (this.deepseek.isAvailable()) list.push("DeepSeek");
-    if (this.anthropic.isAvailable()) list.push("Anthropic");
-    if (this.openrouter.isAvailable()) list.push("OpenRouter");
-    if (this.openai.isAvailable()) list.push("OpenAI");
-    if (this.gemini.isAvailable()) list.push("Gemini");
-    return list;
+    return this._enabled().map((p) => p.name);
   }
 
-  /**
-   * Primary provider selection with fallback cascade
-   */
-  getPrimaryProvider(preferred = null) {
-    if (preferred === "deepseek" && this.deepseek.isAvailable()) return this.deepseek;
-    if (preferred === "anthropic" && this.anthropic.isAvailable()) return this.anthropic;
-    if (preferred === "openrouter" && this.openrouter.isAvailable()) return this.openrouter;
-    if (preferred === "openai" && this.openai.isAvailable()) return this.openai;
-    if (preferred === "gemini" && this.gemini.isAvailable()) return this.gemini;
-    if (preferred === "groq" && this.groq.isAvailable()) return this.groq;
-
-    // Automatic priority cascade
-    if (this.groq.isAvailable()) return this.groq;
-    if (this.deepseek.isAvailable()) return this.deepseek;
-    if (this.anthropic.isAvailable()) return this.anthropic;
-    if (this.openrouter.isAvailable()) return this.openrouter;
-    if (this.openai.isAvailable()) return this.openai;
-    if (this.gemini.isAvailable()) return this.gemini;
-
-    throw new Error(
-      "No AI LLM provider is configured. Please provide at least one API key: GROQ_API_KEY, DEEPSEEK_API_KEY, ANTHROPIC_API_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY."
+  _noProviderError() {
+    return new ProviderError(
+      "No AI provider is configured. Set at least one of GROQ_API_KEY, GEMINI_API_KEY, or OPENROUTER_API_KEY.",
+      { code: "auth", retryable: false }
     );
   }
 
-  getFallbackProviders(current) {
-    const all = [this.groq, this.deepseek, this.anthropic, this.openrouter, this.openai, this.gemini];
-    return all.filter((p) => p !== current && p.isAvailable());
+  /**
+   * Run one provider attempt. For structured calls, a schema_validation / parse
+   * failure triggers exactly one repair retry on the SAME provider before the
+   * error is propagated to the router's cross-provider loop.
+   */
+  async _attempt(provider, invoke, canRepair) {
+    try {
+      return await invoke(provider, {});
+    } catch (err) {
+      const norm = err instanceof ProviderError ? err : normalizeProviderError(err, { provider: provider.name });
+      if (canRepair && (norm.code === "schema_validation" || norm.code === "parse")) {
+        console.warn(`[LLMService] ${provider.name} returned ${norm.code}; attempting one repair retry.`);
+        // If the repair attempt also throws, it propagates to the router loop,
+        // which then moves on to the next provider (or fails).
+        return await invoke(provider, { repair: true });
+      }
+      throw norm;
+    }
+  }
+
+  /**
+   * Core router loop shared by generateStructured / generateText.
+   * @param {object} cfg
+   * @param {string} [cfg.preferredProvider]
+   * @param {(provider, ctx:{repair?:boolean}) => Promise<any>} cfg.invoke
+   * @param {boolean} cfg.canRepair
+   */
+  async _execute({ preferredProvider, invoke, canRepair }) {
+    const chain = this._providerChain(preferredProvider);
+    if (chain.length === 0) throw this._noProviderError();
+
+    let lastError = null;
+
+    for (let i = 0; i < chain.length; i++) {
+      const provider = chain[i];
+      const hasNext = i < chain.length - 1;
+
+      try {
+        return await this._attempt(provider, invoke, canRepair);
+      } catch (rawErr) {
+        const norm = rawErr instanceof ProviderError ? rawErr : normalizeProviderError(rawErr, { provider: provider.name });
+        lastError = this._enrich(norm);
+        const where = `${norm.code}${norm.status ? " " + norm.status : ""}`;
+
+        // Fatal config errors never cascade (this is the core bug fix): a bad
+        // key / bad model / malformed request / unknown failure is surfaced
+        // immediately with its actionable message.
+        const isContentFail = norm.code === "schema_validation" || norm.code === "parse";
+        const isFatal = !norm.retryable && !isContentFail;
+        if (isFatal) {
+          console.warn(`[LLMService] ${provider.name} failed (${where}); fatal config error, not falling back.`);
+          throw this._enrich(norm);
+        }
+
+        // Retryable transport error, or a content failure that survived its
+        // repair retry: move to the next enabled provider if allowed.
+        if (!this.fallbackEnabled || !hasNext) {
+          console.warn(`[LLMService] ${provider.name} failed (${where}); ${hasNext ? "fallback disabled" : "no more providers"}.`);
+          break;
+        }
+
+        const next = chain[i + 1];
+        console.warn(`[LLMService] ${provider.name} failed (${where}); trying ${next.name}.`);
+        if (norm.code === "rate_limit") await this._sleep(this.backoffMs);
+      }
+    }
+
+    // Exhausted the chain on retryable/content errors.
+    if (chain.length > 1) {
+      const agg = new ProviderError(
+        `All ${chain.length} configured AI providers failed. Last: ${lastError?.message || "unknown error"}`,
+        { code: lastError?.code || "unknown", retryable: false, provider: lastError?.provider, envVar: lastError?.envVar, status: lastError?.status }
+      );
+      throw agg;
+    }
+    throw lastError || this._noProviderError();
   }
 
   async generateStructured({ systemPrompt, prompt, schema, preferredProvider = null, maxTokens = 2500, temperature = 0.2 }) {
-    const primary = this.getPrimaryProvider(preferredProvider);
-    const fallbacks = this.getFallbackProviders(primary);
-
-    try {
-      return await primary.generateStructured({ systemPrompt, prompt, schema, maxTokens, temperature });
-    } catch (primaryErr) {
-      console.warn(`[LLMService] Primary provider (${primary.name}) failed:`, primaryErr.message);
-
-      for (const fallback of fallbacks) {
-        try {
-          console.log(`[LLMService] Attempting fallback with ${fallback.name}...`);
-          return await fallback.generateStructured({ systemPrompt, prompt, schema, maxTokens, temperature });
-        } catch (fallbackErr) {
-          console.warn(`[LLMService] Fallback provider (${fallback.name}) failed:`, fallbackErr.message);
-        }
-      }
-
-      throw primaryErr;
-    }
+    const repairSuffix =
+      "\n\nIMPORTANT: your previous reply was not valid JSON matching the required schema. Reply again with ONLY one valid JSON object that strictly matches the schema. No markdown, no code fences, no commentary.";
+    return this._execute({
+      preferredProvider,
+      canRepair: Boolean(schema),
+      invoke: (provider, { repair } = {}) =>
+        provider.generateStructured({
+          systemPrompt,
+          prompt: repair ? `${prompt}${repairSuffix}` : prompt,
+          schema,
+          maxTokens,
+          temperature,
+        }),
+    });
   }
 
   async generateText({ systemPrompt, prompt, preferredProvider = null, maxTokens = 2000, temperature = 0.4 }) {
-    const primary = this.getPrimaryProvider(preferredProvider);
-    const fallbacks = this.getFallbackProviders(primary);
-
-    try {
-      return await primary.generateText({ systemPrompt, prompt, maxTokens, temperature });
-    } catch (primaryErr) {
-      console.warn(`[LLMService] Primary provider (${primary.name}) failed:`, primaryErr.message);
-
-      for (const fallback of fallbacks) {
-        try {
-          console.log(`[LLMService] Attempting fallback with ${fallback.name}...`);
-          return await fallback.generateText({ systemPrompt, prompt, maxTokens, temperature });
-        } catch (fallbackErr) {
-          console.warn(`[LLMService] Fallback provider (${fallback.name}) failed:`, fallbackErr.message);
-        }
-      }
-
-      throw primaryErr;
-    }
+    return this._execute({
+      preferredProvider,
+      canRepair: false,
+      invoke: (provider) => provider.generateText({ systemPrompt, prompt, maxTokens, temperature }),
+    });
   }
 }
 

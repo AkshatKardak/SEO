@@ -1,5 +1,6 @@
 import { getAgentActivity, chatWithAgentCoPilot } from "../controllers/agentController.js";
 import auth from "../middleware/auth.js";
+import express from "express";
 
 const router = express.Router();
 

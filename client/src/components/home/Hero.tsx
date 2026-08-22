@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  Zap,
   Shield,
   TrendingUp,
   Search,
@@ -64,26 +63,16 @@ export default function Hero() {
         <div className="absolute top-1/2 right-1/4 w-[350px] h-[350px] rounded-full bg-violet-500/8 blur-3xl" />
       </div>
 
-      {/* ── COOL INTRODUCTION: LIVE ENGINE TELEMETRY BAR ── */}
-      <div className="relative mb-6 inline-flex flex-wrap items-center justify-center gap-2 sm:gap-4 px-4 py-1.5 rounded-full border border-primary/25 bg-card/80 backdrop-blur-md text-xs font-semibold shadow-lg">
-        <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
-          SerpoAI v2.4 Multi-Agent Core: Online
+      {/* Single status eyebrow — one clean pill instead of three stacked badges */}
+      <div className="relative mb-6 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-primary/20 bg-card/70 backdrop-blur-md text-xs font-semibold shadow-sm">
+        <span className="flex items-center gap-1.5 text-emerald-500 dark:text-emerald-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse inline-block" />
+          Multi-agent engine online
         </span>
-        <span className="w-px h-3 bg-border hidden sm:inline" />
-        <span className="flex items-center gap-1.5 text-primary">
-          <Zap size={12} className="fill-primary" /> 60+ Deep Signals Scanned
+        <span className="w-px h-3 bg-border" />
+        <span className="flex items-center gap-1.5 text-muted-foreground">
+          <Bot size={12} className="text-primary" /> Autonomous SEO &amp; GEO intelligence
         </span>
-        <span className="w-px h-3 bg-border hidden sm:inline" />
-        <span className="flex items-center gap-1.5 text-accent hidden sm:flex">
-          <Sparkles size={12} /> GEO & AI Search Citations
-        </span>
-      </div>
-
-      {/* Hero Badge */}
-      <div className="relative mb-4 inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/20 bg-primary/8 text-primary text-[11px] font-bold tracking-wider uppercase">
-        <Bot size={13} />
-        Autonomous Growth & SEO Intelligence Platform
       </div>
 
       {/* Main Heading */}

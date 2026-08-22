@@ -92,6 +92,32 @@
 
 html {
     color-scheme: light dark;
+    scroll-behavior: smooth;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT GUARDS
+   Stop content from being clipped: kill stray
+   horizontal overflow, and keep in-page anchors
+   from hiding under the fixed h-16 navbar.
+   ═══════════════════════════════════════════ */
+html,
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+*,
+*::before,
+*::after {
+    min-width: 0;
+}
+
+/* Any in-page anchor target clears the fixed h-16 navbar when scrolled to.
+   scroll-margin-top is inert unless the element is a scroll target, so a
+   blanket [id] rule is safe and covers both <section id> and <div id> anchors. */
+[id] {
+    scroll-margin-top: 5.5rem;
 }
 
 /* ═══════════════════════════════════════════
