@@ -11,6 +11,7 @@ import competitorRoutes from "./competitorRoutes.js";
 import strategyRoutes from "./strategyRoutes.js";
 import siteAuditRoutes from "./siteAuditRoutes.js";
 import reportRoutes from "./reportRoutes.js";
+import mlRoutes from "./mlRoutes.js";
 
 const apiV1Router = express.Router();
 
@@ -26,5 +27,6 @@ apiV1Router.use("/competitors", competitorRoutes);
 apiV1Router.use("/strategy", strategyRoutes);
 apiV1Router.use("/audit", siteAuditRoutes);
 apiV1Router.use("/reports", reportRoutes);
+apiV1Router.use("/ml", mlRoutes);
 
 export default apiV1Router;

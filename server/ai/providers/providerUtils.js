@@ -90,16 +90,21 @@ export function normalizeProviderError(error, { provider = "Provider", keyEnv = 
     return mk("auth", false, `${provider} authentication failed. Check ${keyEnv || "the API key"}.`);
   }
 
-  // --- Model unavailable / decommissioned (fatal) ---
+  // --- Model unavailable / decommissioned ---
   if (
     status === 404 ||
     errCode === "model_not_found" || errCode === "model_decommissioned" ||
+    lower.includes("model_permission_blocked_org") || lower.includes("model is blocked") ||
     (lower.includes("model") &&
       (lower.includes("does not exist") || lower.includes("not found") ||
         lower.includes("decommission") || lower.includes("unavailable") ||
-        lower.includes("invalid")))
+        lower.includes("invalid") || lower.includes("no longer available")))
   ) {
-    return mk("model", false, `${provider} is enabled but the configured model is unavailable. Check ${modelEnv || "the model setting"}.`);
+    return mk(
+      "model",
+      false,
+      `${provider} is enabled but the configured model is unavailable. Check ${modelEnv || "the model setting"}.`
+    );
   }
 
   // --- Rate limit (retryable) ---

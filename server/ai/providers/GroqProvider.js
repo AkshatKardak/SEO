@@ -1,11 +1,21 @@
 import Groq from "groq-sdk";
 import { ProviderError, normalizeProviderError, parseStructuredResponse, validateStructured } from "./providerUtils.js";
 
+const MODERN_GROQ_CANDIDATES = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-70b-versatile",
+  "llama3-8b-8192",
+  "mixtral-8x7b-32768",
+  "qwen/qwen3.8-27b",
+  "openai/gpt-oss-120b",
+  "llama-3.1-8b-instant",
+];
+
 export class GroqProvider {
   /**
    * @param {object} [opts]
    * @param {string} [opts.apiKey] - defaults to process.env.GROQ_API_KEY
-   * @param {string} [opts.model]  - defaults to process.env.GROQ_MODEL || "llama-3.1-8b-instant"
+   * @param {string} [opts.model]  - defaults to process.env.GROQ_MODEL || "llama-3.3-70b-versatile"
    * @param {object} [opts.client] - injected client for tests (must expose chat.completions.create)
    */
   constructor({ apiKey = process.env.GROQ_API_KEY, model, client } = {}) {
@@ -14,13 +24,50 @@ export class GroqProvider {
     this.name = "Groq";
     this.keyEnv = "GROQ_API_KEY";
     this.modelEnv = "GROQ_MODEL";
-    this.defaultModel = model || process.env.GROQ_MODEL || "llama-3.1-8b-instant";
+    this.defaultModel = model || process.env.GROQ_MODEL || MODERN_GROQ_CANDIDATES[0];
     this.costPer1kInput = 0.00059;
     this.costPer1kOutput = 0.00079;
   }
 
   isAvailable() {
     return Boolean(this.client);
+  }
+
+  async _createChatCompletion(baseParams, requestedModel) {
+    const targetModel = requestedModel || this.defaultModel;
+    const candidateList =
+      !process.env.GROQ_MODEL && targetModel === this.defaultModel
+        ? [targetModel, ...MODERN_GROQ_CANDIDATES.filter((m) => m !== targetModel)]
+        : [targetModel];
+
+    let lastError = null;
+
+    for (const m of candidateList) {
+      try {
+        const completion = await this.client.chat.completions.create({
+          ...baseParams,
+          model: m,
+        });
+        if (this.defaultModel !== m && !process.env.GROQ_MODEL) {
+          this.defaultModel = m;
+        }
+        return { completion, modelUsed: m };
+      } catch (err) {
+        lastError = err;
+        const msg = String(err?.message || "").toLowerCase();
+        const isModelIssue =
+          err?.status === 404 ||
+          err?.code === "model_not_found" ||
+          msg.includes("model") ||
+          msg.includes("blocked at the organization level");
+
+        if (!isModelIssue || process.env.GROQ_MODEL) {
+          throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+        }
+      }
+    }
+
+    throw normalizeProviderError(lastError, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
   }
 
   async generateStructured({ systemPrompt, prompt, schema, model = this.defaultModel, maxTokens = 2000, temperature = 0.3 }) {
@@ -35,18 +82,15 @@ export class GroqProvider {
       { role: "user", content: prompt },
     ];
 
-    let completion;
-    try {
-      completion = await this.client.chat.completions.create({
-        model,
+    const { completion, modelUsed } = await this._createChatCompletion(
+      {
         messages,
         temperature,
         max_tokens: maxTokens,
         response_format: { type: "json_object" },
-      });
-    } catch (err) {
-      throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
-    }
+      },
+      model
+    );
 
     const duration = Date.now() - startTime;
     const rawContent = completion.choices?.[0]?.message?.content || "";
@@ -65,7 +109,7 @@ export class GroqProvider {
       raw: rawContent,
       meta: {
         provider: this.name,
-        model,
+        model: modelUsed || model,
         inputTokens: usage.prompt_tokens || 0,
         outputTokens: usage.completion_tokens || 0,
         totalTokens: usage.total_tokens || 0,
@@ -86,17 +130,14 @@ export class GroqProvider {
       { role: "user", content: prompt },
     ];
 
-    let completion;
-    try {
-      completion = await this.client.chat.completions.create({
-        model,
+    const { completion, modelUsed } = await this._createChatCompletion(
+      {
         messages,
         temperature,
         max_tokens: maxTokens,
-      });
-    } catch (err) {
-      throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
-    }
+      },
+      model
+    );
 
     const duration = Date.now() - startTime;
     const content = completion.choices?.[0]?.message?.content || "";
@@ -109,7 +150,7 @@ export class GroqProvider {
       text: content,
       meta: {
         provider: this.name,
-        model,
+        model: modelUsed || model,
         inputTokens: usage.prompt_tokens || 0,
         outputTokens: usage.completion_tokens || 0,
         totalTokens: usage.total_tokens || 0,

@@ -47,7 +47,7 @@ export default function ContentStudio() {
           "6. Final Recommendation by Company Size",
         ],
         cta: `Start Free Trial with ${profile?.companyName || 'Us'}`,
-        geoObjective: "Structured to win top citation position in Perplexity and ChatGPT comparison queries.",
+        geoObjective: "Structured to win top citation position in AI search and generative answer queries.",
       });
       toast.success("Content brief formulated by Content Agent!");
     }, 1200);

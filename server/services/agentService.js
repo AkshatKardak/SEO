@@ -119,7 +119,7 @@ Recommended Action: ${opportunity.recommendedAction}`;
     case "GEO Agent": {
       // Generates GEO Authority & Citation Strategy
       const systemPrompt = `You are an elite Generative Engine Optimization Agent.
-Create an action plan to capture citations in AI answers across ChatGPT, Perplexity, and Gemini.`;
+Create an action plan to capture citations in AI answers across Google AI Overviews, Gemini, and Generative Answer Engines.`;
 
       const prompt = `Opportunity: ${opportunity.title}
 Evidence: ${opportunity.evidence?.join("; ")}

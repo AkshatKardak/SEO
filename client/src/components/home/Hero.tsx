@@ -1,242 +1,269 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  Shield,
-  TrendingUp,
-  Search,
   Sparkles,
-  CheckCircle2,
+  Target,
   Globe,
-  Bot,
-  ArrowUpRight,
-  Play,
-  Loader2,
 } from "lucide-react";
 
-const stats = [
-  { value: "60+", label: "Technical Signals" },
-  { value: "1.8s", label: "Multi-Agent Scan" },
-  { value: "98.4%", label: "Fix Precision" },
-  { value: "1-Click", label: "Code Deployment" },
-];
-
-const samplePresets = [
-  "stripe.com",
-  "linear.app",
-  "supabase.com",
-  "shopify.com",
-];
-
 export default function Hero() {
-  const [inputUrl, setInputUrl] = useState("https://cloudflow.io");
-  const [isScanning, setIsScanning] = useState(false);
+  const navigate = useNavigate();
+  const [url, setUrl] = useState("");
 
-  const handleSimulateScan = (e: React.FormEvent) => {
+  const handleAnalyze = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputUrl) return;
-    setIsScanning(true);
-
-    setTimeout(() => {
-      setIsScanning(false);
-      const el = document.getElementById("sample-response");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 900);
-  };
-
-  const handleSelectPreset = (domain: string) => {
-    setInputUrl(`https://${domain}`);
-    const el = document.getElementById("sample-response");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (url.trim()) {
+      navigate(`/analyze?url=${encodeURIComponent(url.trim())}`);
+    } else {
+      navigate("/onboarding");
     }
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background px-4 pt-28 pb-16">
-      {/* Background Radial Glow & Aurora Atmosphere */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] rounded-full bg-primary/12 blur-3xl" />
-        <div className="absolute top-2/3 left-1/4 w-[400px] h-[350px] rounded-full bg-accent/8 blur-3xl" />
-        <div className="absolute top-1/2 right-1/4 w-[350px] h-[350px] rounded-full bg-violet-500/8 blur-3xl" />
-      </div>
+    <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* ── Headline & Positioning ── */}
+      <div className="max-w-3xl mx-auto text-center space-y-5">
+        {/* Restrained Subheading Pill */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card text-xs font-semibold text-muted-foreground shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-primary inline-block" />
+          <span className="text-foreground font-semibold">Autonomous Search Growth OS</span>
+          <span className="text-muted-foreground">·</span>
+          <span>DISCOVER → PRIORITIZE → EXECUTE</span>
+        </div>
 
-      {/* Single status eyebrow — one clean pill instead of three stacked badges */}
-      <div className="relative mb-6 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-primary/20 bg-card/70 backdrop-blur-md text-xs font-semibold shadow-sm">
-        <span className="flex items-center gap-1.5 text-emerald-500 dark:text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse inline-block" />
-          Multi-agent engine online
-        </span>
-        <span className="w-px h-3 bg-border" />
-        <span className="flex items-center gap-1.5 text-muted-foreground">
-          <Bot size={12} className="text-primary" /> Autonomous SEO &amp; GEO intelligence
-        </span>
-      </div>
+        {/* Primary Headline */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight leading-[1.1]">
+          Turn Search Data <br />
+          <span className="text-primary font-black">Into Measurable Growth.</span>
+        </h1>
 
-      {/* Main Heading */}
-      <h1
-        className="relative text-center font-extrabold leading-[1.08] tracking-tight text-foreground max-w-4xl"
-        style={{ fontSize: "clamp(2.4rem, 5.8vw, 4.8rem)" }}
-      >
-        Dominate Search Rankings & AI Answer Engines{" "}
-        <span className="block mt-1 gradient-text">With Autonomous Intelligence</span>
-      </h1>
+        {/* Supporting Copy */}
+        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          SerpoAI discovers your highest-impact SEO and AI-search opportunities, predicts what matters,
+          helps execute approved fixes, and measures what actually moves traffic, conversions and revenue.
+        </p>
 
-      {/* Subtitle */}
-      <p className="relative mt-6 text-center text-muted-foreground max-w-2xl text-base sm:text-lg leading-relaxed">
-        <strong>SerpoAI</strong> replaces disjointed SEO tools with a unified multi-agent system.
-        Audit 60+ technical signals, prioritize fixes by mathematical ICE score, and deploy production-ready code diffs in seconds.
-      </p>
-
-      {/* ── INTERACTIVE INSTANT URL TESTER BAR ── */}
-      <div id="instant-scan-bar" className="relative mt-9 w-full max-w-2xl">
-        <form
-          onSubmit={handleSimulateScan}
-          className="glass-strong p-2 sm:p-2.5 rounded-2xl border border-primary/30 shadow-2xl flex flex-col sm:flex-row items-center gap-2"
-        >
-          <div className="flex items-center gap-2.5 px-3.5 py-2 w-full bg-background/80 rounded-xl border border-border/60">
-            <Search size={16} className="text-primary shrink-0" />
-            <input
-              type="text"
-              value={inputUrl}
-              onChange={(e) => setInputUrl(e.target.value)}
-              placeholder="Enter any website URL (e.g. stripe.com)..."
-              className="w-full bg-transparent text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none font-medium"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isScanning}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl btn-glow text-xs sm:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer shrink-0"
+        {/* ── Input & Immediate Action Bar ── */}
+        <div className="pt-2 max-w-xl mx-auto">
+          <form
+            onSubmit={handleAnalyze}
+            className="p-1.5 rounded-2xl bg-card border border-border shadow-md flex flex-col sm:flex-row items-center gap-2"
           >
-            {isScanning ? (
-              <>
-                <Loader2 size={15} className="animate-spin" /> Scanning Signals...
-              </>
-            ) : (
-              <>
-                <Sparkles size={15} /> Run Live Preview
-              </>
-            )}
-          </button>
-        </form>
+            <div className="flex items-center gap-2 px-3.5 py-2 w-full bg-transparent">
+              <Globe size={16} className="text-muted-foreground shrink-0" />
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://yourwebsite.com"
+                className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none font-medium"
+              />
+            </div>
 
-        {/* Preset quick links */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
-          <span className="text-[11px] font-medium">Or test sample domain:</span>
-          {samplePresets.map((preset) => (
             <button
-              key={preset}
-              onClick={() => handleSelectPreset(preset)}
-              className="px-2.5 py-0.5 rounded-full bg-card hover:bg-muted border border-border/70 text-foreground text-[11px] font-semibold transition-colors cursor-pointer"
+              type="submit"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl btn-primary text-xs font-bold whitespace-nowrap cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
             >
-              {preset}
+              Analyze Website <ArrowRight size={14} />
             </button>
-          ))}
-        </div>
-      </div>
+          </form>
 
-      {/* CTAs */}
-      <div className="relative mt-8 flex flex-col sm:flex-row items-center gap-3">
-        <Link
-          to="/register"
-          className="flex items-center gap-2 px-7 py-3 rounded-full bg-primary text-sm font-bold transition-all hover:opacity-90 hover:scale-105 active:scale-95 shadow-lg"
-          style={{ color: "var(--background)" }}
-        >
-          Start Free Audit <ArrowRight size={16} />
-        </Link>
-        <a
-          href="#how-it-works"
-          className="flex items-center gap-2 px-6 py-3 rounded-full border border-border text-sm font-semibold text-foreground hover:bg-muted transition-all"
-        >
-          <Play size={14} className="text-primary fill-primary" /> See How It Works
-        </a>
-      </div>
-
-      {/* Trust Badges */}
-      <div className="relative mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <Shield size={12} className="text-primary" /> Zero Credit Card Required
-        </span>
-        <span className="w-px h-3 bg-border hidden sm:inline" />
-        <span className="flex items-center gap-1.5">
-          <TrendingUp size={12} className="text-primary" /> Free 14-Day Full Access
-        </span>
-        <span className="w-px h-3 bg-border hidden sm:inline" />
-        <span className="flex items-center gap-1.5">
-          <CheckCircle2 size={12} className="text-primary" /> SSRF-Safe Cloud Crawler
-        </span>
-      </div>
-
-      {/* Stats Bar */}
-      <div className="relative mt-12 w-full max-w-2xl">
-        <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border rounded-2xl border border-border bg-card/60 backdrop-blur-sm overflow-hidden shadow-sm">
-          {stats.map((s) => (
-            <div key={s.label} className="flex flex-col items-center py-4 px-2 text-center">
-              <span className="text-2xl font-black text-foreground">{s.value}</span>
-              <span className="text-[11px] font-semibold text-muted-foreground mt-0.5">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── HERO FLOATING LIVE SCORE & ACTION TEASER CARD ── */}
-      <div className="relative mt-10 w-full max-w-xl glass rounded-2xl border border-border/80 p-5 shadow-2xl space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs">
-              <Globe size={16} />
-            </div>
-            <div>
-              <p className="text-xs font-mono text-muted-foreground">https://cloudflow.io</p>
-              <p className="text-xs font-bold text-foreground">Live Telemetry & SEO Health</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <span className="text-[10px] uppercase font-bold text-muted-foreground block">Overall Score</span>
-            <div className="text-3xl font-black gradient-text">89</div>
+          {/* Core Engine Vectors */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-3.5 text-xs text-muted-foreground">
+            <span className="text-[11px] font-semibold text-foreground/80">Vectors:</span>
+            {["SEO", "GEO", "Technical", "Content", "Competitors", "Analytics"].map((tag) => (
+              <span
+                key={tag}
+                className="px-2.5 py-0.5 rounded-md bg-muted text-[11px] font-mono font-medium text-foreground/80 border border-border hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary transition-all cursor-pointer"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* 4 Pillars Mini-bar */}
-        <div className="grid grid-cols-4 gap-2">
-          {[
-            { label: "SEO", score: 94, color: "bg-emerald-500" },
-            { label: "Perf", score: 82, color: "bg-blue-500" },
-            { label: "A11y", score: 96, color: "bg-violet-500" },
-            { label: "Best Pr.", score: 90, color: "bg-amber-500" },
-          ].map((c) => (
-            <div key={c.label} className="flex flex-col gap-1">
-              <div className="flex justify-between text-[10px]">
-                <span className="text-muted-foreground font-semibold">{c.label}</span>
-                <span className="font-bold text-foreground">{c.score}</span>
-              </div>
-              <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                <div className={`h-full rounded-full ${c.color}`} style={{ width: `${c.score}%` }} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Mini Fix Snippet Teaser */}
-        <div className="p-3 rounded-xl bg-background/80 border border-border/60 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 truncate mr-2">
-            <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-mono font-bold">
-              ICE 9.2
-            </span>
-            <span className="text-[11px] text-foreground font-medium truncate">
-              Auto-generated FAQ schema for Perplexity citations
-            </span>
-          </div>
-          <a
-            href="#sample-response"
-            className="text-[11px] text-primary hover:underline font-bold flex items-center gap-0.5 shrink-0"
+        {/* Primary CTAs */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <Link
+            to="/onboarding"
+            className="px-6 py-2.5 rounded-xl btn-primary text-xs font-bold flex items-center gap-2 shadow-sm"
           >
-            Preview Output <ArrowUpRight size={12} />
+            Run Growth Scan <ArrowRight size={14} />
+          </Link>
+          <a
+            href="#growth-loop"
+            className="px-5 py-2.5 rounded-xl btn-secondary text-xs font-semibold text-foreground flex items-center gap-1.5"
+          >
+            See How It Works
           </a>
+        </div>
+      </div>
+
+      {/* ── 03. REALISTIC HERO PRODUCT PREVIEW ── */}
+      <div className="mt-14 max-w-5xl mx-auto">
+        <div className="surface-card rounded-2xl border border-border shadow-xl overflow-hidden bg-card hover-lift transition-all">
+          {/* Dashboard Window Chrome */}
+          <div className="px-4 py-3 bg-muted/40 border-b border-border flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
+              </div>
+              <span className="text-xs font-mono font-bold text-foreground flex items-center gap-1.5">
+                <span className="text-primary font-bold">SERPOAI</span> GROWTH ENGINE · <span className="text-muted-foreground font-normal">cloudflow.io</span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-primary/10 text-primary text-[11px] font-mono font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                Autonomous Telemetry Active
+              </span>
+            </div>
+          </div>
+
+          {/* Top 4 Metric Cards */}
+          <div className="p-4 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-3 border-b border-border bg-card">
+            {[
+              { label: "Growth Score", value: "82", delta: "+6.4%", desc: "Composite health index" },
+              { label: "AI Visibility (GEO)", value: "74%", delta: "+12%", desc: "Generative engine citations" },
+              { label: "Technical Health", value: "91", delta: "Good", desc: "Core Web Vitals & schema" },
+              { label: "Growth Opportunity", value: "88", delta: "High ROI", desc: "ICE-prioritized backlog" },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="p-3.5 rounded-xl bg-surface-elevated border border-border space-y-1 hover-lift cursor-pointer hover:border-primary/50 transition-all"
+              >
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground font-medium">{m.label}</span>
+                  <span className="font-mono text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.2 rounded">
+                    {m.delta}
+                  </span>
+                </div>
+                <div className="text-2xl font-black font-mono text-foreground tracking-tight">{m.value}</div>
+                <p className="text-[11px] text-muted-foreground truncate">{m.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Interactive Preview Body */}
+          <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left: High-Impact Opportunities */}
+            <div className="lg:col-span-7 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                  <Target size={14} className="text-primary" />
+                  HIGH-IMPACT OPPORTUNITIES (ICE RANKED)
+                </span>
+                <span className="text-[11px] font-mono text-muted-foreground">ML Prioritized</span>
+              </div>
+
+              <div className="space-y-2">
+                {[
+                  {
+                    title: "Inject SoftwareApplication JSON-LD schema on pricing page",
+                    type: "Structured Data",
+                    ice: "Score 9.4",
+                    impact: "+14% CTR",
+                    agent: "SEO Agent",
+                  },
+                  {
+                    title: "Publish Brand vs Competitor comparison matrix (/vs/competitor)",
+                    type: "Content & GEO",
+                    ice: "Score 9.1",
+                    impact: "+32% CVR",
+                    agent: "Content Agent",
+                  },
+                  {
+                    title: "Resolve 4 canonical conflicts & compress above-the-fold hero",
+                    type: "Technical SEO",
+                    ice: "Score 8.7",
+                    impact: "-210ms LCP",
+                    agent: "SEO Agent",
+                  },
+                ].map((opp, idx) => (
+                  <div
+                    key={opp.title}
+                    className="p-3.5 rounded-xl border border-border bg-card flex items-start justify-between gap-3 hover-lift cursor-pointer hover:border-primary/50 transition-all"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold font-mono text-primary">{idx + 1}.</span>
+                        <span className="text-xs font-bold text-foreground">{opp.title}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                        <span className="font-mono text-muted-foreground">{opp.type}</span>
+                        <span>·</span>
+                        <span className="text-primary font-medium">{opp.agent}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <span className="text-xs font-bold font-mono text-foreground block">{opp.ice}</span>
+                      <span className="text-[10px] font-bold font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                        {opp.impact}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: AI Search Visibility & Growth Graph */}
+            <div className="lg:col-span-5 space-y-4">
+              {/* AI Search Presence */}
+              <div className="p-4 rounded-xl border border-border bg-surface-elevated space-y-3 hover-lift transition-all">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                    <Sparkles size={13} className="text-primary" />
+                    AI SEARCH VISIBILITY
+                  </span>
+                  <span className="text-[11px] font-mono text-primary font-bold">74% Avg Citation</span>
+                </div>
+
+                <div className="space-y-2">
+                  {[
+                    { engine: "Google AI Overviews", score: "78%", width: "78%" },
+                    { engine: "Gemini AI Search", score: "74%", width: "74%" },
+                    { engine: "Generative Answer Engines", score: "71%", width: "71%" },
+                    { engine: "AI Research & Citations", score: "66%", width: "66%" },
+                  ].map((e) => (
+                    <div key={e.engine} className="space-y-1 hover:translate-x-1 transition-transform cursor-pointer">
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-muted-foreground">{e.engine}</span>
+                        <span className="font-mono font-semibold text-foreground">{e.score}</span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-primary" style={{ width: e.width }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Growth Graph Chain */}
+              <div className="p-3.5 rounded-xl border border-border bg-card space-y-2 hover-lift transition-all">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block">
+                  GROWTH GRAPH ATTRIBUTION CHAIN
+                </span>
+                <div className="flex items-center justify-between text-[11px] font-mono text-foreground font-semibold">
+                  <span>Impressions</span>
+                  <span className="text-muted-foreground">→</span>
+                  <span>Traffic</span>
+                  <span className="text-muted-foreground">→</span>
+                  <span>Engagement</span>
+                  <span className="text-muted-foreground">→</span>
+                  <span className="text-primary font-bold">Revenue</span>
+                </div>
+                <div className="text-[10px] text-muted-foreground pt-1 flex items-center justify-between border-t border-border/50">
+                  <span>Closed-loop tracking</span>
+                  <span className="text-primary font-semibold">+18.4% MRR Attribution</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

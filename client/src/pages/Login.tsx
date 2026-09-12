@@ -48,7 +48,7 @@ export default function Login({ state }: { state: string }) {
             <div className="w-full max-w-md">
 
                 {/* Form Card */}
-                <div className="bg-card border border-border rounded-2xl p-8 shadow-sm">
+                <div className="bg-card border border-border rounded-2xl p-8 shadow-sm hover-lift">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="text-center py-4">
                             <h1 className="text-2xl font-semibold text-foreground">

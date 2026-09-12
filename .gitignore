@@ -4,4 +4,10 @@ server/node_modules/
 server/.env
 client/.env
 dist/
+client/dist/
 .DS_Store
+.venv/
+*/.venv/
+__pycache__/
+*/__pycache__/
+*.pyc

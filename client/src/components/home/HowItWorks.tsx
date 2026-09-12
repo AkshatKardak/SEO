@@ -52,7 +52,7 @@ const workflowSteps: StepDetail[] = [
     highlights: [
       "Full Lighthouse-grade audits: SEO, Performance, Accessibility & Best Practices",
       "Core Web Vitals telemetry (LCP, FID/INP, CLS, TTFB) with precise millisecond metrics",
-      "Generative Engine Optimization (GEO) scans for Perplexity, ChatGPT Search & Gemini citations",
+      "Generative Engine Optimization (GEO) scans for Google AI Overviews, Gemini & answer engine citations",
     ],
     mockData: {
       input: "Crawling HTML DOM, JSON-LD scripts, asset sizes & search engine visibility...",
@@ -87,7 +87,7 @@ const workflowSteps: StepDetail[] = [
     executionTime: "Continuous",
     highlights: [
       "Pre-generated JSON-LD Schema markup & optimized meta descriptions ready to paste",
-      "Automated daily/weekly rank tracking across Google, Perplexity & AI Overviews",
+      "Automated daily/weekly rank tracking across Google & AI Overviews",
       "Closed-loop memory records what worked to refine future growth sprints",
     ],
     mockData: {

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /actions/
+
+Sitemap: https://serpoai.com/sitemap.xml

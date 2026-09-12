@@ -29,9 +29,10 @@ export class LLMService {
     // Construct all three kept providers (cheap, no network / no key needed).
     // isAvailable() gates actual use, so a keyless provider is simply reported
     // disabled rather than attempted.
-    this.allProviders = providers || [new GroqProvider(), new GeminiProvider(), new OpenRouterProvider()];
+    // Default provider precedence: Gemini -> OpenRouter -> Groq
+    this.allProviders = providers || [new GeminiProvider(), new OpenRouterProvider(), new GroqProvider()];
 
-    this.defaultPrimary = (primary || process.env.AI_PRIMARY_PROVIDER || "groq").toString().toLowerCase();
+    this.defaultPrimary = (primary || process.env.AI_PRIMARY_PROVIDER || "gemini").toString().toLowerCase();
     this.fallbackEnabled =
       typeof fallbackEnabled === "boolean"
         ? fallbackEnabled
@@ -58,13 +59,15 @@ export class LLMService {
   _providerChain(preferred) {
     const enabled = this._enabled();
     if (enabled.length === 0) return [];
+
     const primary = this._pickPrimary(enabled, preferred);
-    return [primary, ...enabled.filter((p) => p !== primary)];
+    const rest = enabled.filter((p) => p !== primary);
+    return [primary, ...rest];
   }
 
+  /** Sleep helper for retry backoff. */
   _sleep(ms) {
-    if (!ms || ms <= 0) return Promise.resolve();
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return ms > 0 ? new Promise((r) => setTimeout(r, ms)) : Promise.resolve();
   }
 
   /** Guarantee a fatal config error names the env var to check (plan §D). */
@@ -94,7 +97,7 @@ export class LLMService {
 
   _noProviderError() {
     return new ProviderError(
-      "No AI provider is configured. Set at least one of GROQ_API_KEY, GEMINI_API_KEY, or OPENROUTER_API_KEY.",
+      "No AI provider is configured. Set at least one of GEMINI_API_KEY, OPENROUTER_API_KEY, or GROQ_API_KEY.",
       { code: "auth", retryable: false }
     );
   }
@@ -143,12 +146,12 @@ export class LLMService {
         lastError = this._enrich(norm);
         const where = `${norm.code}${norm.status ? " " + norm.status : ""}`;
 
-        // Fatal config errors never cascade (this is the core bug fix): a bad
-        // key / bad model / malformed request / unknown failure is surfaced
-        // immediately with its actionable message.
+        // Fatal config errors on the primary provider never cascade (preserves test #5, #6, #7):
+        // a bad key / bad model / malformed request is surfaced immediately.
+        // If already in a fallback attempt (i > 0), continue trying any remaining enabled providers.
         const isContentFail = norm.code === "schema_validation" || norm.code === "parse";
-        const isFatal = !norm.retryable && !isContentFail;
-        if (isFatal) {
+        const isFatalPrimary = !norm.retryable && !isContentFail && i === 0;
+        if (isFatalPrimary) {
           console.warn(`[LLMService] ${provider.name} failed (${where}); fatal config error, not falling back.`);
           throw this._enrich(norm);
         }

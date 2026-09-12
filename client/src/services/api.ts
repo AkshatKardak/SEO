@@ -272,3 +272,19 @@ export const rankAPI = {
   deleteKeyword: (id: string) =>
     request(`/api/rank/${id}`, { method: "DELETE" }),
 };
+
+// ─── Machine Learning API ─────────────────────────────────
+export const mlAPI = {
+  rankOpportunities: (projectId: string) =>
+    request(`/api/v1/ml/rank/${projectId}`),
+
+  detectAnomalies: (projectId: string, metric?: string, currentValue?: number) =>
+    request(`/api/v1/ml/anomalies/${projectId}?metric=${metric || "organic_traffic"}&currentValue=${currentValue || 31400}`),
+
+  getGrowthForecast: (projectId: string, metric?: string) =>
+    request(`/api/v1/ml/forecast/${projectId}?metric=${metric || "organic_traffic"}`),
+
+  getPublicForecast: (domain?: string, metric?: string) =>
+    request(`/api/v1/ml/public-forecast?domain=${domain || "example.com"}&metric=${metric || "organic_traffic"}`),
+};
+

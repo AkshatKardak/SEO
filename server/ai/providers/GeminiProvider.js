@@ -1,10 +1,15 @@
 import { ProviderError, normalizeProviderError, parseStructuredResponse, validateStructured } from "./providerUtils.js";
 
+const MODERN_GEMINI_CANDIDATES = [
+  "gemini-3.6-flash",
+  "gemini-flash-latest",
+];
+
 export class GeminiProvider {
   /**
    * @param {object} [opts]
    * @param {string}   [opts.apiKey]    - defaults to process.env.GEMINI_API_KEY
-   * @param {string}   [opts.model]     - defaults to process.env.GEMINI_MODEL || "gemini-2.0-flash"
+   * @param {string}   [opts.model]     - defaults to process.env.GEMINI_MODEL || "gemini-3.6-flash"
    * @param {Function} [opts.fetchImpl] - injected fetch for tests
    */
   constructor({ apiKey = process.env.GEMINI_API_KEY, model, fetchImpl } = {}) {
@@ -12,7 +17,7 @@ export class GeminiProvider {
     this.name = "Gemini";
     this.keyEnv = "GEMINI_API_KEY";
     this.modelEnv = "GEMINI_MODEL";
-    this.defaultModel = model || process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    this.defaultModel = model || process.env.GEMINI_MODEL || MODERN_GEMINI_CANDIDATES[0];
     this.fetchImpl = fetchImpl || fetch;
     this.costPer1kInput = 0.0001;
     this.costPer1kOutput = 0.0004;
@@ -24,28 +29,54 @@ export class GeminiProvider {
 
   /** Perform the REST call, mapping any failure to a normalized ProviderError. */
   async _call({ model, body }) {
-    // The key travels in the query string; never surface the endpoint in errors.
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
-    let res;
-    try {
-      res = await this.fetchImpl(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    } catch (err) {
-      throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
-    }
+    const targetModel = model || this.defaultModel;
+    const candidateList =
+      !process.env.GEMINI_MODEL && targetModel === this.defaultModel
+        ? [targetModel, ...MODERN_GEMINI_CANDIDATES.filter((m) => m !== targetModel)]
+        : [targetModel];
 
-    if (!res.ok) {
+    let lastError = null;
+
+    for (const m of candidateList) {
+      // The key travels in the query string; never surface the endpoint in errors.
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${this.apiKey}`;
+      let res;
+      try {
+        res = await this.fetchImpl(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (err) {
+        throw normalizeProviderError(err, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+      }
+
+      if (res.ok) {
+        if (this.defaultModel !== m && !process.env.GEMINI_MODEL) {
+          this.defaultModel = m;
+        }
+        return res.json();
+      }
+
       const errBody = await res.json().catch(() => ({}));
-      const synthetic = new Error(errBody?.error?.message || res.statusText || "Gemini request failed");
+      const rawMsg = errBody?.error?.message || res.statusText || "Gemini request failed";
+      const synthetic = new Error(rawMsg);
       synthetic.status = res.status;
       synthetic.code = errBody?.error?.status;
-      throw normalizeProviderError(synthetic, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+      lastError = synthetic;
+      console.warn(`[GeminiProvider] Candidate ${m} failed (${res.status}): ${rawMsg}`);
+
+      const isModelError =
+        res.status === 404 ||
+        rawMsg.toLowerCase().includes("model") ||
+        rawMsg.toLowerCase().includes("not available") ||
+        rawMsg.toLowerCase().includes("not found");
+      if (!isModelError) {
+        throw normalizeProviderError(synthetic, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
+      }
     }
 
-    return res.json();
+    throw normalizeProviderError(lastError, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
   }
 
   async generateStructured({ systemPrompt, prompt, schema, model = this.defaultModel, maxTokens = 2000, temperature = 0.2 }) {

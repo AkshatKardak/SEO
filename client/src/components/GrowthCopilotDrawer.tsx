@@ -63,7 +63,7 @@ export default function GrowthCopilotDrawer() {
 
   const quickPrompts = [
     "What should I do today to increase conversions?",
-    "How can I get cited in Perplexity and ChatGPT?",
+    "How can I get cited in Google AI Overviews and answer engines?",
     "Suggest a high-intent comparison angle for our product",
     "How can we fix our top technical SEO issues?",
   ];

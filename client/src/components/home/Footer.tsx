@@ -1,87 +1,77 @@
 import { Link } from "react-router-dom";
-import { Mail } from "lucide-react";
 import Logo from "../../assets/Logo.png";
 
-const links = {
-    Product: [
-        { label: "Features", to: "/#features" },
-        { label: "Changelog", to: "/" },
-    ],
-    Legal: [
-        { label: "Privacy Policy", to: "/" },
-        { label: "Terms of Service", to: "/" },
-    ],
-};
-
 export default function Footer() {
-    return (
-        <footer className="bg-background border-t border-border/40 pt-16 pb-8 px-4">
-            <div className="max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
+  const currentYear = new Date().getFullYear();
 
-                    {/* Brand */}
-                    <div className="md:col-span-2">
-                        <Link to="/" className="flex items-center gap-2 mb-4 w-fit group">
-                            <img
-                                src={Logo}
-                                alt="SerpoAI Logo"
-                                className="h-8 w-auto object-contain transition-opacity group-hover:opacity-80"
-                            />
-                        </Link>
+  return (
+    <footer className="border-t border-border/80 bg-surface-elevated/50 text-foreground py-14 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        {/* Brand Column */}
+        <div className="col-span-2 space-y-3">
+          <Link to="/" className="flex items-center group">
+            <img src={Logo} alt="SerpoAI" className="brand-logo" />
+          </Link>
+          <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
+            The Autonomous Search Growth Operating System. Discovers, prioritizes, executes, measures, and learns from what actually moves search revenue.
+          </p>
+          <div className="text-[11px] font-mono text-muted-foreground pt-1">
+            Loop: DISCOVER → PRIORITIZE → EXECUTE → MEASURE → LEARN
+          </div>
+        </div>
 
-                        <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-6">
-                            AI-powered SEO analysis that turns raw Lighthouse data into clear, prioritised action plans.
-                        </p>
+        {/* Operating System */}
+        <div className="space-y-2.5 text-xs">
+          <span className="font-mono font-bold uppercase tracking-wider text-muted-foreground text-[11px] block">
+            Operating System
+          </span>
+          <ul className="space-y-1.5 text-muted-foreground">
+            <li><a href="#growth-loop" className="hover:text-foreground transition-colors">Growth Loop</a></li>
+            <li><a href="#ice-engine" className="hover:text-foreground transition-colors">ICE Opportunity Engine</a></li>
+            <li><a href="#agents" className="hover:text-foreground transition-colors">Autonomous AI Agents</a></li>
+            <li><a href="#ml-predictions" className="hover:text-foreground transition-colors">ML Predictions & Radar</a></li>
+            <li><a href="#growth-graph" className="hover:text-foreground transition-colors">Growth Graph</a></li>
+          </ul>
+        </div>
 
-                        <a
-                            href="mailto:hello@serpoai.dev"
-                            className="inline-flex items-center gap-2 w-8 h-8 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-all justify-center"
-                            aria-label="Email us"
-                        >
-                            <Mail size={15} />
-                        </a>
-                    </div>
+        {/* Capabilities */}
+        <div className="space-y-2.5 text-xs">
+          <span className="font-mono font-bold uppercase tracking-wider text-muted-foreground text-[11px] block">
+            Intelligence
+          </span>
+          <ul className="space-y-1.5 text-muted-foreground">
+            <li><a href="#geo-presence" className="hover:text-foreground transition-colors">GEO Visibility</a></li>
+            <li><a href="#competitors" className="hover:text-foreground transition-colors">Competitor Intelligence</a></li>
+            <li><a href="#action-center" className="hover:text-foreground transition-colors">Action Center</a></li>
+            <li><a href="#growth-memory" className="hover:text-foreground transition-colors">Growth Memory</a></li>
+            <li><a href="#strategy" className="hover:text-foreground transition-colors">30/60/90 Strategy</a></li>
+          </ul>
+        </div>
 
-                    {/* Nav Links */}
-                    {Object.entries(links).map(([section, items]) => (
-                        <div key={section}>
-                            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-                                {section}
-                            </p>
-                            <ul className="space-y-3">
-                                {items.map((item) => (
-                                    <li key={item.label}>
-                                        <Link
-                                            to={item.to}
-                                            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+        {/* Technical Tools */}
+        <div className="space-y-2.5 text-xs">
+          <span className="font-mono font-bold uppercase tracking-wider text-muted-foreground text-[11px] block">
+            SEO Tools
+          </span>
+          <ul className="space-y-1.5 text-muted-foreground">
+            <li><Link to="/analyze" className="hover:text-foreground transition-colors">Single URL Audit</Link></li>
+            <li><Link to="/rank-tracker" className="hover:text-foreground transition-colors">Rank Tracker</Link></li>
+            <li><Link to="/site-audit" className="hover:text-foreground transition-colors">Technical Crawl</Link></li>
+            <li><Link to="/onboarding" className="hover:text-foreground transition-colors">Connect Domain</Link></li>
+          </ul>
+        </div>
+      </div>
 
-                {/* Bottom bar */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-border/40">
-                    <p className="text-xs text-muted-foreground">
-                        © {new Date().getFullYear()} SerpoAI. All rights reserved.
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                        Built with Love by{" "}
-                        <a
-                            href="https://github.com/AkshatKardak"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline underline-offset-2 transition-colors"
-                        >
-                            Akshat Kardak
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </footer>
-    );
+      <div className="max-w-7xl mx-auto pt-8 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground font-mono gap-4">
+        <div>© {currentYear} SerpoAI Inc. All rights reserved.</div>
+        <div className="flex items-center gap-6">
+          <span>Autonomous Search Growth OS</span>
+          <span>·</span>
+          <span>Privacy & Security</span>
+          <span>·</span>
+          <span>Terms</span>
+        </div>
+      </div>
+    </footer>
+  );
 }

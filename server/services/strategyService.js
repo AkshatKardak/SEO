@@ -70,7 +70,7 @@ Generate the comprehensive 30-60-90 day strategic roadmap.`;
           { task: "Create Top 3 Competitor Comparison Matrices", ownerAgent: "Content Agent", expectedImpact: "+40 high-intent visitors/day", status: "pending" },
         ],
         days60: [
-          { task: "Publish GEO Data-Dense Resource Guides for Perplexity & ChatGPT", ownerAgent: "GEO Agent", expectedImpact: "+50% AI citation authority", status: "pending" },
+          { task: "Publish GEO Data-Dense Resource Guides for AI Search & Citations", ownerAgent: "GEO Agent", expectedImpact: "+50% AI citation authority", status: "pending" },
           { task: "Optimize Structured Data and JSON-LD Entity Graph", ownerAgent: "SEO Agent", expectedImpact: "Rich snippets in SERPs", status: "pending" },
         ],
         days90: [

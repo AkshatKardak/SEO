@@ -63,8 +63,14 @@ export default function GEOIntelligence() {
               AI-Search Visibility Engine
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Evaluate how your brand is cited and positioned across modern AI answer engines (ChatGPT, Perplexity, Gemini, Google AI).
+              Simulate and evaluate how your brand is cited and positioned across modern AI answer engines (Google AI Overviews, Gemini, and Generative Answer Engines).
             </p>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground bg-muted/50 px-2 py-0.5 rounded border border-border">
+                <Sparkles size={11} className="text-primary" />
+                Powered by SerpoAI Connected Intelligence Engine
+              </span>
+            </div>
           </div>
 
           <button
@@ -114,7 +120,7 @@ export default function GEOIntelligence() {
         <div className="glass rounded-2xl p-6 border border-border mb-8">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-bold text-foreground">AI Search System Query Coverage</h3>
-            <span className="text-xs text-muted-foreground">ChatGPT · Perplexity · Gemini · Google AI</span>
+            <span className="text-xs text-muted-foreground">Google AI Overviews · Gemini · Generative Citations</span>
           </div>
 
           {loading ? (
@@ -147,10 +153,10 @@ export default function GEOIntelligence() {
                   {/* Engine Results Grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                     {[
-                      { name: "ChatGPT Search", data: q.engines?.chatgpt },
-                      { name: "Perplexity", data: q.engines?.perplexity },
-                      { name: "Gemini", data: q.engines?.gemini },
                       { name: "Google AI Overviews", data: q.engines?.google_ai },
+                      { name: "Gemini AI Search", data: q.engines?.gemini },
+                      { name: "Generative Answer Engines", data: q.engines?.chatgpt },
+                      { name: "AI Research & Citations", data: q.engines?.perplexity },
                     ].map((eng) => (
                       <div
                         key={eng.name}

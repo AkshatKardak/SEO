@@ -33,7 +33,7 @@ export const homeFeaturesData = [
   {
     icon: <ZapIcon size={28} />,
     title: "Instant AI Audit",
-    desc: "Get a full SEO audit in seconds powered by Gemini AI and real browser rendering.",
+    desc: "Get a full SEO audit in seconds powered by advanced AI intelligence and real browser rendering.",
   },
   {
     icon: <SearchIcon size={28} />,

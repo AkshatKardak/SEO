@@ -12,8 +12,8 @@ export async function runGEOAnalysis(project, profile) {
   const productThemes = profile?.products?.concat(profile?.services || []).join(", ") || profile?.industry;
 
   const systemPrompt = `You are a Generative Engine Optimization (GEO) and AI-Search Visibility Intelligence Specialist.
-Your task is to analyze how visible this brand is across modern AI answer engines (ChatGPT Search, Perplexity, Google AI Overviews, and Gemini).
-Simulate realistic AI answer query coverage based on current industry authority, brand entities, and topic depth.
+Your task is to analyze how visible this brand is across modern AI search channels (Google AI Overviews, Gemini, and Generative Answer Engines like ChatGPT & Perplexity).
+Simulate realistic AI answer query coverage based on current industry authority, brand entities, and topic depth using SerpoAI's connected AI intelligence.
 Analyze:
 1. Brand mention rates and positions in answer summaries for 4-6 commercial high-intent search queries.
 2. Direct competitor citations vs. brand citations.
@@ -29,9 +29,33 @@ Competitors: ${competitorsList}
 
 Generate a comprehensive GEO report with:
 - 4 to 6 realistic user AI search queries (e.g. "Best ${profile?.industry || 'software'} tools for...")
-- Per query: ChatGPT, Perplexity, Gemini, Google AI simulated results (mentioned, position), competitor mentions, missing topics.
+- Per query: simulated results across generative engines (ChatGPT/Copilot, Perplexity/Research, Gemini, Google AI Overviews) including mentioned (boolean), position (number or null), competitor mentions, missing topics.
 - Top citation domains in this space
-- Missing authority signals`;
+- Missing authority signals
+
+Respond strictly in valid JSON matching this exact structure:
+{
+  "geoScore": 65,
+  "citationScore": 55,
+  "brandVisibilityScore": 60,
+  "competitorVisibilityScore": 75,
+  "brandMentionRate": 45,
+  "queries": [
+    {
+      "query": "Best software for...",
+      "chatgpt": { "mentioned": true, "position": 2 },
+      "perplexity": { "mentioned": false, "position": null },
+      "gemini": { "mentioned": true, "position": 1 },
+      "google_ai": { "mentioned": true, "position": 2 },
+      "competitorMentions": ["Competitor A"],
+      "missingTopics": ["Topic X"]
+    }
+  ],
+  "citationDomains": [
+    { "domain": "g2.com", "authority": "High", "count": 8 }
+  ],
+  "missingAuthoritySignals": ["Independent benchmark data"]
+}`;
 
   const result = await llm.generateStructured({
     systemPrompt,

@@ -11,7 +11,7 @@ const features = [
   {
     icon: <Sparkles size={22} />,
     title: "Generative Engine Optimization (GEO)",
-    desc: "Ensure your brand is cited and recommended as the primary source in ChatGPT Search, Perplexity AI, and Google AI Overviews.",
+    desc: "Ensure your brand is cited and recommended as the primary source in Google AI Overviews, Gemini, and Generative Answer Engines.",
     accent: "text-violet-400",
     bg: "bg-violet-500/10",
     border: "border-violet-500/20",

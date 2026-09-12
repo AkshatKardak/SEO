@@ -65,7 +65,7 @@ export async function runTechnicalSiteAudit(projectId) {
       severity: "critical",
       category: "schema",
       title: "Missing Organization / Software JSON-LD Schema",
-      description: "AI answer engines (ChatGPT, Perplexity) lack structured entity information.",
+      description: "AI search engines and answer bots lack structured entity information.",
       affectedUrl: targetUrl,
       recommendedFix: `Inject JSON-LD script for Organization with name "${project.name || project.domain}" and URL "${targetUrl}".`,
       autoFixable: true,

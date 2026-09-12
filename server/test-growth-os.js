@@ -131,12 +131,9 @@ async function runTests() {
   console.log(`  Supported Provider Architectures: Groq, DeepSeek, Anthropic, OpenRouter, OpenAI, Gemini`);
   console.log(`  Active Configured Providers in Environment: ${available.join(", ") || "None"}`);
   console.log(`  Default Modern Models:`);
-  console.log(`    - OpenAI: ${llm.openai.defaultModel}`);
-  console.log(`    - Gemini: ${llm.gemini.defaultModel}`);
-  console.log(`    - DeepSeek: ${llm.deepseek.defaultModel}`);
-  console.log(`    - Anthropic: ${llm.anthropic.defaultModel}`);
-  console.log(`    - OpenRouter: ${llm.openrouter.defaultModel}`);
-  console.log(`    - Groq: ${llm.groq.defaultModel}`);
+  for (const p of llm.allProviders) {
+    console.log(`    - ${p.name}: ${p.defaultModel} (configured: ${p.isAvailable() ? "yes" : "no"})`);
+  }
 
   console.log("\n=== ALL ARCHITECTURAL TESTS PASSED SUCCESSFULLY ===");
 }

@@ -5,19 +5,20 @@ import Project from "../models/Project.js";
 import CompanyProfile from "../models/CompanyProfile.js";
 import GrowthOpportunity from "../models/GrowthOpportunity.js";
 import AgentRun from "../models/AgentRun.js";
+import { rankOpportunitiesWithML } from "./mlClientService.js";
 
 /**
  * Generates CompanyProfile from crawled pages
  */
 export async function synthesizeCompanyProfile(project, crawledPages) {
-  const pageSummaries = crawledPages.map(p => ({
-    url: p.url,
-    title: p.title,
-    description: p.description,
-    h1: p.h1,
-    h2: p.h2,
-    wordCount: p.wordCount,
-    textSnippet: p.bodyTextSnippet.slice(0, 1000),
+  const pageSummaries = (crawledPages || []).map(p => ({
+    url: p.url || "",
+    title: p.title || "",
+    description: p.description || p.metaDescription || "",
+    h1: p.h1 || [],
+    h2: p.h2 || [],
+    wordCount: p.wordCount || 0,
+    textSnippet: (p.bodyTextSnippet || p.textSnippet || "").slice(0, 1000),
   }));
 
   const systemPrompt = `You are an elite Growth Operating System and Chief Strategy Officer.
@@ -61,12 +62,12 @@ Produce a comprehensive JSON Company Profile matching:
     {
       projectId: project._id,
       ...profileData,
-      rawCrawledPages: crawledPages.map(p => ({
-        url: p.url,
-        title: p.title,
-        description: p.description,
-        h1: p.h1?.[0] || "",
-        wordCount: p.wordCount,
+      rawCrawledPages: (crawledPages || []).map(p => ({
+        url: p.url || "",
+        title: p.title || "",
+        description: p.description || p.metaDescription || "",
+        h1: Array.isArray(p.h1) ? (p.h1[0] || "") : (p.h1 || ""),
+        wordCount: p.wordCount || 0,
       })),
     },
     { upsert: true, new: true }
@@ -135,18 +136,46 @@ Historical Growth Memory:
 ${memoryContext}
 
 Crawled Pages Overview:
-${crawledPages.map(p => `• URL: ${p.url}
-  Title: "${p.title}"
-  H1: ${JSON.stringify(p.h1)}
+${(crawledPages || []).map(p => `• URL: ${p.url || ""}
+  Title: "${p.title || ""}"
+  H1: ${JSON.stringify(p.h1 || [])}
   Missing Alt Images: ${p.images?.missingAlt || 0}/${p.images?.total || 0}
   Internal Links: ${p.links?.internal?.length || 0}
-  Word Count: ${p.wordCount}
-  Schema: ${JSON.stringify(p.schemaTypes)}`).join("\n\n")}
+  Word Count: ${p.wordCount || 0}
+  Schema: ${JSON.stringify(p.schemaTypes || [])}`).join("\n\n")}
 
 Generate:
 1. "opportunities": Array of 6 to 10 prioritized growth opportunities.
 2. "overallGrowthHealth": integer score (0-100).
-3. "scores": { visibility, seo, geo, conversion, content } (0-100 each).`;
+3. "scores": { "visibility": 60, "seo": 70, "geo": 55, "conversion": 65, "content": 60 } (0-100 each).
+
+Respond strictly in valid JSON matching this exact structure:
+{
+  "opportunities": [
+    {
+      "type": "TECHNICAL_SEO",
+      "title": "Inject SoftwareApplication JSON-LD schema on pricing page",
+      "description": "Provide structured data so search engines understand pricing.",
+      "evidence": ["Missing JSON-LD on pricing page"],
+      "impactScore": 9,
+      "effortScore": 2,
+      "confidenceScore": 0.9,
+      "estimatedValue": "High (+14% CTR)",
+      "recommendedAction": "Deploy schema markup block",
+      "automationLevel": "Autopilot",
+      "requiresApproval": false,
+      "assignedAgent": "SEO Agent"
+    }
+  ],
+  "overallGrowthHealth": 78,
+  "scores": {
+    "visibility": 75,
+    "seo": 80,
+    "geo": 65,
+    "conversion": 70,
+    "content": 72
+  }
+}`;
 
   const result = await llm.generateStructured({
     systemPrompt,
@@ -164,11 +193,23 @@ Generate:
     status: "discovered",
   });
 
-  // Insert newly discovered opportunities
+  // Insert newly discovered opportunities with ML ranking
+  const mlInputs = opportunities.map(o => ({
+    title: o.title,
+    type: o.type,
+    impactScore: o.impactScore,
+    effortScore: o.effortScore,
+    confidenceScore: o.confidenceScore,
+  }));
+
+  const mlRankings = await rankOpportunitiesWithML(project.domain, project.growthGoal, mlInputs, memoryItems.length);
+  const mlMap = new Map((mlRankings.rankedOpportunities || []).map(r => [r.title, r]));
+
   const createdOpportunities = [];
   for (const opp of opportunities) {
     const evidenceArr = Array.isArray(opp.evidence) ? opp.evidence : [opp.evidence];
     const priority = Math.round(((opp.impactScore * opp.confidenceScore) / opp.effortScore) * 10 * 10) / 10;
+    const mlData = mlMap.get(opp.title);
 
     const created = await GrowthOpportunity.create({
       projectId: project._id,
@@ -179,13 +220,23 @@ Generate:
       impactScore: opp.impactScore,
       effortScore: opp.effortScore,
       confidenceScore: opp.confidenceScore,
-      priorityScore: priority,
+      priorityScore: mlData ? mlData.priorityScore : priority,
       estimatedValue: opp.estimatedValue,
       status: "discovered",
       recommendedAction: opp.recommendedAction,
       automationLevel: opp.automationLevel,
       requiresApproval: opp.requiresApproval,
       assignedAgent: opp.assignedAgent,
+      mlPrediction: mlData ? {
+        predictedImpactScore: mlData.predictedImpactScore,
+        successProbability: mlData.successProbability,
+        expectedTrafficLift: mlData.expectedTrafficLift,
+        expectedConversionLift: mlData.expectedConversionLift,
+        confidenceLevel: mlData.confidenceLevel,
+        contributingSignals: mlData.contributingSignals,
+        isMlPredicted: true,
+        learningMode: mlData.learningMode,
+      } : undefined,
     });
     createdOpportunities.push(created);
   }

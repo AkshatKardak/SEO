@@ -68,6 +68,22 @@ const growthOpportunitySchema = new mongoose.Schema(
       impactObserved: String,
       verified: Boolean,
     },
+    mlPrediction: {
+      predictedImpactScore: { type: Number },
+      successProbability: { type: Number },
+      expectedTrafficLift: { type: String },
+      expectedConversionLift: { type: String },
+      confidenceLevel: { type: String, enum: ["high", "medium", "low", "learning"], default: "medium" },
+      contributingSignals: [
+        {
+          name: { type: String },
+          impact: { type: String },
+          isPositive: { type: Boolean, default: true },
+        },
+      ],
+      isMlPredicted: { type: Boolean, default: false },
+      learningMode: { type: Boolean, default: false },
+    },
   },
   { timestamps: true }
 );

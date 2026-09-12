@@ -129,7 +129,7 @@ const presetSites: PresetSite[] = [
     },
     iceActions: [
       {
-        title: "Deploy Automated FAQ JSON-LD for Perplexity Citation Blueprints",
+        title: "Deploy Automated FAQ JSON-LD for AI Citation Blueprints",
         agent: "GEO Agent",
         iceScore: 9.2,
         impact: "High (+24% AI Engine Visibility)",
@@ -360,7 +360,7 @@ export default function ResponseShowcase() {
               </span>
               <span className="text-border hidden sm:inline">|</span>
               <span className="text-muted-foreground text-[11px] hidden sm:inline">
-                Gemini 2.0 Flash + Lighthouse Engine
+                Multi-Agent AI Engine + Lighthouse
               </span>
             </div>
           </div>
@@ -704,7 +704,7 @@ export default function ResponseShowcase() {
                     Generative Engine Optimization (GEO) Citations
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    How AI answer engines (Perplexity, ChatGPT Search, Gemini) cite your website as an authoritative source.
+                    How AI answer engines (Google AI Overviews, Gemini, and Generative Citations) cite your website as an authoritative source.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -718,7 +718,7 @@ export default function ResponseShowcase() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-card/80 border border-border/70 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-foreground">Perplexity AI</span>
+                    <span className="font-bold text-xs text-foreground">AI Research Citations</span>
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   </div>
                   <p className="text-xs font-semibold text-emerald-400">{site.geoVisibility.perplexityStatus}</p>
@@ -727,7 +727,7 @@ export default function ResponseShowcase() {
 
                 <div className="p-4 rounded-2xl bg-card/80 border border-border/70 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-foreground">ChatGPT Search</span>
+                    <span className="font-bold text-xs text-foreground">Generative Answer Engines</span>
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   </div>
                   <p className="text-xs font-semibold text-emerald-400">{site.geoVisibility.chatgptStatus}</p>
@@ -790,7 +790,7 @@ export default function ResponseShowcase() {
                     theme: "GEO AI Authority & Comparison Pages",
                     tasks: [
                       "Publish 4 high-intent Competitor vs Brand pages",
-                      "Deploy structured FAQ data for Perplexity citations",
+                      "Deploy structured FAQ data for AI citations",
                       "Build entity citation links across authoritative domains",
                     ],
                     status: "In Progress (65%)",
