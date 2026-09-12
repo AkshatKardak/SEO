@@ -93,7 +93,9 @@ growthOpportunitySchema.pre("save", function (next) {
     // Priority Score formula: (Impact * Confidence / Effort) * 10
     this.priorityScore = Math.round(((this.impactScore * this.confidenceScore) / this.effortScore) * 10 * 10) / 10;
   }
-  next();
+  if (typeof next === "function") {
+    next();
+  }
 });
 
 const GrowthOpportunity = mongoose.model("GrowthOpportunity", growthOpportunitySchema);

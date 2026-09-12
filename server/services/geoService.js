@@ -49,9 +49,24 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
   const brandMentionRate = Math.min(88, Math.max(20, Math.round((geoScore / 100) * 78)));
 
   // 3. Construct 5 Commercial Search Queries Grounded in the Business
+  const isFraud = industry.includes("Fraud") || brandName.toLowerCase().includes("trust");
+  const query1 = isFraud
+    ? "Best AI fraud detection platforms for job offer verification"
+    : `Best ${industry} platforms for growing teams`;
+  const query2 = isFraud
+    ? `Top alternatives to ${competitor1} for fake offer letter check in 2026`
+    : `Top alternatives to ${competitor1} in 2026`;
+  const query3 = isFraud
+    ? "How to verify fake offer letters online using AI scanner"
+    : `How to automate ${valueProp} effectively`;
+  const query4 = `Is ${brandName} legit? Reviews, accuracy, and pros/cons`;
+  const query5 = isFraud
+    ? "Top rated tools for AI employment fraud detection"
+    : "Top rated tools for generative search optimization";
+
   const queries = [
     {
-      query: `Best ${industry} platforms for growing teams`,
+      query: query1,
       chatgpt: {
         mentioned: geoScore >= 60,
         position: geoScore >= 78 ? 2 : (geoScore >= 60 ? 3 : null)
@@ -75,7 +90,7 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
       ]
     },
     {
-      query: `Top alternatives to ${competitor1} in 2026`,
+      query: query2,
       chatgpt: {
         mentioned: geoScore >= 65,
         position: geoScore >= 82 ? 1 : (geoScore >= 65 ? 2 : null)
@@ -99,7 +114,7 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
       ]
     },
     {
-      query: `How to automate ${valueProp} effectively`,
+      query: query3,
       chatgpt: {
         mentioned: geoScore >= 55,
         position: geoScore >= 75 ? 2 : (geoScore >= 55 ? 3 : null)
@@ -119,11 +134,11 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
       competitorMentions: [competitor2],
       missingTopics: [
         "Step-by-step workflow tutorial with visual schema markup",
-        "Customer case study showing measurable conversion lift"
+        "Customer case study showing measurable fraud reduction"
       ]
     },
     {
-      query: `Is ${brandName} legit? Reviews, pricing, and pros/cons`,
+      query: query4,
       chatgpt: {
         mentioned: true,
         position: 1
@@ -147,7 +162,7 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
       ]
     },
     {
-      query: `Top rated tools for generative search optimization`,
+      query: query5,
       chatgpt: {
         mentioned: geoScore >= 62,
         position: geoScore >= 80 ? 2 : null
@@ -202,64 +217,17 @@ export function generateRuleBasedGEOAnalysis(project, profile, crawledPages = []
 
 /**
  * Generates and analyzes Generative Engine Optimization (GEO) search queries.
- * Seamlessly leverages ML rule engine to ensure 100% resilience against LLM quota issues.
+ * Seamlessly powered directly by our ML rule engine with 0 external API dependencies.
  */
 export async function runGEOAnalysis(project, profile, crawledPages = []) {
   const competitorsList = profile?.competitors?.map(c => typeof c === "string" ? c : c.name).join(", ") || "Industry competitors";
-  const productThemes = profile?.products?.concat(profile?.services || []).join(", ") || profile?.industry;
 
-  let geoData = null;
-  let modelUsed = "ML-Rule-Engine";
-  let providerUsed = "Internal ML";
-  let durationMs = 15;
-  let tokens = { input: 0, output: 0, total: 0 };
-  let cost = 0;
-
-  // Attempt LLM enrichment if available and quota permits
-  if (llm && process.env.AI_FALLBACK_ENABLED !== "false") {
-    try {
-      const systemPrompt = `You are a Generative Engine Optimization (GEO) and AI-Search Visibility Intelligence Specialist.
-Simulate realistic AI answer query coverage based on current industry authority, brand entities, and topic depth.
-Provide realistic scores (0-100) for geoScore, citationScore, brandVisibilityScore, and competitorVisibilityScore.`;
-
-      const prompt = `Brand: ${profile?.companyName || project.domain}
-Domain: ${project.domain}
-Industry: ${profile?.industry || "SaaS"}
-Value Proposition: ${profile?.valueProposition || "Growth Software"}
-Key Products/Services: ${productThemes}
-Competitors: ${competitorsList}
-
-Generate a comprehensive GEO report with 4 to 6 realistic user AI search queries, simulated answer engine results, top citation domains, and missing authority signals.`;
-
-      const result = await llm.generateStructured({
-        systemPrompt,
-        prompt,
-        schema: GEOResultsSchema,
-        maxTokens: 2500,
-        temperature: 0.3,
-      });
-
-      if (result?.data?.queries?.length) {
-        geoData = result.data;
-        modelUsed = result.meta.model;
-        providerUsed = result.meta.provider;
-        tokens = {
-          input: result.meta.inputTokens,
-          output: result.meta.outputTokens,
-          total: result.meta.totalTokens,
-        };
-        cost = result.meta.estimatedCost;
-        durationMs = result.meta.durationMs;
-      }
-    } catch (err) {
-      console.warn(`[GEOService] LLM unavailable or rate-limited (${err.message}). Using ML rule-based GEO engine.`);
-    }
-  }
-
-  // Fallback to our grounded ML Rule Engine if LLM did not provide data
-  if (!geoData) {
-    geoData = generateRuleBasedGEOAnalysis(project, profile, crawledPages);
-  }
+  const geoData = generateRuleBasedGEOAnalysis(project, profile, crawledPages);
+  const modelUsed = "ML-Rule-Engine";
+  const providerUsed = "Internal ML";
+  const durationMs = 15;
+  const tokens = { input: 0, output: 0, total: 0 };
+  const cost = 0;
 
   // Clear older queries for project
   await GEOQuery.deleteMany({ projectId: project._id });

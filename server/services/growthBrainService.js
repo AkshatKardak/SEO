@@ -17,14 +17,13 @@ export function generateRuleBasedCompanyProfile(project, crawledPages = []) {
   const companyName = parts[0]?.trim() || (project.domain ? project.domain.split(".")[0].toUpperCase() : "SerpoAI");
 
   const metaDesc = firstPage.description || firstPage.metaDescription || "";
-  const descText = metaDesc.length > 20
-    ? metaDesc
-    : `${companyName} is an autonomous search and growth platform helping businesses optimize technical SEO, content authority, and generative engine visibility.`;
 
   // Infer industry from text & metadata
-  const fullText = (crawledPages.map(p => `${p.title} ${p.description || ""} ${p.bodyTextSnippet || ""}`).join(" ")).toLowerCase();
+  const fullText = (crawledPages.map(p => `${p.title || ""} ${p.description || ""} ${p.bodyTextSnippet || ""}`).join(" ")).toLowerCase();
   let industry = "B2B SaaS & Digital Software";
-  if (fullText.includes("ecommerce") || fullText.includes("shop") || fullText.includes("cart")) {
+  if (fullText.includes("fraud") || fullText.includes("offer letter") || fullText.includes("scam") || fullText.includes("verification")) {
+    industry = "AI Fraud Detection & Employment Security";
+  } else if (fullText.includes("ecommerce") || fullText.includes("shop") || fullText.includes("cart")) {
     industry = "E-Commerce & Online Retail";
   } else if (fullText.includes("agency") || fullText.includes("client") || fullText.includes("consulting")) {
     industry = "Digital Agency & Marketing Services";
@@ -36,17 +35,56 @@ export function generateRuleBasedCompanyProfile(project, crawledPages = []) {
 
   const h1s = crawledPages.flatMap(p => Array.isArray(p.h1) ? p.h1 : [p.h1]).filter(Boolean);
   const h2s = crawledPages.flatMap(p => Array.isArray(p.h2) ? p.h2 : [p.h2]).filter(Boolean);
-  const products = h1s.length ? h1s.slice(0, 3) : ["Search Growth Engine", "Autonomous Site Auditor", "GEO Intelligence"];
-  const services = h2s.length ? h2s.slice(0, 4) : ["SEO Prioritization", "Core Web Vitals Diagnostics", "AI Overviews Tracking", "Conversion Funnel Lift"];
 
-  return {
-    companyName,
-    industry,
-    description: descText,
-    products,
-    services,
-    targetAudience: ["Founders & Executives", "Growth Engineers", "SEO Specialists", "Marketing Directors"],
-    buyerPersonas: [
+  let descText = metaDesc.length > 20 ? metaDesc : "";
+  if (!descText) {
+    if (industry.includes("Fraud")) {
+      descText = `${companyName} provides AI-driven offer letter verification and fraud detection solutions to protect professionals, recruiters, and enterprises against employment scams.`;
+    } else {
+      descText = `${companyName} is an autonomous digital platform helping businesses maximize visibility, organic authority, and conversion performance.`;
+    }
+  }
+
+  let products = h1s.length ? h1s.slice(0, 3) : [];
+  if (!products.length) {
+    if (industry.includes("Fraud")) {
+      products = ["Fake Offer Letter Detector", "AI Fraud Scanner", "Real-Time Credential Verification"];
+    } else {
+      products = ["Search Growth Engine", "Autonomous Site Auditor", "GEO Intelligence"];
+    }
+  }
+
+  let services = h2s.length ? h2s.slice(0, 4) : [];
+  if (!services.length) {
+    if (industry.includes("Fraud")) {
+      services = ["Document Authenticity Analysis", "Employer Domain Validation", "Candidate Risk Assessment", "Scam Pattern Radar"];
+    } else {
+      services = ["SEO Prioritization", "Core Web Vitals Diagnostics", "AI Overviews Tracking", "Conversion Funnel Lift"];
+    }
+  }
+
+  let buyerPersonas = [
+    {
+      name: "Job Seeker / Candidate",
+      role: "Career Professional",
+      painPoints: ["Receiving suspicious job offers", "Fear of identity theft and deposit scams", "Difficulty verifying recruiter authenticity"],
+      goals: ["Instantly verify offer letter legitimacy", "Secure safe employment confirmation"]
+    },
+    {
+      name: "Talent Acquisition Lead",
+      role: "HR & People Operations",
+      painPoints: ["Brand impersonation by scammers", "Counterfeit offer letters issued in company name", "Candidate trust erosion"],
+      goals: ["Protect employer brand reputation", "Verify candidate credentials and offer letters"]
+    }
+  ];
+
+  let competitors = [
+    { name: "Truecaller Enterprise", domain: "truecaller.com", differentiation: "Phone caller ID vs. specialized offer letter document forensic analysis" },
+    { name: "Persona Identity", domain: "withpersona.com", differentiation: "Generic identity KYC vs. specialized employment scam detection" }
+  ];
+
+  if (!industry.includes("Fraud")) {
+    buyerPersonas = [
       {
         name: "Growth Engineer",
         role: "Technical Optimization Lead",
@@ -59,15 +97,41 @@ export function generateRuleBasedCompanyProfile(project, crawledPages = []) {
         painPoints: ["High customer acquisition cost", "Lack of clear ROI from traditional SEO agencies"],
         goals: ["Drive sustainable inbound signups", "Dominate generative search answers"]
       }
-    ],
-    competitors: [
+    ];
+    competitors = [
       { name: "Ahrefs", domain: "ahrefs.com", differentiation: "Legacy backlink database vs. autonomous closed-loop execution" },
       { name: "Semrush", domain: "semrush.com", differentiation: "Manual dashboard analysis vs. automated code fixes and ICE ranking" }
-    ],
-    valueProposition: h1s[0] || "Autonomous search growth that turns organic traffic into revenue",
-    keywords: [companyName.toLowerCase(), "seo software", "generative engine optimization", "organic growth", "technical seo"],
-    brandEntities: [companyName, "Autonomous Search Growth OS", "GEO Engine"],
-    contentTopics: ["Search Engine Optimization", "Generative Engine Optimization (GEO)", "Conversion Rate Lift", "Technical Site Architecture"],
+    ];
+  }
+
+  let valueProposition = h1s[0] || "";
+  if (!valueProposition) {
+    if (parts.length > 1) {
+      valueProposition = parts.slice(1).join(" ").trim();
+    } else if (industry.includes("Fraud")) {
+      valueProposition = "Instant AI fraud detection and fake offer letter verification online";
+    } else {
+      valueProposition = "Autonomous search growth that turns organic traffic into revenue";
+    }
+  }
+
+  return {
+    companyName,
+    industry,
+    description: descText,
+    products,
+    services,
+    targetAudience: industry.includes("Fraud")
+      ? ["Job Seekers", "HR Leaders", "Hiring Managers", "Risk & Compliance Teams"]
+      : ["Founders & Executives", "Growth Engineers", "SEO Specialists", "Marketing Directors"],
+    buyerPersonas,
+    competitors,
+    valueProposition,
+    keywords: [companyName.toLowerCase(), industry.toLowerCase().split(" ")[0], "verification", "online check", "ai software"],
+    brandEntities: [companyName, `${companyName} Platform`, "AI Verification"],
+    contentTopics: industry.includes("Fraud")
+      ? ["Offer Letter Verification", "Job Scam Detection", "Employer Credential Check", "Recruitment Security"]
+      : ["Search Engine Optimization", "Generative Engine Optimization (GEO)", "Conversion Rate Lift", "Technical Site Architecture"],
     growthBottlenecks: [
       "Incomplete structured JSON-LD schema across key pages",
       "Absence of direct competitor comparison pages targeting high-intent searches",
@@ -77,69 +141,15 @@ export function generateRuleBasedCompanyProfile(project, crawledPages = []) {
 }
 
 /**
- * Generates CompanyProfile from crawled pages
+ * Generates CompanyProfile from crawled pages via direct ML Rule Engine
  */
 export async function synthesizeCompanyProfile(project, crawledPages) {
-  let profileData = null;
-  let modelUsed = "ML-Rule-Engine";
-  let providerUsed = "Internal ML";
-  let durationMs = 10;
-  let tokens = { input: 0, output: 0, total: 0 };
-  let cost = 0;
-
-  // Try LLM if enabled and quota permits
-  if (llm && process.env.AI_FALLBACK_ENABLED !== "false") {
-    try {
-      const pageSummaries = (crawledPages || []).map(p => ({
-        url: p.url || "",
-        title: p.title || "",
-        description: p.description || p.metaDescription || "",
-        h1: p.h1 || [],
-        h2: p.h2 || [],
-        wordCount: p.wordCount || 0,
-        textSnippet: (p.bodyTextSnippet || p.textSnippet || "").slice(0, 1000),
-      }));
-
-      const systemPrompt = `You are an elite Growth Operating System and Chief Strategy Officer.
-Analyze the crawled web data for a company website and construct a structured Company Profile and Knowledge Graph.
-Respond with pure JSON strictly conforming to the requested schema.`;
-
-      const prompt = `Domain: ${project.domain}
-Growth Goal: ${project.growthGoal}
-Crawled Pages Data:
-${JSON.stringify(pageSummaries, null, 2)}
-
-Produce a comprehensive JSON Company Profile with companyName, industry, description, products, services, targetAudience, buyerPersonas, competitors, valueProposition, keywords, brandEntities, contentTopics, growthBottlenecks.`;
-
-      const result = await llm.generateStructured({
-        systemPrompt,
-        prompt,
-        schema: CompanyProfileSchema,
-        maxTokens: 2500,
-        temperature: 0.2,
-      });
-
-      if (result?.data?.companyName) {
-        profileData = result.data;
-        modelUsed = result.meta.model;
-        providerUsed = result.meta.provider;
-        tokens = {
-          input: result.meta.inputTokens,
-          output: result.meta.outputTokens,
-          total: result.meta.totalTokens,
-        };
-        cost = result.meta.estimatedCost;
-        durationMs = result.meta.durationMs;
-      }
-    } catch (err) {
-      console.warn(`[GrowthBrain] LLM profile synthesis failed or rate-limited (${err.message}). Using ML rule-based profile.`);
-    }
-  }
-
-  // Fallback to our grounded ML Rule Engine if LLM did not provide data
-  if (!profileData) {
-    profileData = generateRuleBasedCompanyProfile(project, crawledPages);
-  }
+  const profileData = generateRuleBasedCompanyProfile(project, crawledPages);
+  const modelUsed = "ML-Rule-Engine";
+  const providerUsed = "Internal ML";
+  const durationMs = 12;
+  const tokens = { input: 0, output: 0, total: 0 };
+  const cost = 0;
 
   // Persist CompanyProfile
   const profile = await CompanyProfile.findOneAndUpdate(
@@ -337,77 +347,12 @@ export async function runGrowthBrainAnalysis(project, profile, crawledPages) {
     ? memoryItems.map(m => `- [${m.category}] ${m.learning} (Confidence: ${m.confidence})`).join("\n")
     : "No prior experiment memory yet (baseline scan).";
 
-  let brainData = null;
-  let modelUsed = "ML-Rule-Engine";
-  let providerUsed = "Internal ML";
-  let durationMs = 15;
-  let tokens = { input: 0, output: 0, total: 0 };
-  let cost = 0;
-
-  // Attempt LLM generation if enabled and quota permits
-  if (llm && process.env.AI_FALLBACK_ENABLED !== "false") {
-    try {
-      const systemPrompt = `You are the AI Growth Brain of AI Growth OS.
-Your core philosophy: Discover → Prioritize → Execute → Measure → Learn → Repeat.
-Instead of generating 100 trivial tips, discover 6-10 highest-leverage, outcome-focused Growth Opportunities.
-Rank opportunities strictly based on:
-Priority Score = Impact (1-10) × Confidence (0.1-1.0) ÷ Effort (1-10)
-
-Crucial Rule: Adapt priority directly to the user's Growth Goal: "${project.growthGoal}".`;
-
-      const prompt = `Company Profile:
-- Company Name: ${profile.companyName}
-- Industry: ${profile.industry}
-- Value Prop: ${profile.valueProposition}
-- Target Audience: ${profile.targetAudience?.join(", ")}
-- Selected Growth Goal: ${project.growthGoal}
-
-Historical Growth Memory:
-${memoryContext}
-
-Crawled Pages Overview:
-${(crawledPages || []).map(p => `• URL: ${p.url || ""}
-  Title: "${p.title || ""}"
-  H1: ${JSON.stringify(p.h1 || [])}
-  Missing Alt Images: ${p.images?.missingAlt || 0}/${p.images?.total || 0}
-  Internal Links: ${p.links?.internal?.length || 0}
-  Word Count: ${p.wordCount || 0}
-  Schema: ${JSON.stringify(p.schemaTypes || [])}`).join("\n\n")}
-
-Generate:
-1. "opportunities": Array of 6 to 10 prioritized growth opportunities.
-2. "overallGrowthHealth": integer score (0-100).
-3. "scores": { "visibility": 60, "seo": 70, "geo": 55, "conversion": 65, "content": 60 } (0-100 each).`;
-
-      const result = await llm.generateStructured({
-        systemPrompt,
-        prompt,
-        schema: OpportunitiesListSchema,
-        maxTokens: 3000,
-        temperature: 0.3,
-      });
-
-      if (result?.data?.opportunities?.length) {
-        brainData = result.data;
-        modelUsed = result.meta.model;
-        providerUsed = result.meta.provider;
-        tokens = {
-          input: result.meta.inputTokens,
-          output: result.meta.outputTokens,
-          total: result.meta.totalTokens,
-        };
-        cost = result.meta.estimatedCost;
-        durationMs = result.meta.durationMs;
-      }
-    } catch (err) {
-      console.warn(`[GrowthBrain] LLM opportunity generation failed or rate-limited (${err.message}). Using ML rule-based opportunity engine.`);
-    }
-  }
-
-  // Fallback to grounded ML Rule Engine if LLM did not provide data
-  if (!brainData) {
-    brainData = generateRuleBasedOpportunities(project, profile, crawledPages);
-  }
+  const brainData = generateRuleBasedOpportunities(project, profile, crawledPages);
+  const modelUsed = "ML-Rule-Engine";
+  const providerUsed = "Internal ML";
+  const durationMs = 15;
+  const tokens = { input: 0, output: 0, total: 0 };
+  const cost = 0;
 
   const { opportunities, overallGrowthHealth, scores } = brainData;
 
