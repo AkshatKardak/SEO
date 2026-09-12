@@ -38,8 +38,8 @@ export default function AgentActivity() {
   }, [currentProject]);
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
@@ -56,7 +56,7 @@ export default function AgentActivity() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="glass rounded-2xl p-4 flex items-center gap-3">
+          <div className="surface-card hover-lift rounded-2xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
               <Cpu size={20} />
             </div>
@@ -66,7 +66,7 @@ export default function AgentActivity() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-4 flex items-center gap-3">
+          <div className="surface-card hover-lift rounded-2xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center text-success">
               <CheckCircle2 size={20} />
             </div>
@@ -76,7 +76,7 @@ export default function AgentActivity() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-4 flex items-center gap-3">
+          <div className="surface-card hover-lift rounded-2xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent">
               <Sparkles size={20} />
             </div>
@@ -86,7 +86,7 @@ export default function AgentActivity() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-4 flex items-center gap-3">
+          <div className="surface-card hover-lift rounded-2xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
               <DollarSign size={20} />
             </div>
@@ -98,7 +98,7 @@ export default function AgentActivity() {
         </div>
 
         {/* Runs List */}
-        <div className="glass rounded-2xl p-6 border border-border">
+        <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
           <h3 className="text-sm font-bold text-foreground mb-4">Recent Task Logs</h3>
 
           {loading ? (

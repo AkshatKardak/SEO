@@ -65,8 +65,8 @@ ${(strategy.roadmapPhases?.days90 || []).map((t: any) => `- [ ] ${t.task} (Owner
   ];
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -93,10 +93,10 @@ ${(strategy.roadmapPhases?.days90 || []).map((t: any) => `- [ ] ${t.task} (Owner
 
         {loading ? (
           <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="glass rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
+                <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
               ))}
             </div>
           </div>
@@ -112,7 +112,7 @@ ${(strategy.roadmapPhases?.days90 || []).map((t: any) => `- [ ] ${t.task} (Owner
           <div className="space-y-6">
             {/* North Star & Executive Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass rounded-2xl p-6 border border-primary/30 flex flex-col justify-between space-y-4 bg-gradient-to-br from-card to-primary/5">
+              <div className="surface-card hover-lift rounded-2xl p-6 border border-primary/30 flex flex-col justify-between space-y-4 bg-gradient-to-br from-card to-primary/5">
                 <div>
                   <div className="flex items-center justify-between text-xs font-bold text-primary mb-2">
                     <span>NORTH STAR METRIC</span>

@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState, useEffect } from "react";
 import { useProject } from "../context/ProjectContext";
 import { growthAPI } from "../services/api";
@@ -53,6 +54,7 @@ export default function SiteAudit() {
     setFixingId(issueId);
     try {
       await growthAPI.autoFixIssue(currentProject._id, issueId);
+      try { confetti({ particleCount: 65, spread: 60, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success("Fix action formulated and queued in Action Center!");
       await fetchAudit();
     } catch (err: any) {
@@ -67,8 +69,8 @@ export default function SiteAudit() {
   const cwv = audit?.coreWebVitals;
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -98,16 +100,16 @@ export default function SiteAudit() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="glass rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
+                <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
               ))}
             </div>
-            <div className="glass rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
           </div>
         ) : (
           <div className="space-y-6">
             {/* Overview Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="glass rounded-2xl p-5 border border-primary/30 flex items-center gap-4">
+              <div className="surface-card hover-lift rounded-2xl p-5 border border-primary/30 flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-2xl font-black">
                   {score}
                 </div>
@@ -117,19 +119,19 @@ export default function SiteAudit() {
                 </div>
               </div>
 
-              <div className="glass rounded-2xl p-5 border border-border">
+              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase">Largest Contentful Paint</span>
                 <p className="text-2xl font-black text-success mt-1">{cwv?.lcp?.value || "1.8s"}</p>
                 <p className="text-[11px] text-muted-foreground">LCP Speed: Good</p>
               </div>
 
-              <div className="glass rounded-2xl p-5 border border-border">
+              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase">Interaction to Next Paint</span>
                 <p className="text-2xl font-black text-success mt-1">{cwv?.fidInp?.value || "42ms"}</p>
                 <p className="text-[11px] text-muted-foreground">INP Responsiveness: Good</p>
               </div>
 
-              <div className="glass rounded-2xl p-5 border border-border">
+              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase">Cumulative Layout Shift</span>
                 <p className="text-2xl font-black text-success mt-1">{cwv?.cls?.value || "0.03"}</p>
                 <p className="text-[11px] text-muted-foreground">CLS Stability: Good</p>
@@ -137,7 +139,7 @@ export default function SiteAudit() {
             </div>
 
             {/* Issues Breakdown & Auto-Fix */}
-            <div className="glass rounded-2xl p-6 border border-border space-y-4">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Diagnostic Issues & Auto-Fix Actions</h3>

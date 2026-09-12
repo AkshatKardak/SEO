@@ -87,8 +87,8 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -135,8 +135,8 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
 
         {loading ? (
           <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
-            <div className="glass rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
           </div>
         ) : !selectedReport ? (
           <div className="glass rounded-2xl p-12 text-center space-y-3">
@@ -149,7 +149,7 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
         ) : (
           <div className="space-y-6">
             {/* Report Header Card */}
-            <div className="glass rounded-2xl p-6 border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-primary/10 text-primary">
                   {selectedReport.period} Executive Brief
@@ -189,7 +189,7 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
             </div>
 
             {/* Executive Summary */}
-            <div className="glass rounded-2xl p-6 border border-border space-y-2">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Executive Synthesis
               </h3>
@@ -200,7 +200,7 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
 
             {/* Top Wins & Learnings */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass rounded-2xl p-6 border border-border space-y-3">
+              <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-3">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-success flex items-center gap-1.5">
                   <CheckCircle2 size={14} /> Top Wins This Cycle
                 </h3>
@@ -214,7 +214,7 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
                 </ul>
               </div>
 
-              <div className="glass rounded-2xl p-6 border border-border space-y-3">
+              <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-3">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
                   <Sparkles size={14} /> Verified Learnings & Strategy Shifts
                 </h3>
@@ -230,7 +230,7 @@ ${(rep.nextCyclePriorities || []).map((p: string) => `- ${p}`).join("\n")}
             </div>
 
             {/* Next Cycle Priorities */}
-            <div className="glass rounded-2xl p-6 border border-border space-y-3">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Next Cycle High-ROI Priorities
               </h3>

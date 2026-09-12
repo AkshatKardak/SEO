@@ -200,8 +200,8 @@ export default function Report() {
   const infoCount = issues.filter((i) => i.severity === "info").length;
 
   return (
-    <div className="min-h-screen pt-16 md:pt-24 bg-background">
-      <div ref={reportRef} className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div ref={reportRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="mb-8">
           <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">

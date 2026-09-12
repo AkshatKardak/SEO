@@ -25,8 +25,8 @@ export default function CompanyProfileView() {
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
@@ -56,7 +56,7 @@ export default function CompanyProfileView() {
               </div>
             </div>
 
-            <div className="glass rounded-2xl p-6 border border-border space-y-3">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Products & Services
               </h3>
@@ -74,7 +74,7 @@ export default function CompanyProfileView() {
           </div>
 
           {/* Buyer Personas */}
-          <div className="glass rounded-2xl p-6 border border-border">
+          <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-bold text-foreground">Target Buyer Personas</h3>
@@ -128,7 +128,7 @@ export default function CompanyProfileView() {
           {/* Competitors & Growth Bottlenecks */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Competitors */}
-            <div className="glass rounded-2xl p-6 border border-border">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
               <h3 className="text-sm font-bold text-foreground mb-3">Key Market Competitors</h3>
               <div className="space-y-2.5">
                 {(profile.competitors || []).map((comp: any, i: number) => (
@@ -143,7 +143,7 @@ export default function CompanyProfileView() {
             </div>
 
             {/* Growth Bottlenecks */}
-            <div className="glass rounded-2xl p-6 border border-border">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
               <h3 className="text-sm font-bold text-foreground mb-3">Identified Growth Bottlenecks</h3>
               <div className="space-y-2">
                 {(profile.growthBottlenecks || []).map((bot: string, i: number) => (

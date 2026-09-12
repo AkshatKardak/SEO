@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState } from "react";
 import { useProject } from "../context/ProjectContext";
 import {
@@ -49,13 +50,14 @@ export default function ContentStudio() {
         cta: `Start Free Trial with ${profile?.companyName || 'Us'}`,
         geoObjective: "Structured to win top citation position in AI search and generative answer queries.",
       });
+      try { confetti({ particleCount: 70, spread: 65, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success("Content brief formulated by Content Agent!");
     }, 1200);
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
@@ -99,7 +101,7 @@ export default function ContentStudio() {
         {/* Builder Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Inputs */}
-          <div className="glass rounded-2xl p-6 border border-border space-y-4">
+          <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-4">
             <h3 className="text-sm font-bold text-foreground">Configuration</h3>
 
             {activeFormat === "comparison" && (

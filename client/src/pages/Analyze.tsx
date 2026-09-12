@@ -155,8 +155,8 @@ export default function Analyze() {
     : [];
 
   return (
-    <div className="min-h-screen pt-16 md:pt-20 bg-background bg-grid overflow-x-hidden">
-      <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background bg-grid overflow-x-hidden">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ── Header ── */}
         <div className="text-center mb-8 mt-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-4">

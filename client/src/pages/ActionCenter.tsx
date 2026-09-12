@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState, useEffect } from "react";
 import { useProject } from "../context/ProjectContext";
 import { growthAPI } from "../services/api";
@@ -41,6 +42,7 @@ export default function ActionCenter() {
     setProcessingId(id);
     try {
       await growthAPI.approveAction(id);
+      try { confetti({ particleCount: 75, spread: 65, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success("Action approved and deployed successfully!");
       if (previewAction?._id === id) setPreviewAction(null);
       await fetchActions();
@@ -77,8 +79,8 @@ export default function ActionCenter() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>

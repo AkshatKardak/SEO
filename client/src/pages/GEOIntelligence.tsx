@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState, useEffect } from "react";
 import { useProject } from "../context/ProjectContext";
 import { growthAPI } from "../services/api";
@@ -37,6 +38,7 @@ export default function GEOIntelligence() {
     try {
       await growthAPI.triggerGEOAnalysis(currentProject._id);
       await fetchGEO();
+      try { confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success("AI Search Visibility analysis completed!");
     } catch (err: any) {
       toast.error(err.message || "GEO scan failed");
@@ -50,8 +52,8 @@ export default function GEOIntelligence() {
   const mentionRate = geoData?.mentionRate || 40;
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -85,7 +87,7 @@ export default function GEOIntelligence() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="glass rounded-2xl p-5 flex items-center gap-4 border border-primary/20">
+          <div className="surface-card hover-lift rounded-2xl p-5 flex items-center gap-4 border border-primary/20">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-2xl font-black">
               {geoScore}
             </div>
@@ -95,7 +97,7 @@ export default function GEOIntelligence() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-5 flex items-center gap-4 border border-accent/20">
+          <div className="surface-card hover-lift rounded-2xl p-5 flex items-center gap-4 border border-accent/20">
             <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-2xl font-black">
               {mentionRate}%
             </div>
@@ -105,7 +107,7 @@ export default function GEOIntelligence() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-5 flex items-center gap-4 border border-border">
+          <div className="surface-card hover-lift rounded-2xl p-5 flex items-center gap-4 border border-border">
             <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center text-foreground text-2xl font-black">
               {queries.length}
             </div>
@@ -139,7 +141,7 @@ export default function GEOIntelligence() {
               {queries.map((q: any) => (
                 <div
                   key={q._id}
-                  className="p-4 rounded-xl bg-card/60 border border-border/70 space-y-3"
+                  className="surface-card hover-lift p-4 rounded-xl border border-border space-y-3 bg-card"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <p className="text-sm font-bold text-foreground font-mono">

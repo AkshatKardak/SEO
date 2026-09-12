@@ -57,8 +57,8 @@ export default function CompetitorIntelligence() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -117,7 +117,7 @@ export default function CompetitorIntelligence() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="glass rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
+                <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
               ))}
             </div>
             <div className="glass rounded-2xl p-8 h-72 animate-pulse bg-muted/40" />
@@ -154,7 +154,7 @@ export default function CompetitorIntelligence() {
             </div>
 
             {/* Content Gaps Table */}
-            <div className="glass rounded-2xl p-6 border border-border">
+            <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Uncovered Content & Topic Gaps</h3>
@@ -199,7 +199,7 @@ export default function CompetitorIntelligence() {
 
             {/* Strengths vs Vulnerabilities */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass rounded-2xl p-6 border border-border">
+              <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
                   Competitor Core Strengths
                 </h3>
@@ -213,7 +213,7 @@ export default function CompetitorIntelligence() {
                 </ul>
               </div>
 
-              <div className="glass rounded-2xl p-6 border border-border">
+              <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
                   Competitor Vulnerabilities (Your Angle)
                 </h3>

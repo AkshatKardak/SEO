@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState, useEffect } from "react";
 import { useProject } from "../context/ProjectContext";
 import { growthAPI } from "../services/api";
@@ -80,6 +81,7 @@ export default function Experiments() {
         currentValue: observedValue,
         winner: winnerChoice,
       });
+      try { confetti({ particleCount: 80, spread: 70, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success("Experiment evaluated & learning stored in Growth Memory!");
       setEvaluatingExp(null);
       setObservedValue("");
@@ -90,8 +92,8 @@ export default function Experiments() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -119,7 +121,7 @@ export default function Experiments() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[1, 2].map((i) => (
-              <div key={i} className="glass rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
+              <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
             ))}
           </div>
         ) : experiments.length === 0 ? (

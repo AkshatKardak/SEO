@@ -75,8 +75,8 @@ export default function AnalyticsView() {
   const integrations = data?.integrations || [];
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -102,8 +102,8 @@ export default function AnalyticsView() {
 
         {loading ? (
           <div className="space-y-4">
-            <div className="glass rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
-            <div className="glass rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
+            <div className="surface-card hover-lift rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
           </div>
         ) : (
           <>
@@ -137,7 +137,7 @@ export default function AnalyticsView() {
         )}
 
         {/* The 6-Step Growth Graph Funnel */}
-        <div className="glass rounded-2xl p-6 border border-border mb-8">
+        <div className="surface-card hover-lift rounded-2xl p-6 border border-border mb-8">
           <h3 className="text-sm font-bold text-foreground mb-4">Growth Graph Funnel Breakdown</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
@@ -172,7 +172,7 @@ export default function AnalyticsView() {
         {/* Top Landing Pages & Channel Attribution */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Top Landing Pages */}
-          <div className="glass rounded-2xl p-6 border border-border">
+          <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
             <h3 className="text-sm font-bold text-foreground mb-4">Top Landing Pages & Conversion Rates</h3>
             <div className="space-y-2.5">
               {(snapshot?.topLandingPages || []).map((page: any) => (
@@ -191,7 +191,7 @@ export default function AnalyticsView() {
           </div>
 
           {/* Traffic Sources */}
-          <div className="glass rounded-2xl p-6 border border-border">
+          <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
             <h3 className="text-sm font-bold text-foreground mb-4">Traffic Source Attribution</h3>
             <div className="space-y-3">
               {(snapshot?.sourceAttribution || []).map((src: any) => (
@@ -210,7 +210,7 @@ export default function AnalyticsView() {
         </div>
 
         {/* Connected Integrations */}
-        <div className="glass rounded-2xl p-6 border border-border">
+        <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-foreground">Active Analytics Integrations</h3>
             <span className="text-xs text-muted-foreground">Tokens encrypted server-side</span>

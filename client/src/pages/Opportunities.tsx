@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti";
 import { useState, useEffect } from "react";
 import { useProject } from "../context/ProjectContext";
 import { growthAPI } from "../services/api";
@@ -57,6 +58,7 @@ export default function Opportunities() {
     setExecutingId(opp._id);
     try {
       await growthAPI.executeOpportunity(opp._id);
+      try { confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 }, colors: ["#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"] }); } catch(e){} 
       toast.success(`${opp.assignedAgent} dispatched successfully!`);
       await fetchOpps();
     } catch (err: any) {
@@ -99,8 +101,8 @@ export default function Opportunities() {
     });
 
   return (
-    <div className="min-h-screen pt-20 pb-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
@@ -189,7 +191,7 @@ export default function Opportunities() {
             {filtered.map((opp) => (
               <div
                 key={opp._id}
-                className="glass rounded-xl p-5 hover:border-primary/40 transition-all border border-border/80"
+                className="surface-card hover-lift rounded-2xl p-5 border border-border transition-all bg-card"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   {/* Left: ICE Priority badge + Title */}
