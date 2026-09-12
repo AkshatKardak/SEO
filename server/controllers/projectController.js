@@ -67,7 +67,7 @@ export const createProject = async (req, res) => {
 
     // Step 4: Run Initial GEO Analysis
     try {
-      await runGEOAnalysis(project, profile);
+      await runGEOAnalysis(project, profile, crawlResult.pages);
     } catch (geoErr) {
       console.warn("[ProjectController] GEO analysis warning:", geoErr.message);
     }

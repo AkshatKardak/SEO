@@ -1,15 +1,18 @@
 import { ProviderError, normalizeProviderError, parseStructuredResponse, validateStructured } from "./providerUtils.js";
 
 const MODERN_GEMINI_CANDIDATES = [
-  "gemini-3.6-flash",
   "gemini-flash-latest",
+  "gemini-3.5-flash",
+  "gemini-flash-lite-latest",
+  "gemini-3.5-flash-lite",
+  "gemini-3.6-flash",
 ];
 
 export class GeminiProvider {
   /**
    * @param {object} [opts]
    * @param {string}   [opts.apiKey]    - defaults to process.env.GEMINI_API_KEY
-   * @param {string}   [opts.model]     - defaults to process.env.GEMINI_MODEL || "gemini-3.6-flash"
+   * @param {string}   [opts.model]     - defaults to process.env.GEMINI_MODEL || "gemini-flash-latest"
    * @param {Function} [opts.fetchImpl] - injected fetch for tests
    */
   constructor({ apiKey = process.env.GEMINI_API_KEY, model, fetchImpl } = {}) {
@@ -66,12 +69,8 @@ export class GeminiProvider {
       lastError = synthetic;
       console.warn(`[GeminiProvider] Candidate ${m} failed (${res.status}): ${rawMsg}`);
 
-      const isModelError =
-        res.status === 404 ||
-        rawMsg.toLowerCase().includes("model") ||
-        rawMsg.toLowerCase().includes("not available") ||
-        rawMsg.toLowerCase().includes("not found");
-      if (!isModelError) {
+      const isAuthError = res.status === 401 || res.status === 403;
+      if (isAuthError || process.env.GEMINI_MODEL) {
         throw normalizeProviderError(synthetic, { provider: this.name, keyEnv: this.keyEnv, modelEnv: this.modelEnv });
       }
     }
