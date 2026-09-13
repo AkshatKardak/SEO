@@ -22,6 +22,7 @@ const growthOpportunitySchema = new mongoose.Schema(
         "OUTREACH",
         "EXPERIMENT",
         "RETENTION",
+        "STRATEGY",
       ],
       required: true,
       index: true,
@@ -43,13 +44,32 @@ const growthOpportunitySchema = new mongoose.Schema(
     recommendedAction: { type: String, required: true },
     automationLevel: {
       type: String,
-      enum: ["Copilot", "Autopilot", "Autonomous"],
+      enum: [
+        "Copilot",
+        "Autopilot",
+        "Autonomous",
+        "Semi-Autonomous",
+        "copilot",
+        "autopilot",
+        "autonomous",
+        "semi-autonomous",
+      ],
       default: "Autopilot",
+      set: (val) => {
+        if (!val) return "Autopilot";
+        const v = String(val).trim().toLowerCase();
+        if (v === "copilot") return "Copilot";
+        if (v === "autopilot") return "Autopilot";
+        if (v === "autonomous") return "Autonomous";
+        if (v.includes("semi")) return "Semi-Autonomous";
+        return val;
+      },
     },
     requiresApproval: { type: Boolean, default: true },
     assignedAgent: {
       type: String,
       enum: [
+        "Growth Brain",
         "Intelligence Agent",
         "SEO Agent",
         "GEO Agent",

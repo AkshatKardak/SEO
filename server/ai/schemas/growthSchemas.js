@@ -61,6 +61,7 @@ const VALID_OPP_TYPES = [
   "OUTREACH",
   "EXPERIMENT",
   "RETENTION",
+  "STRATEGY",
 ];
 
 const toOppType = z.preprocess((val) => {
@@ -73,6 +74,7 @@ const toOppType = z.preprocess((val) => {
   if (upper.includes("COMPET")) return "COMPETITOR";
   if (upper.includes("LINK") || upper.includes("BACKLINK")) return "BACKLINK";
   if (upper.includes("PAGE")) return "ON_PAGE_SEO";
+  if (upper.includes("STRAT")) return "STRATEGY";
   return "CONTENT";
 }, z.enum(VALID_OPP_TYPES).default("CONTENT"));
 
@@ -102,6 +104,7 @@ const toScore10 = (def = 5) =>
   }, z.number().min(1).max(10).default(def));
 
 const VALID_AGENTS = [
+  "Growth Brain",
   "Intelligence Agent",
   "SEO Agent",
   "GEO Agent",
@@ -116,6 +119,16 @@ const toAgent = z.preprocess((val) => {
   return match || "Growth Analyst";
 }, z.enum(VALID_AGENTS).default("Growth Analyst"));
 
+const toAutomationLevel = z.preprocess((val) => {
+  if (typeof val !== "string") return "Autopilot";
+  const str = val.trim().toLowerCase();
+  if (str === "copilot") return "Copilot";
+  if (str === "autopilot") return "Autopilot";
+  if (str === "autonomous") return "Autonomous";
+  if (str.includes("semi")) return "Semi-Autonomous";
+  return "Autopilot";
+}, z.enum(["Copilot", "Autopilot", "Autonomous", "Semi-Autonomous"]).default("Autopilot"));
+
 export const OpportunityItemSchema = z.object({
   type: toOppType,
   title: z.string(),
@@ -126,7 +139,7 @@ export const OpportunityItemSchema = z.object({
   confidenceScore: toConfidence,
   estimatedValue: z.string().default("Medium"),
   recommendedAction: z.string(),
-  automationLevel: z.enum(["Copilot", "Autopilot", "Autonomous"]).default("Autopilot"),
+  automationLevel: toAutomationLevel,
   requiresApproval: z.boolean().default(true),
   assignedAgent: toAgent,
 });
