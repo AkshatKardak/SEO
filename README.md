@@ -5,7 +5,7 @@
 <h1 align="center">SerpoAI</h1>
 <p align="center">
   <strong>An Autonomous Search Growth Operating System</strong><br/>
-  <em>"Turn Search Data Into Growth."</em>
+  <em>"Turn Search Data Into Compounding Organic Growth."</em>
 </p>
 
 <p align="center">
@@ -16,16 +16,41 @@
     <img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" />
   </a>
   <img src="https://img.shields.io/badge/ML%20Engine-FastAPI%20%2B%20scikit--learn-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/GEO%20Engine-Active-purple?style=for-the-badge" />
 </p>
 
 <p align="center">
+  <a href="#-product-dashboard--views">Dashboard Views</a> •
   <a href="#-product-positioning">Positioning</a> •
   <a href="#-core-operating-loop">Growth Loop</a> •
-  <a href="#-ml-intelligence-engine">ML Engine</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-getting-started">Getting Started</a> •
-  <a href="#-specialized-ai-agents">AI Agents</a>
+  <a href="#-machine-learning-ml-vs-large-language-model-llm-architecture">ML vs LLM</a> •
+  <a href="#-specialized-autonomous-agents">AI Agents</a> •
+  <a href="#-deployment-guide-render--netlify">Deployment</a> •
+  <a href="#-author">Author</a>
 </p>
+
+---
+
+## 📸 Product Dashboard & Views
+
+### Autonomous Growth Command Center
+<p align="center">
+  <img src="client/public/Dashboard.png" alt="SerpoAI Autonomous Growth Dashboard" width="100%" />
+</p>
+
+### Feature Suite Overview
+
+| Generative Engine Optimization (GEO) Radar | ICE-Ranked Opportunity Backlog |
+| :---: | :---: |
+| <img src="client/public/GEOIntelligence.png" alt="GEO Radar" width="100%" /> | <img src="client/public/opportunities.png" alt="Opportunity Backlog" width="100%" /> |
+
+| 6-Tier Funnel Growth Analytics | 30-60-90 Day Strategic Roadmap |
+| :---: | :---: |
+| <img src="client/public/GrowthAnalytics.png" alt="Growth Analytics" width="100%" /> | <img src="client/public/30-60-90RoadMap.png" alt="Roadmap" width="100%" /> |
+
+| Deep Technical Site Audit | Autonomous Agent Activity & Observability |
+| :---: | :---: |
+| <img src="client/public/TechnicalAudit.png" alt="Technical Audit" width="100%" /> | <img src="client/public/AgentActivity.png" alt="Agent Activity" width="100%" /> |
 
 ---
 
@@ -52,22 +77,24 @@ $$\Large \textbf{DISCOVER} \longrightarrow \textbf{PRIORITIZE} \longrightarrow \
 
 ---
 
-## 🧠 Machine Learning Engine (`ml-service/`)
+## ⚡ Machine Learning (ML) vs. Large Language Model (LLM) Architecture
 
-SerpoAI integrates a dedicated Python FastAPI service powered by `scikit-learn`, `numpy`, `pandas`, and `statsmodels` for real product decisions:
+SerpoAI uses a **Hybrid Architecture** separating high-speed mathematical prediction and entity modeling from generative language synthesis:
 
-### 1. Smart Opportunity Ranking
-- **Inputs**: Page type, current ranking, search volume, competitor gap, content depth, technical severity, historical experiment count.
-- **Outputs**: ML predicted impact score, success probability (0–100%), expected traffic lift range (`+8–15%`), expected conversion lift range (`+3–7%`), and top contributing signal attribution (positive & negative factors).
-- **Cold-Start Handling**: Hybrid Bayesian priors with automatic `"learning_mode": true` indicator when historical domain data is building.
+| Capability / Feature | Underlying Engine | Why It Uses This Engine | Execution Speed & Cost |
+| :--- | :--- | :--- | :--- |
+| **Growth Opportunity Discovery** | **Internal ML & Rule Engine** (`growthBrainService.js`) | Deterministic multi-page DOM parsing & 5-pillar scoring rules. 100% resilient against external API rate limits or quota drops. | ⚡ ~15ms (Zero API Cost) |
+| **Predictive Opportunity Ranking (ICE)** | **Machine Learning Engine** (`scikit-learn` / `mlClientService.js`) | Bayesian probability models estimating traffic/conversion lift % and ranking ICE scores against historical priors. | ⚡ ~20ms (Zero API Cost) |
+| **Company Knowledge Graph** | **Direct Entity ML Engine** (`generateRuleBasedCompanyProfile`) | Extracts meta tags, H1/H2 structures, and entity topics to construct structured buyer personas and growth bottlenecks. | ⚡ ~12ms (Zero API Cost) |
+| **GEO AI-Search Citation Radar** | **Algorithmic Simulation Engine** (`generateRuleBasedGEOAnalysis`) | Evaluates brand citation positioning across Google AI Overviews, Gemini, ChatGPT, and Perplexity. | ⚡ ~15ms (Zero API Cost) |
+| **Time-Series Anomaly Detection** | **Machine Learning** (`IsolationForest` + Z-Score in `ml-service`) | Identifies sudden traffic, CTR, or ranking deviations against historical confidence intervals. | ⚡ ~25ms (Zero API Cost) |
+| **30-Day Growth Forecasting** | **Statistical Machine Learning** (Holt-Winters exponential smoothing) | Autoregressive forecasting with 95% confidence bands distinguishing actuals from projections. | ⚡ ~30ms (Zero API Cost) |
+| **Agent Code Diffs & Fixes** | **Large Language Models (LLMs)** (`agentService.js`) | Formulates exact production-ready JSON-LD schemas, robots.txt rules, and HTML patches for approved actions. | 🤖 1.2s–2.5s (LLM Tokens) |
+| **High-Intent Content Drafts** | **Large Language Models (LLMs)** (`Content Agent`) | Drafts /vs/competitor comparison matrices, customer-proof copy, and deep conversion outlines. | 🤖 2.0s–3.5s (LLM Tokens) |
+| **30-60-90 Day Strategy Narrative** | **Large Language Models (LLMs)** (`strategyService.js`) | Synthesizes high-level qualitative execution milestones and executive North Star strategy. | 🤖 1.5s–2.8s (LLM Tokens) |
+| **Executive Weekly Briefs** | **Large Language Models (LLMs)** (`reportService.js`) | Generates polished executive summaries and markdown export briefs for team leadership. | 🤖 1.8s–3.0s (LLM Tokens) |
 
-### 2. SEO Anomaly Radar
-- **Inputs**: 14-day & 30-day time-series telemetry across traffic, impressions, CTR, keyword rankings, and Core Web Vitals.
-- **Outputs**: Automated detection of statistical deviations (Z-score + IsolationForest), severity classification (`critical`, `warning`, `info`), and explainable likely contributing factors.
-
-### 3. 30-Day Growth Forecasting
-- **Inputs**: Historical search traffic and visibility time-series.
-- **Outputs**: Autoregressive Holt-Winters exponential projection with 95% confidence bands distinguishing **ACTUAL** historical baseline from **FORECAST** bounds.
+> **Multi-Provider LLM Cascade**: When LLM generation is requested, SerpoAI cascades automatically across configured providers (**Groq** $\to$ **Gemini** $\to$ **OpenRouter** $\to$ **OpenAI** $\to$ **Anthropic** $\to$ **DeepSeek**) with automatic schema-repair retries so provider outages or rate limits never break user flows.
 
 ---
 
@@ -75,42 +102,48 @@ SerpoAI integrates a dedicated Python FastAPI service powered by `scikit-learn`,
 
 | Agent | Subsystem | Primary Inputs | Generated Artifacts |
 | :--- | :--- | :--- | :--- |
+| **Growth Brain** | Global Strategy | Growth goal, Crawled pages, Historical memory | Prioritized ICE backlog, 5-Pillar scores |
 | **Intelligence Agent** | Knowledge Graph | DOM text, Meta signals, Competitor URLs | Company Knowledge Graph, Personas, Bottlenecks |
 | **SEO Agent** | Technical & Schema | DOM tree, Lighthouse, Canonical headers | 1-Click JSON-LD schemas, Core Web Vitals patches |
-| **GEO Agent** | AI Search & Citations | High-intent queries, Perplexity & ChatGPT citations | AI search presence graph, Citation gap teardown |
+| **GEO Agent** | AI Search & Citations | High-intent queries, Perplexity & Gemini citations | AI search presence graph, Citation gap teardown |
 | **Content Agent** | High-Intent Briefs | Topic gaps, Keyword search volumes | /vs/competitor matrices, Conversion outlines |
 | **Growth Analyst** | Attribution & Memory | Search Console metrics, Signups, Revenue | Growth Graph attribution, Verified Growth Memory |
 
 ---
 
-## 🏗️ System Architecture
+## 🌐 Deployment Guide (Render + Netlify)
 
-```
-                                  SERPOAI PLATFORM
-                                         │
-                 ┌───────────────────────┴───────────────────────┐
-                 │                                               │
-           ML Engine (FastAPI)                          LLM Orchestrator
-       (scikit-learn / statsmodels)                 (Groq / DeepSeek / Claude)
-                 │                                               │
-       • Opportunity Ranking (Lift %)                   • Knowledge Graph Synthesis
-       • Anomaly Radar (Deviation)                      • Code Patch Generation
-       • 30-Day Growth Forecasting                      • High-Intent Content Briefs
-                 │                                               │
-                 └───────────────────────┬───────────────────────┘
-                                         │
-                                   Growth Brain
-                                         │
-                             5 Specialized AI Agents
-                                         │
-                           Action Center (Human Approval)
-                                         │
-                                   Deploy & Crawl
-                                         │
-                           Growth Graph Attribution
-                                         │
-                               Persistent Growth Memory
-```
+### 1. Deploying Backend & ML Service on Render
+1. **Backend Web Service (`server/`)**:
+   - Create a **New Web Service** on [Render](https://render.com).
+   - Root Directory: `server`
+   - Environment: `Node`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Environment Variables:
+     - `MONGODB_URI`: Your MongoDB Atlas connection URI
+     - `JWT_SECRET`: Secure random string
+     - `PORT`: `5000`
+     - `GROQ_API_KEY` / `GEMINI_API_KEY` / `OPENROUTER_API_KEY`: At least one active AI key for generative code diffs
+     - `ML_SERVICE_URL`: (Optional) URL of the Python ML service
+
+2. **Python ML Service (`ml-service/`)** *(Optional for standalone Python microservice)*:
+   - Create a **New Web Service** on Render.
+   - Root Directory: `ml-service`
+   - Environment: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port 8000`
+
+### 2. Deploying Frontend on Netlify
+1. Connect your repository on [Netlify](https://www.netlify.com).
+2. Configure build settings:
+   - **Base directory**: `client`
+   - **Build command**: `npm run build`
+   - **Publish directory**: `client/dist`
+3. Add Environment Variable:
+   - `VITE_API_URL`: Your deployed Render server URL (e.g. `https://serpoai-backend.onrender.com/api`)
+4. Single-Page Application (SPA) Routing:
+   - The included `client/public/_redirects` file ensures client-side routing works on page refresh with zero 404s.
 
 ---
 
@@ -119,38 +152,23 @@ SerpoAI integrates a dedicated Python FastAPI service powered by `scikit-learn`,
 ```
 seo-rank-tracker-main/
 │
-├── client/                                 # React 18 + TypeScript + Vite + Tailwind CSS
+├── client/                                 # React + TypeScript + Vite + Tailwind CSS
+│   ├── public/                             # Static Assets, Screenshots & Netlify _redirects
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── home/                       # Editorial Landing Page Components (17 Sections)
-│   │   │   │   ├── Hero.tsx                # Hero + Realistic Product Dashboard Preview
-│   │   │   │   ├── ProblemSection.tsx      # Checklists vs Growth Loop
-│   │   │   │   ├── GrowthLoopSection.tsx   # DISCOVER → PRIORITIZE → EXECUTE → MEASURE → LEARN
-│   │   │   │   ├── ICEOpportunitySection.tsx# Mathematical ICE Prioritization & Sorting
-│   │   │   │   ├── GEOPresenceSection.tsx  # AI Search Presence & Citation Gaps
-│   │   │   │   ├── AIAgentsSection.tsx     # 5 Autonomous Specialized Agents
-│   │   │   │   ├── CompetitorSection.tsx   # Competitor Benchmarks & Gaps
-│   │   │   │   ├── MLPredictionsSection.tsx# Smart Ranking, Anomaly Radar, Forecasting
-│   │   │   │   ├── GrowthGraphSection.tsx  # 6-Tier Funnel Attribution
-│   │   │   │   ├── ActionCenterSection.tsx # Human-in-the-Loop Code Diff Approvals
-│   │   │   │   ├── GrowthMemorySection.tsx # Permanent Organizational Memory
-│   │   │   │   ├── StrategySection.tsx     # 30-60-90 Day Strategic Roadmap
-│   │   │   │   ├── ProofSection.tsx        # Traditional SEO vs SerpoAI Table
-│   │   │   │   ├── FinalCTASection.tsx     # Final Call to Action
-│   │   │   │   └── Footer.tsx              # Editorial Footer
-│   │   │   └── Navbar.tsx                  # Minimal Navigation & Project Switcher
-│   │   ├── pages/                          # Core Dashboard & Product Views
-│   │   └── services/api.ts                 # Axios API Client with ML API
+│   │   ├── components/                     # High-Impact Cards, Radar & Area Charts
+│   │   ├── pages/                          # Dashboard, GEO, Opportunities, Action Center
+│   │   └── services/api.ts                 # Axios API Client with ML Services
 │   └── package.json
 │
 ├── server/                                 # Express + Node.js Backend API
-│   ├── ai/providers/                       # Multi-Provider Fallback Cascade
-│   ├── controllers/                        # Opportunity, Project, Action, & ML Controllers
+│   ├── ai/providers/                       # Multi-Provider Cascade (Groq, Gemini, OpenRouter)
+│   ├── controllers/                        # Project, Opportunity, GEO, & Audit Controllers
 │   ├── models/                             # Mongoose Schemas (Opportunity, Memory, Project)
 │   ├── routes/                             # Express Routers (/api/v1/*)
 │   ├── services/
-│   │   ├── mlClientService.js              # Python ML API Client + Statistical Fallback
+│   │   ├── mlClientService.js              # ML Scoring + Bayesian Statistical Engine
 │   │   ├── growthBrainService.js           # Growth Brain Knowledge Synthesis
+│   │   ├── geoService.js                   # Generative Engine Optimization Engine
 │   │   └── crawlerService.js               # SSRF-Safe Cloud Crawler
 │   └── server.js
 │
@@ -161,68 +179,9 @@ seo-rank-tracker-main/
     │   │   ├── opportunity_ranker.py       # ML Outcome Probability & Lift Estimator
     │   │   ├── anomaly_detector.py         # IsolationForest & Rolling Z-Score Radar
     │   │   └── traffic_forecaster.py       # Autoregressive Time-Series Projection
-    │   ├── routes/                         # /api/ml/predictions, /anomalies, /forecasts
-    │   └── schemas/                        # Pydantic Request & Response Models
+    │   └── routes/                         # /api/ml/predictions, /anomalies, /forecasts
     └── requirements.txt
 ```
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/AkshatKardak/SEO.git
-cd SEO
-```
-
-### 2. Configure Environment Variables
-Create `.env` in `server/`:
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/serpoai
-JWT_SECRET=your_secure_jwt_secret
-
-# AI Providers (At least one required)
-GROQ_API_KEY=gsk_...
-DEEPSEEK_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
-GEMINI_API_KEY=AIzaSy...
-
-# ML Service URL
-ML_SERVICE_URL=http://localhost:8000
-```
-
-### 3. Start the Python ML Service
-```bash
-cd ml-service
-python -m venv .venv
-
-# On Windows:
-.venv\Scripts\activate
-# On Linux/macOS:
-source .venv/bin/activate
-
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-
-### 4. Start the Backend API
-```bash
-cd ../server
-npm install
-npm run dev
-```
-
-### 5. Start the Frontend Client
-```bash
-cd ../client
-npm install
-npm run dev
-```
-
-Visit `http://localhost:5173` to access SerpoAI.
 
 ---
 
@@ -235,3 +194,10 @@ Visit `http://localhost:5173` to access SerpoAI.
 
 ## 📄 License
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
+---
+
+## 👤 Author
+**Akshat Kardak**  
+- GitHub: [@AkshatKardak](https://github.com/AkshatKardak)  
+- Repository: [SerpoAI — Autonomous Search Growth OS](https://github.com/AkshatKardak/SEO)
