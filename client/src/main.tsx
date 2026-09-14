@@ -5,8 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { ProjectProvider } from "./context/ProjectContext.tsx";
+import { ClerkProvider } from "@clerk/clerk-react";
 
-createRoot(document.getElementById("root")!).render(
+const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "";
+
+const app = (
     <BrowserRouter>
         <ThemeProvider>
             <AuthProvider>
@@ -17,3 +20,14 @@ createRoot(document.getElementById("root")!).render(
         </ThemeProvider>
     </BrowserRouter>
 );
+
+createRoot(document.getElementById("root")!).render(
+    clerkPublishableKey ? (
+        <ClerkProvider publishableKey={clerkPublishableKey}>
+            {app}
+        </ClerkProvider>
+    ) : (
+        app
+    )
+);
+

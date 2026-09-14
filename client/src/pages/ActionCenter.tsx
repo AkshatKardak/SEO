@@ -8,8 +8,10 @@ import {
   Eye,
   X,
   Loader2,
+  GitPullRequest,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import SerpoBotPRModal from "../components/features/SerpoBotPRModal";
 
 export default function ActionCenter() {
   const { currentProject } = useProject();
@@ -17,6 +19,7 @@ export default function ActionCenter() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"pending" | "history">("pending");
   const [previewAction, setPreviewAction] = useState<any | null>(null);
+  const [serpoModalAction, setSerpoModalAction] = useState<any | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -165,9 +168,17 @@ export default function ActionCenter() {
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => setPreviewAction(action)}
-                      className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-semibold hover:bg-muted text-foreground transition-colors flex items-center gap-1.5"
+                      className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-semibold hover:bg-muted text-foreground transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <Eye size={14} /> Preview Diff
+                    </button>
+
+                    <button
+                      onClick={() => setSerpoModalAction(action)}
+                      className="px-3.5 py-2 rounded-xl bg-primary/10 border border-primary/25 text-xs font-bold hover:bg-primary/20 text-primary transition-colors flex items-center gap-1.5 cursor-pointer"
+                      title="Dispatch PR via Serpo Bot"
+                    >
+                      <GitPullRequest size={14} /> Dispatch PR
                     </button>
 
                     {action.status === "pending_approval" ? (
@@ -264,25 +275,36 @@ export default function ActionCenter() {
             )}
 
             {/* Modal Buttons */}
-            <div className="flex items-center gap-2 pt-3">
+            <div className="flex items-center gap-2 pt-3 flex-wrap">
               <button
                 onClick={() => setPreviewAction(null)}
-                className="py-2.5 px-4 rounded-xl bg-card border border-border text-xs font-bold text-foreground hover:bg-muted"
+                className="py-2.5 px-4 rounded-xl bg-card border border-border text-xs font-bold text-foreground hover:bg-muted cursor-pointer"
               >
                 Close
+              </button>
+
+              <button
+                onClick={() => {
+                  const target = previewAction;
+                  setPreviewAction(null);
+                  setSerpoModalAction(target);
+                }}
+                className="py-2.5 px-4 rounded-xl bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              >
+                <GitPullRequest size={14} /> Dispatch PR via Serpo Bot
               </button>
 
               {previewAction.status === "pending_approval" && (
                 <>
                   <button
                     onClick={() => handleReject(previewAction._id)}
-                    className="py-2.5 px-4 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 text-xs font-bold"
+                    className="py-2.5 px-4 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 text-xs font-bold cursor-pointer"
                   >
                     Reject
                   </button>
                   <button
                     onClick={() => handleApprove(previewAction._id)}
-                    className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5"
+                    className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <CheckCircle2 size={14} /> Authorize & Deploy
                   </button>
@@ -291,6 +313,18 @@ export default function ActionCenter() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Serpo Bot Pull Request Dispatcher Modal */}
+      {serpoModalAction && (
+        <SerpoBotPRModal
+          isOpen={Boolean(serpoModalAction)}
+          onClose={() => setSerpoModalAction(null)}
+          opportunityTitle={serpoModalAction.title || "SEO Patch"}
+          patchCode={serpoModalAction.payload?.codeDiff || serpoModalAction.description || "// SEO Optimization Patch"}
+          targetFile={serpoModalAction.payload?.targetFile || "src/components/SEOHead.tsx"}
+          opportunityId={serpoModalAction._id}
+        />
       )}
     </div>
   );

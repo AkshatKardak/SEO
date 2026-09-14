@@ -459,8 +459,12 @@ export default function Navbar() {
                   }}
                   className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-border/80 bg-card hover:bg-muted/60 text-xs transition-all cursor-pointer"
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px] font-black">
-                    {user.name.charAt(0).toUpperCase()}
+                  <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px] font-black overflow-hidden shrink-0">
+                    {user.imageUrl ? (
+                      <img src={user.imageUrl} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      user.name.charAt(0).toUpperCase()
+                    )}
                   </div>
                   <span className="font-bold text-foreground truncate max-w-[100px]">{user.name}</span>
                   <ChevronDown size={12} className="text-muted-foreground" />

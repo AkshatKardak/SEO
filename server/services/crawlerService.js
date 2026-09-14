@@ -239,10 +239,34 @@ export function extractPageData(html, pageUrl) {
 }
 
 /**
- * Multi-Page Crawl Engine
- * Crawls homepage and discovers key internal subpages (pricing, features, about, blog)
+ * Shallow Sitemap XML Discovery
+ * Extracts priority URLs from /sitemap.xml if available
  */
-export async function crawlWebsite(rootUrl, maxPages = 4) {
+async function fetchSitemapUrls(rootUrl) {
+  try {
+    const urlObj = new URL(rootUrl);
+    const sitemapUrl = `${urlObj.origin}/sitemap.xml`;
+    const safety = await isSafeUrl(sitemapUrl);
+    if (!safety.safe) return [];
+
+    const res = await fetchPage(safety.url, 6000);
+    if (!res.html || !res.html.includes("<url>")) return [];
+
+    const locMatches = res.html.match(/<loc>(https?:\/\/[^<]+)<\/loc>/gi) || [];
+    return locMatches
+      .map(m => m.replace(/<\/?loc>/gi, "").trim())
+      .filter(u => u.startsWith(urlObj.origin))
+      .slice(0, 10);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Multi-Page Crawl Engine
+ * Crawls homepage, discovers sitemap.xml, and prioritizes key internal subpages
+ */
+export async function crawlWebsite(rootUrl, maxPages = 5) {
   const safety = await isSafeUrl(rootUrl);
   if (!safety.safe) {
     throw new Error(`SSRF Blocked: ${safety.reason}`);
@@ -258,13 +282,24 @@ export async function crawlWebsite(rootUrl, maxPages = 4) {
   pages.push(rootData);
   visited.add(normalizedRoot.replace(/\/$/, ""));
 
-  // Step 2: Identify high-value internal links
+  // Step 2: Discover Sitemap URLs
+  const sitemapUrls = await fetchSitemapUrls(normalizedRoot);
+
+  // Step 3: Identify high-value internal links
   const targetKeywords = ["pricing", "features", "product", "about", "blog", "docs", "solutions"];
   const queue = [];
 
+  // Add priority sitemap URLs
+  for (const sUrl of sitemapUrls) {
+    const clean = sUrl.replace(/\/$/, "");
+    if (!visited.has(clean) && !queue.includes(sUrl)) {
+      queue.push(sUrl);
+    }
+  }
+
   for (const link of rootData.links.internal) {
     const cleanLink = link.replace(/\/$/, "");
-    if (!visited.has(cleanLink)) {
+    if (!visited.has(cleanLink) && !queue.includes(link)) {
       const lower = cleanLink.toLowerCase();
       const isPriority = targetKeywords.some(kw => lower.includes(kw));
       if (isPriority) {

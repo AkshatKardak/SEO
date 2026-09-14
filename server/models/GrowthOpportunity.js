@@ -108,6 +108,9 @@ const growthOpportunitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+growthOpportunitySchema.index({ projectId: 1, status: 1, priorityScore: -1 });
+growthOpportunitySchema.index({ projectId: 1, category: 1 });
+
 growthOpportunitySchema.pre("save", function (next) {
   if (this.effortScore > 0) {
     // Priority Score formula: (Impact * Confidence / Effort) * 10
@@ -120,3 +123,4 @@ growthOpportunitySchema.pre("save", function (next) {
 
 const GrowthOpportunity = mongoose.model("GrowthOpportunity", growthOpportunitySchema);
 export default GrowthOpportunity;
+

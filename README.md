@@ -23,8 +23,9 @@
   <a href="#-product-dashboard--views">Dashboard Views</a> •
   <a href="#-product-positioning">Positioning</a> •
   <a href="#-core-operating-loop">Growth Loop</a> •
-  <a href="#-machine-learning-ml-vs-large-language-model-llm-architecture">ML vs LLM</a> •
-  <a href="#-specialized-autonomous-agents">AI Agents</a> •
+  <a href="#-core-features">Core Features</a> •
+  <a href="#-unique-features">Unique Features</a> •
+  <a href="#-machine-learning-ml-integration">ML Integration</a> •
   <a href="#-deployment-guide-render--netlify">Deployment</a> •
   <a href="#-author">Author</a>
 </p>
@@ -66,48 +67,48 @@ SerpoAI discovers your highest-impact SEO and AI-search opportunities, predicts 
 
 ## 🔄 Core Operating Loop
 
-$$\Large \textbf{DISCOVER} \longrightarrow \textbf{PRIORITIZE} \longrightarrow \textbf{EXECUTE} \longrightarrow \textbf{MEASURE} \longrightarrow \textbf{LEARN} \longrightarrow \textbf{REPEAT}$$
+$$\Large \textbf{SCAN} \longrightarrow \textbf{PRIORITIZE} \longrightarrow \textbf{APPROVE} \longrightarrow \textbf{DEPLOY} \longrightarrow \textbf{MEASURE}$$
 
-1. **DISCOVER**: SSRF-safe multi-page crawler extracts 60+ DOM hygiene signals and synthesizes a structured company knowledge graph.
-2. **PRIORITIZE**: Mathematical ICE formula $\left(\frac{\text{Impact} \times \text{Confidence}}{\text{Effort}} \times 10\right)$ weighted by ML outcome probability and North Star business goals.
-3. **EXECUTE**: 5 specialized AI agents generate verified code diffs, JSON-LD structured data, and bottom-funnel comparison briefs with human-in-the-loop approval.
-4. **MEASURE**: Multi-touch Growth Graph tracks the complete outcome chain: $\text{Impressions} \to \text{Traffic} \to \text{Engagement} \to \text{Signups} \to \text{Revenue}$.
-5. **LEARN**: Permanent **Growth Memory** stores verified experiment outcomes and feeds learned priors back into future recommendations.
-6. **REPEAT**: Continuous autonomous optimization compounding organic search velocity.
-
----
-
-## ⚡ Machine Learning (ML) vs. Large Language Model (LLM) Architecture
-
-SerpoAI uses a **Hybrid Architecture** separating high-speed mathematical prediction and entity modeling from generative language synthesis:
-
-| Capability / Feature | Underlying Engine | Why It Uses This Engine | Execution Speed & Cost |
-| :--- | :--- | :--- | :--- |
-| **Growth Opportunity Discovery** | **Internal ML & Rule Engine** (`growthBrainService.js`) | Deterministic multi-page DOM parsing & 5-pillar scoring rules. 100% resilient against external API rate limits or quota drops. | ⚡ ~15ms (Zero API Cost) |
-| **Predictive Opportunity Ranking (ICE)** | **Machine Learning Engine** (`scikit-learn` / `mlClientService.js`) | Bayesian probability models estimating traffic/conversion lift % and ranking ICE scores against historical priors. | ⚡ ~20ms (Zero API Cost) |
-| **Company Knowledge Graph** | **Direct Entity ML Engine** (`generateRuleBasedCompanyProfile`) | Extracts meta tags, H1/H2 structures, and entity topics to construct structured buyer personas and growth bottlenecks. | ⚡ ~12ms (Zero API Cost) |
-| **GEO AI-Search Citation Radar** | **Algorithmic Simulation Engine** (`generateRuleBasedGEOAnalysis`) | Evaluates brand citation positioning across Google AI Overviews, Gemini, ChatGPT, and Perplexity. | ⚡ ~15ms (Zero API Cost) |
-| **Time-Series Anomaly Detection** | **Machine Learning** (`IsolationForest` + Z-Score in `ml-service`) | Identifies sudden traffic, CTR, or ranking deviations against historical confidence intervals. | ⚡ ~25ms (Zero API Cost) |
-| **30-Day Growth Forecasting** | **Statistical Machine Learning** (Holt-Winters exponential smoothing) | Autoregressive forecasting with 95% confidence bands distinguishing actuals from projections. | ⚡ ~30ms (Zero API Cost) |
-| **Agent Code Diffs & Fixes** | **Large Language Models (LLMs)** (`agentService.js`) | Formulates exact production-ready JSON-LD schemas, robots.txt rules, and HTML patches for approved actions. | 🤖 1.2s–2.5s (LLM Tokens) |
-| **High-Intent Content Drafts** | **Large Language Models (LLMs)** (`Content Agent`) | Drafts /vs/competitor comparison matrices, customer-proof copy, and deep conversion outlines. | 🤖 2.0s–3.5s (LLM Tokens) |
-| **30-60-90 Day Strategy Narrative** | **Large Language Models (LLMs)** (`strategyService.js`) | Synthesizes high-level qualitative execution milestones and executive North Star strategy. | 🤖 1.5s–2.8s (LLM Tokens) |
-| **Executive Weekly Briefs** | **Large Language Models (LLMs)** (`reportService.js`) | Generates polished executive summaries and markdown export briefs for team leadership. | 🤖 1.8s–3.0s (LLM Tokens) |
-
-> **Multi-Provider LLM Cascade**: When LLM generation is requested, SerpoAI cascades automatically across configured providers (**Groq** $\to$ **Gemini** $\to$ **OpenRouter** $\to$ **OpenAI** $\to$ **Anthropic** $\to$ **DeepSeek**) with automatic schema-repair retries so provider outages or rate limits never break user flows.
+1. **SCAN**: Deep multi-page crawler and sitemap parser inspects HTML structure, metadata, canonical tags, and structured schema data.
+2. **PRIORITIZE**: Mathematical ICE formula $\left(\frac{\text{Impact} \times \text{Confidence}}{\text{Effort}} \times 10\right)$ scores opportunities so you fix high-traffic wins first.
+3. **APPROVE**: Strict Human-in-the-Loop review ensures zero unauthorized code changes. Every optimization produces an interactive diff.
+4. **DEPLOY**: 1-click GitHub Pull Request dispatch via **Serpo Bot** or instant framework-agnostic code snippet copy.
+5. **MEASURE**: Tracks post-deployment rank improvements, CTR gains, and AI Answer Engine citations over time.
 
 ---
 
-## 🤖 Specialized Autonomous Agents
+## 🚀 Core Features
 
-| Agent | Subsystem | Primary Inputs | Generated Artifacts |
-| :--- | :--- | :--- | :--- |
-| **Growth Brain** | Global Strategy | Growth goal, Crawled pages, Historical memory | Prioritized ICE backlog, 5-Pillar scores |
-| **Intelligence Agent** | Knowledge Graph | DOM text, Meta signals, Competitor URLs | Company Knowledge Graph, Personas, Bottlenecks |
-| **SEO Agent** | Technical & Schema | DOM tree, Lighthouse, Canonical headers | 1-Click JSON-LD schemas, Core Web Vitals patches |
-| **GEO Agent** | AI Search & Citations | High-intent queries, Perplexity & Gemini citations | AI search presence graph, Citation gap teardown |
-| **Content Agent** | High-Intent Briefs | Topic gaps, Keyword search volumes | /vs/competitor matrices, Conversion outlines |
-| **Growth Analyst** | Attribution & Memory | Search Console metrics, Signups, Revenue | Growth Graph attribution, Verified Growth Memory |
+- **Deep Technical Site Audit**: Crawls pages to detect missing meta tags, broken canonicals, heading hierarchy issues, and Core Web Vitals bottlenecks.
+- **ICE-Ranked Opportunity Engine**: Prioritizes growth fixes using mathematical Impact, Confidence, and Effort scoring to maximize search ROI.
+- **Generative Engine Optimization (GEO) Radar**: Audits brand citation presence across ChatGPT, Perplexity, Gemini, and Google AI Overviews.
+- **1-Click Code Patch Generator**: Creates production-ready JSON-LD schemas (Organization, Article, FAQ, Product), robots.txt rules, and OpenGraph tags.
+- **Multi-Page Sitemap XML Crawler**: Discovers and prioritizes key subpages (pricing, product, blog) protected by SSRF cloud sandbox filters.
+- **Daily Keyword Rank Tracker**: Monitors Google keyword positions on daily or weekly schedules with rank history graphs.
+- **Executive PDF & Markdown Reports**: Generates professional stakeholder audit briefs with 1-click PDF download.
+- **Secure Clerk Authentication**: Enterprise-grade single sign-on with multi-tenant workspace protection.
+
+---
+
+## 🌟 Unique Features
+
+- **GitHub PR / Webhook Dispatcher ("Serpo Bot")**: Automatically opens a new branch, commits the verified SEO fix, and dispatches a GitHub Pull Request with ML safety validation scores and automated test outputs.
+- **Automated Keyword Cannibalization Graph**: An interactive cluster visualization detecting when multiple pages on your website compete for identical search terms, with 1-click canonicalization, 301 redirects, and semantic differentiation patches.
+- **Google Search Console (GSC) Striking Distance Quick Wins**: Mathematical CTR gap analysis identifying queries ranking in positions 4–10 with high impressions and low clicks, generating 1-click meta title rewrites to capture lost traffic.
+- **Closed-Loop Growth Memory**: Vector-backed memory tracking verified before-and-after SERP outcomes, learning which optimizations yield maximum rank velocity for your niche.
+
+---
+
+## 🧠 Machine Learning (ML) Integration
+
+SerpoAI uses machine learning directly inside each core feature for high-speed deterministic prediction:
+
+- **ICE Opportunity Ranking**: Bayesian probability scoring calculates expected traffic lift and ranks tasks by mathematical priority.
+- **Keyword Cannibalization Radar**: Jaccard similarity and intent vector clustering detect semantic query overlap between internal pages.
+- **GSC Quick Wins & CTR Lift**: Striking-distance regression model compares actual CTR against benchmark curves to compute predicted monthly click gains.
+- **Patch Safety Verification**: AST syntax linter and Schema.org specification validator compute a 0–100% safety confidence score before git dispatch.
+- **Time-Series Anomaly Detection**: Isolation Forest and rolling Z-score filters flag sudden ranking drops or CTR anomalies against historical baselines.
+- **30-Day Growth Forecasting**: Holt-Winters exponential smoothing projects future search traffic with 95% confidence intervals.
 
 ---
 

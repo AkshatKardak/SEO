@@ -9,6 +9,8 @@ import {
 import { rankAPI } from "../services/api";
 import toast from "react-hot-toast";
 import ScheduleSelector from "../components/ScheduleSelector";
+import KeywordCannibalizationGraph from "../components/features/KeywordCannibalizationGraph";
+import GSCQuickWinsDetector from "../components/features/GSCQuickWinsDetector";
 
 interface RankEntry {
   date: string;
@@ -63,6 +65,7 @@ export default function RankTracker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [schedulePreference, setSchedulePreference] = useState<string>("daily");
+  const [activeTab, setActiveTab] = useState<"rankings" | "cannibalization" | "gsc_quick_wins">("rankings");
 
   const fetchKeywords = async () => {
     try {
@@ -190,15 +193,63 @@ export default function RankTracker() {
           </button>
         </div>
 
-        {/* ── Schedule Selector ── */}
-        <div className="glass rounded-xl px-5 py-4 mb-6">
-          <ScheduleSelector
-            current={schedulePreference}
-            onChange={(val) => setSchedulePreference(val)}
-          />
+        {/* ── Navigation Tabs ── */}
+        <div className="flex items-center gap-2 mb-6 border-b border-border/70 pb-3 flex-wrap">
+          <button
+            onClick={() => setActiveTab("rankings")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeTab === "rankings"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+            }`}
+          >
+            <Target size={14} /> Keyword Rankings
+          </button>
+          <button
+            onClick={() => setActiveTab("cannibalization")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeTab === "cannibalization"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+            }`}
+          >
+            <AlertCircle size={14} /> Cannibalization Graph (ML)
+          </button>
+          <button
+            onClick={() => setActiveTab("gsc_quick_wins")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              activeTab === "gsc_quick_wins"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+            }`}
+          >
+            <TrendingUp size={14} /> GSC Striking Distance Quick Wins (ML)
+          </button>
         </div>
 
-        {/* ── Summary Stats ── */}
+        {activeTab === "cannibalization" && (
+          <div className="mb-10 animate-in fade-in duration-200">
+            <KeywordCannibalizationGraph />
+          </div>
+        )}
+
+        {activeTab === "gsc_quick_wins" && (
+          <div className="mb-10 animate-in fade-in duration-200">
+            <GSCQuickWinsDetector />
+          </div>
+        )}
+
+        {activeTab === "rankings" && (
+          <>
+            {/* ── Schedule Selector ── */}
+            <div className="glass rounded-xl px-5 py-4 mb-6">
+              <ScheduleSelector
+                current={schedulePreference}
+                onChange={(val) => setSchedulePreference(val)}
+              />
+            </div>
+
+            {/* ── Summary Stats ── */}
         {keywords.length > 0 && (
           <div className="grid grid-cols-3 gap-3 mb-6">
             {[
@@ -367,6 +418,8 @@ export default function RankTracker() {
             })}
           </div>
         )}
+        </>
+      )}
       </div>
 
       {/* ── Add Keyword Modal ── */}

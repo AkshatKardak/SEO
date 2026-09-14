@@ -20,69 +20,125 @@ interface FAQItem {
   category: string;
 }
 
+interface GlossaryItem {
+  term: string;
+  definition: string;
+}
+
 const FAQS: FAQItem[] = [
   {
-    category: "Architecture",
-    question: "How is SerpoAI different from legacy SEO tools like Ahrefs or Semrush?",
+    category: "Basics",
+    question: "What is SerpoAI?",
     answer:
-      "Traditional SEO platforms are passive dashboards: they crawl pages once a week and show historical charts of what already dropped. SerpoAI is an active closed-loop growth engine. It executes real-time code audits, computes deterministic ICE scores (Impact, Confidence, Ease), generates production-ready code patches (JSON-LD schemas, OpenGraph, semantic tags), and measures post-deploy ranking velocity automatically.",
+      "SerpoAI is an all-in-one search growth tool that helps your website rank higher on Google and get cited by AI answer engines like ChatGPT, Perplexity, and Google AI Overviews. It automatically finds what is slowing down your search traffic and writes the exact code fixes for you.",
+  },
+  {
+    category: "Audience",
+    question: "Who is SerpoAI for?",
+    answer:
+      "SerpoAI is built for founders, developers, product teams, and marketers who want more organic search traffic without hiring expensive agencies or spending hours manually writing SEO code.",
+  },
+  {
+    category: "Comparison",
+    question: "How is SerpoAI different from tools like Ahrefs or Semrush?",
+    answer:
+      "Traditional SEO tools only show you charts and tell you what already went wrong in the past. SerpoAI is an execution engine: it finds your highest-priority fixes, generates the exact code changes (like JSON-LD schemas and meta tags), and lets you open a GitHub Pull Request with one click.",
   },
   {
     category: "Safety",
-    question: "Will SerpoAI automatically deploy code changes without my permission?",
+    question: "Will SerpoAI change my code or website without my permission?",
     answer:
-      "Never. SerpoAI operates on a strict Human-in-the-Loop guarantee. Every optimization is presented as a visual git diff with linter verification and unit test predictions. You retain 100% control to review, edit, copy, or dispatch changes via GitHub Pull Request with a single click.",
+      "Never. We follow a strict 'Human-in-the-Loop' rule. You always see the exact code preview before anything happens. Nothing is merged or committed without your explicit approval.",
   },
   {
-    category: "Performance",
-    question: "Why does SerpoAI use local ML rule sets alongside LLMs?",
+    category: "Simplicity",
+    question: "Do I need to know how to code to use SerpoAI?",
     answer:
-      "Speed, reliability, and zero hallucination risk. Over 85% of structural SEO analysis—including schema hierarchy validation, heading tree depth, keyword cannibalization, and ICE formula rankings—executes in <5ms locally using our deterministic ML rule engine with zero API latency. LLMs (Gemini, Groq, OpenRouter) are strictly reserved for generative synthesis and natural language rewrites, supported by automatic 3-tier fallbacks.",
+      "No. SerpoAI creates ready-to-use snippets that you can copy and paste into any website builder (WordPress, Webflow, Shopify) or dispatch directly to GitHub if you are a developer.",
   },
   {
-    category: "GEO & AI Search",
-    question: "What is GEO (Generative Engine Optimization) and why is it critical in 2025?",
+    category: "Pricing",
+    question: "How much does it cost to get started?",
     answer:
-      "More than 40% of search queries now resolve directly in AI Answer Engines like Perplexity, Google AI Overviews, and ChatGPT Search without users clicking through to websites. GEO optimizes your content structure, entity relationship triples, and structured schema so your brand is cited as the authoritative canonical source inside AI-generated summaries.",
+      "You can run your first website scan completely free with zero credit card required.",
+  },
+];
+
+const GLOSSARY_TERMS: GlossaryItem[] = [
+  {
+    term: "SEO (Search Engine Optimization)",
+    definition: "The practice of improving your website so it ranks higher in organic Google search results.",
   },
   {
-    category: "Integrations",
-    question: "Which web frameworks and CMS platforms are supported?",
-    answer:
-      "SerpoAI produces framework-agnostic, web-standards compliant code. You can deploy generated patches directly into Next.js (App & Pages Router), React, Nuxt, Astro, Remix, SvelteKit, WordPress, Shopify, or plain static HTML.",
+    term: "GEO (Generative Engine Optimization)",
+    definition: "Optimizing your content so AI engines like ChatGPT and Perplexity quote and link to your website in their answers.",
   },
   {
-    category: "Security",
-    question: "How does SerpoAI protect against SSRF and unauthorized crawler abuse?",
-    answer:
-      "Our crawler architecture runs in an isolated sandbox with comprehensive SSRF defenses: private IP range blacklisting (127.0.0.1, 10.0.0.0/8, 192.168.0.0/16, link-local metadata endpoints), strict DNS rebinding checks, TLS verification, and token bucket rate limiters.",
+    term: "ICE Score",
+    definition: "A simple formula (Impact × Confidence ÷ Effort) from 1 to 10 that tells you which SEO task will give you the fastest results.",
+  },
+  {
+    term: "JSON-LD Schema",
+    definition: "A clean snippet of code hidden on your page that tells Google and AI bots exact facts about your company, products, and articles.",
+  },
+  {
+    term: "Canonical Tag",
+    definition: "An HTML tag that tells Google which version of a page is the original one when you have similar or duplicate pages.",
+  },
+  {
+    term: "CTR (Click-Through Rate)",
+    definition: "The percentage of people who see your website in search results and actually click on it.",
+  },
+  {
+    term: "SERP",
+    definition: "Search Engine Results Page — the page of results Google displays after someone searches for a query.",
+  },
+  {
+    term: "AI Overviews",
+    definition: "The AI-generated answer box that appears at the top of Google search results before regular web links.",
+  },
+  {
+    term: "Crawling",
+    definition: "When an automated program reads your website's pages to find errors, missing tags, and traffic opportunities.",
+  },
+  {
+    term: "Keyword Cannibalization",
+    definition: "When two or more pages on your own website fight against each other for the exact same search term, hurting both pages.",
+  },
+  {
+    term: "SSRF Protection",
+    definition: "A security protection that ensures our crawler only scans public websites and can never access private internal networks.",
+  },
+  {
+    term: "Pull Request (PR)",
+    definition: "A proposal to merge code changes into a software project on GitHub so your team can review it.",
   },
 ];
 
 const TRUST_PILLARS = [
   {
     icon: Cpu,
-    title: "<5ms Deterministic Rules",
-    description: "Instantaneous local machine learning audit with zero external LLM API downtime or token bottlenecks.",
-    tag: "High Throughput",
+    title: "Instant Smart Audits",
+    description: "Our machine learning rules check your entire website in seconds with zero waiting.",
+    tag: "Fast & Reliable",
   },
   {
     icon: ShieldCheck,
-    title: "Human-in-the-Loop Safeguard",
-    description: "Visual diffs, schema syntax verification, and manual approval safeguards before any patch is committed.",
-    tag: "Zero Risk",
+    title: "You Are Always In Control",
+    description: "Every code change is shown as a visual preview. Nothing touches your website without your approval.",
+    tag: "100% Safe",
   },
   {
     icon: Sparkles,
-    title: "GEO Answer Engine Audits",
-    description: "Synthetic entity triples and citation probability scoring for Perplexity, ChatGPT, and Google SGE.",
-    tag: "Next-Gen SEO",
+    title: "AI Search & Citations (GEO)",
+    description: "Get discovered and cited when people ask questions on ChatGPT, Perplexity, and Google AI.",
+    tag: "Next-Gen Search",
   },
   {
     icon: Lock,
-    title: "SSRF & Sandbox Protected",
-    description: "Enterprise crawler with private DNS blocking, ephemeral token storage, and secure Clerk authentication.",
-    tag: "Enterprise Ready",
+    title: "Safe & Secure by Default",
+    description: "Isolated cloud crawler with Clerk authentication and enterprise-grade data protection.",
+    tag: "Enterprise Safe",
   },
 ];
 
@@ -182,6 +238,39 @@ export default function FinalCTASection() {
             </div>
           );
         })}
+      </div>
+
+      {/* ── PLAIN-ENGLISH GLOSSARY OF TERMS ── */}
+      <div className="max-w-4xl mx-auto mb-20 space-y-6">
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border bg-surface-elevated text-xs font-mono font-semibold text-primary">
+            <Sparkles size={12} />
+            Plain-English Glossary
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold text-foreground">
+            Key Terms, Explained Simply
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-xl mx-auto">
+            A quick dictionary of every search and AI term used across SerpoAI, written in plain English with zero confusing buzzwords.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {GLOSSARY_TERMS.map((item, idx) => (
+            <div
+              key={idx}
+              className="p-4 rounded-xl border border-border bg-card/60 hover:bg-card hover:border-primary/30 transition-all space-y-1"
+            >
+              <div className="font-bold text-xs sm:text-sm text-foreground flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                {item.term}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed pl-3.5">
+                {item.definition}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ── REFINED LAUNCHPAD (NO DUPLICATE INPUT BOX) ── */}

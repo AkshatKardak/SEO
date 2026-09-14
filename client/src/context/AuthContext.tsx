@@ -1,12 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { authAPI } from "../services/api";
 
-interface User {
+export interface User {
     _id: string;
     name: string;
     email: string;
     plan: string;
+    imageUrl?: string;
 }
 
 interface AuthContextType {
@@ -15,11 +17,67 @@ interface AuthContextType {
     loading: boolean;
     login: (token: string) => Promise<void>;
     logout: () => void;
+    isClerk: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const hasClerk = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+function ClerkAuthBridge({ children }: { children: React.ReactNode }) {
+    const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+    const { signOut } = useClerk();
+    const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
+    const [localUser, setLocalUser] = useState<User | null>(null);
+
+    const user: User | null = isSignedIn && clerkUser
+        ? {
+            _id: clerkUser.id,
+            name: clerkUser.fullName || clerkUser.firstName || clerkUser.username || "User",
+            email: clerkUser.primaryEmailAddress?.emailAddress || "",
+            plan: "Pro Growth",
+            imageUrl: clerkUser.imageUrl,
+        }
+        : localUser;
+
+    const effectiveToken = isSignedIn ? (token || "clerk-active-session") : token;
+
+    const login = async (newToken: string) => {
+        localStorage.setItem("token", newToken);
+        setToken(newToken);
+        try {
+            const data = await authAPI.getUser();
+            setLocalUser(data.user ?? data);
+        } catch {
+            // fallback
+        }
+    };
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        setToken(null);
+        setLocalUser(null);
+        if (isSignedIn) {
+            signOut();
+        }
+    };
+
+    return (
+        <AuthContext.Provider
+            value={{
+                user,
+                token: effectiveToken,
+                loading: !isLoaded,
+                login,
+                logout,
+                isClerk: true,
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+function StandardAuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
     const [loading, setLoading] = useState(true);
@@ -50,10 +108,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, token, loading, login, logout, isClerk: false }}>
             {children}
         </AuthContext.Provider>
     );
+}
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+    if (hasClerk) {
+        return <ClerkAuthBridge>{children}</ClerkAuthBridge>;
+    }
+    return <StandardAuthProvider>{children}</StandardAuthProvider>;
 }
 
 export const useAuth = () => {
@@ -61,3 +126,4 @@ export const useAuth = () => {
     if (!ctx) throw new Error("useAuth must be used within AuthProvider");
     return ctx;
 };
+

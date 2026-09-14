@@ -10,7 +10,7 @@ const integrationSchema = new mongoose.Schema(
     },
     provider: {
       type: String,
-      enum: ["google_analytics_4", "google_search_console", "posthog", "serper", "custom"],
+      enum: ["google_analytics_4", "google_search_console", "posthog", "serper", "github", "custom"],
       required: true,
     },
     status: {
@@ -23,6 +23,9 @@ const integrationSchema = new mongoose.Schema(
       siteUrl: { type: String, default: "" },
       apiKey: { type: String, default: "" },
       projectId: { type: String, default: "" },
+      repoOwner: { type: String, default: "" },
+      repoName: { type: String, default: "" },
+      branch: { type: String, default: "main" },
       host: { type: String, default: "" },
     },
     encryptedTokens: {
