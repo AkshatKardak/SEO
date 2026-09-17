@@ -21,7 +21,24 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+      {/* ── Radiant Ambient Glow Orbs ── */}
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-primary/15 rounded-full blur-[110px] pointer-events-none opacity-60 animate-pulse-glow" />
+      <div className="absolute top-48 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute top-60 right-10 w-80 h-80 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+      {/* ── Floating Badges ── */}
+      <div className="hidden xl:flex absolute top-36 right-8 z-20 animate-float items-center gap-2 px-3.5 py-2 rounded-2xl glass-card border border-primary/30 shadow-xl text-xs font-mono">
+        <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+        <span className="font-bold text-foreground">Serpo Bot:</span>
+        <span className="text-primary font-semibold">99.8% AST Safe</span>
+      </div>
+
+      <div className="hidden xl:flex absolute top-72 left-8 z-20 animate-float-delayed items-center gap-2.5 px-3.5 py-2 rounded-2xl glass-card border border-primary/30 shadow-xl text-xs font-mono">
+        <Sparkles size={14} className="text-primary" />
+        <span className="font-bold text-foreground">GSC Quick Wins:</span>
+        <span className="text-emerald-500 font-semibold">+142% CTR Lift</span>
+      </div>
       {/* ── Headline & Positioning ── */}
       <div className="max-w-3xl mx-auto text-center space-y-5">
         {/* Restrained Subheading Pill */}
@@ -102,7 +119,7 @@ export default function Hero() {
 
       {/* ── 03. REALISTIC HERO PRODUCT PREVIEW ── */}
       <div className="mt-14 max-w-5xl mx-auto">
-        <div className="surface-card rounded-2xl border border-border shadow-xl overflow-hidden bg-card hover-lift transition-all">
+        <div className="surface-card rounded-2xl border border-border/80 shadow-2xl overflow-hidden bg-card card-interactive glow-emerald transition-all">
           {/* Dashboard Window Chrome */}
           <div className="px-4 py-3 bg-muted/40 border-b border-border flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">

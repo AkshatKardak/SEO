@@ -416,23 +416,22 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-muted-foreground">
-              <a href="#growth-loop" className="hover:text-foreground transition-colors">
-                How It Works
-              </a>
-              <a href="#agents" className="hover:text-foreground transition-colors">
-                Agents
-              </a>
-              <a href="#geo-presence" className="hover:text-foreground transition-colors">
-                GEO
-              </a>
-              <a href="#ice-engine" className="hover:text-foreground transition-colors">
-                Features
-              </a>
-              <Link to="/analyze" className="hover:text-foreground transition-colors">
-                SEO Tools
-              </Link>
-            </div>
+            location.pathname !== "/login" && location.pathname !== "/register" && (
+              <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-muted-foreground">
+                <a href="/#growth-loop" className="hover:text-foreground transition-colors">
+                  How It Works
+                </a>
+                <a href="/#platform-showcase" className="hover:text-foreground transition-colors">
+                  Features
+                </a>
+                <a href="/#proof" className="hover:text-foreground transition-colors">
+                  Proof
+                </a>
+                <Link to="/analyze" className="hover:text-foreground transition-colors">
+                  Free Scan
+                </Link>
+              </div>
+            )
           )}
 
           {/* ── Right Actions ── */}
@@ -498,20 +497,29 @@ export default function Navbar() {
               </div>
             ) : (
               /* Unauthenticated Buttons */
-              <div className="flex items-center gap-2">
+              location.pathname === "/login" || location.pathname === "/register" ? (
                 <Link
-                  to="/login"
-                  className="px-3.5 py-1.5 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                  to="/"
+                  className="px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Log In
+                  ← Back to Home
                 </Link>
-                <Link
-                  to="/register"
-                  className="btn-glow px-4 py-2 rounded-xl text-xs font-bold shadow-sm"
-                >
-                  Start Free
-                </Link>
-              </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/login"
+                    className="px-3.5 py-1.5 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="btn-glow px-4 py-2 rounded-xl text-xs font-bold shadow-sm"
+                  >
+                    Start Free
+                  </Link>
+                </div>
+              )
             )}
           </div>
 

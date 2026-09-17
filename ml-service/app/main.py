@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import predictions, anomalies, forecasts
+from .routes import predictions, anomalies, forecasts, features
 
 app = FastAPI(
     title="SerpoAI Machine Learning Engine",
@@ -20,6 +20,7 @@ app.add_middleware(
 app.include_router(predictions.router, prefix="/api/ml")
 app.include_router(anomalies.router, prefix="/api/ml")
 app.include_router(forecasts.router, prefix="/api/ml")
+app.include_router(features.router, prefix="/api/ml")
 
 @app.get("/")
 def root():

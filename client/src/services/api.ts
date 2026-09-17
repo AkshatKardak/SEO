@@ -286,5 +286,55 @@ export const mlAPI = {
 
   getPublicForecast: (domain?: string, metric?: string) =>
     request(`/api/v1/ml/public-forecast?domain=${domain || "example.com"}&metric=${metric || "organic_traffic"}`),
+
+  // ── 3 Unique ML Features ──
+  evaluatePatch: (data: { opportunityId: string; patchCode: string; targetFile?: string }) =>
+    request("/api/v1/ml/serpo-bot/evaluate-patch", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  dispatchPR: (data: {
+    repo?: string;
+    baseBranch?: string;
+    prBranch?: string;
+    commitMessage?: string;
+    opportunityId: string;
+    patchCode: string;
+  }) =>
+    request("/api/v1/ml/serpo-bot/dispatch-pr", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getCannibalization: (projectId: string) =>
+    request(`/api/v1/ml/cannibalization/${projectId}`),
+
+  applyCannibalizationFix: (data: {
+    pairId: string;
+    fixType: string;
+    targetUrl?: string;
+    primaryUrl?: string;
+  }) =>
+    request("/api/v1/ml/cannibalization/apply-fix", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getGSCQuickWins: (projectId: string) =>
+    request(`/api/v1/ml/gsc-quick-wins/${projectId}`),
+
+  optimizeGSCQuickWin: (data: {
+    queryId: string;
+    query: string;
+    optimizedTitle: string;
+    optimizedMeta: string;
+    targetUrl?: string;
+  }) =>
+    request("/api/v1/ml/gsc-quick-wins/optimize", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };
+
 

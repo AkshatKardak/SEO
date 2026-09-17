@@ -17,7 +17,7 @@ export default function ProblemSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {/* The Old Way */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-border bg-card space-y-5 hover-lift transition-all">
+        <div className="p-6 sm:p-8 rounded-2xl border border-border bg-card space-y-5 card-interactive hover:border-danger/40 transition-all">
           <div className="flex items-center gap-2.5 text-danger font-bold text-sm uppercase tracking-wider font-mono">
             <Ban size={18} />
             The Old Way: Disconnected Audits
@@ -40,7 +40,7 @@ export default function ProblemSection() {
         </div>
 
         {/* The SerpoAI Way */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-primary/40 bg-card space-y-5 shadow-sm hover-lift transition-all">
+        <div className="p-6 sm:p-8 rounded-2xl border border-primary/40 bg-gradient-to-br from-card via-card to-primary/5 space-y-5 shadow-lg card-interactive glow-emerald transition-all">
           <div className="flex items-center gap-2.5 text-primary font-bold text-sm uppercase tracking-wider font-mono">
             <Zap size={18} />
             The SerpoAI Way: Autonomous Growth OS

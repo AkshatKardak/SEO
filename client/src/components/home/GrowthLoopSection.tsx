@@ -149,7 +149,7 @@ export default function GrowthLoopSection() {
       </div>
 
       {/* ── Active Stage Interactive Viewer ── */}
-      <div className="surface-card p-6 sm:p-8 rounded-2xl border border-border bg-card">
+      <div className="surface-card p-6 sm:p-8 rounded-2xl border border-border/80 bg-card card-interactive glow-emerald shadow-xl transition-all">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <div className="flex items-center gap-3">
