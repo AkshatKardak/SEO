@@ -1,8 +1,14 @@
 import os
-import joblib
+try:
+    import joblib
+except ImportError:
+    joblib = None
 import numpy as np
 from typing import List, Dict, Any
-from sklearn.metrics.pairwise import cosine_similarity
+try:
+    from sklearn.metrics.pairwise import cosine_similarity
+except ImportError:
+    cosine_similarity = None
 
 ARTIFACTS_DIR = os.path.join(os.path.dirname(__file__), "artifacts")
 
@@ -12,6 +18,9 @@ class CannibalizationEngine:
         self._load_vectorizer()
 
     def _load_vectorizer(self):
+        if joblib is None:
+            self.vectorizer = None
+            return
         vec_path = os.path.join(ARTIFACTS_DIR, "cannibalization_vectorizer.joblib")
         if os.path.exists(vec_path):
             try:
@@ -61,7 +70,7 @@ class CannibalizationEngine:
 
         for p in active_pairs:
             overlap = 75.0
-            if self.vectorizer and "textA" in p and "textB" in p:
+            if self.vectorizer and cosine_similarity and "textA" in p and "textB" in p:
                 try:
                     vecs = self.vectorizer.transform([p["textA"], p["textB"]])
                     sim = float(cosine_similarity(vecs[0], vecs[1])[0][0])

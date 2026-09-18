@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Loader2, User2Icon, ShieldCheck, Eye, EyeOff, Sparkles, ArrowRight } from "lucide-react";
+import { Mail, Lock, Loader2, User2Icon, ShieldCheck, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
 import { SignIn, SignUp } from "@clerk/clerk-react";
@@ -9,7 +9,7 @@ const hasClerk = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 
 export default function Login({ state }: { state: string }) {
     const [isLoginState, setIsLoginState] = useState(state === "login");
-    const [useCustomForm, setUseCustomForm] = useState(false);
+    const [useCustomForm, setUseCustomForm] = useState(!hasClerk);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -17,8 +17,15 @@ export default function Login({ state }: { state: string }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { login } = useAuth();
+    const { user, login } = useAuth();
     const navigate = useNavigate();
+
+    // Immediate redirect to Dashboard if already authenticated
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard", { replace: true });
+        }
+    }, [user, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,13 +42,12 @@ export default function Login({ state }: { state: string }) {
 
             if (data.token) {
                 await login(data.token);
-                navigate("/dashboard");
+                navigate("/dashboard", { replace: true });
             } else {
-                setError(data.message || "Something went wrong");
+                setError(data.message || "Authentication failed. Check credentials.");
             }
         } catch (err: unknown) {
-            const message =
-                err instanceof Error ? err.message : "Something went wrong";
+            const message = err instanceof Error ? err.message : "Something went wrong";
             setError(message);
         } finally {
             setLoading(false);
@@ -49,145 +55,135 @@ export default function Login({ state }: { state: string }) {
     };
 
     return (
-        <div className="relative min-h-screen flex flex-col justify-center items-center px-4 pt-28 pb-16 overflow-hidden">
-            {/* ── Atmospheric Ambient Backdrop (Non-overlapping, pointer-events-none) ── */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[580px] h-[580px] bg-primary/10 rounded-full blur-3xl pointer-events-none opacity-60 animate-pulse" />
-            <div className="absolute bottom-10 right-1/4 w-[380px] h-[380px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none opacity-50" />
-            <div className="absolute inset-0 bg-[radial-gradient(#80808012_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-
-            <div className="relative z-10 w-full max-w-md mx-auto space-y-5">
-                {/* ── Top Brand Header ── */}
+        <div className="min-h-screen bg-background text-text-primary flex flex-col justify-center items-center px-4 py-12 select-none relative">
+            <div className="w-full max-w-md mx-auto space-y-6">
+                {/* ── Top Instrument Header ── */}
                 <div className="text-center space-y-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/25 bg-primary/10 text-xs font-mono font-semibold text-primary shadow-sm">
-                        <Sparkles size={13} className="text-primary" />
-                        <span>Autonomous Growth Security</span>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-surface-muted text-[11px] font-mono text-text-secondary">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
+                        <span>SERPO ENGINE · AUTH GATEWAY</span>
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                        {isLoginState ? "Welcome back" : "Create your account"}
+
+                    <h1 className="font-serif text-3xl sm:text-4xl font-normal text-text-primary tracking-tight">
+                        {isLoginState ? "Authenticate to Console" : "Initialize Workspace"}
                     </h1>
-                    <p className="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto">
+
+                    <p className="text-xs text-text-secondary font-sans max-w-sm mx-auto">
                         {isLoginState
-                            ? "Sign in to deploy verified SEO patches and monitor search telemetry"
-                            : "Join SerpoAI to discover striking distance wins and automated growth"}
+                            ? "Access continuous search telemetry, ICE opportunity backlog, and automated git patches."
+                            : "Deploy SerpoAI on your domains or staging repositories to capture organic search intent."}
                     </p>
                 </div>
 
-                {/* ── Segmented Controller (Switch between Clerk & Direct Form) ── */}
+                {/* ── Segmented Controller (Clerk vs Direct Form) ── */}
                 {hasClerk && (
-                    <div className="p-1 rounded-xl bg-surface-elevated border border-border flex items-center gap-1 shadow-sm">
+                    <div className="p-1 rounded bg-surface-muted border border-border flex items-center gap-1 text-xs">
                         <button
                             type="button"
                             onClick={() => { setUseCustomForm(false); setError(""); }}
-                            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            className={`flex-1 py-1.5 px-3 rounded font-medium transition-colors flex items-center justify-center gap-1.5 ${
                                 !useCustomForm
-                                    ? "bg-card text-primary shadow-sm border border-border"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "bg-surface text-text-primary border border-border shadow-xs"
+                                    : "text-text-muted hover:text-text-primary"
                             }`}
                         >
-                            <ShieldCheck size={14} className="text-primary" />
-                            Clerk One-Click
+                            <ShieldCheck size={14} className="text-accent" />
+                            <span>Clerk OAuth</span>
                         </button>
                         <button
                             type="button"
                             onClick={() => { setUseCustomForm(true); setError(""); }}
-                            className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            className={`flex-1 py-1.5 px-3 rounded font-medium transition-colors flex items-center justify-center gap-1.5 ${
                                 useCustomForm
-                                    ? "bg-card text-primary shadow-sm border border-border"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "bg-surface text-text-primary border border-border shadow-xs"
+                                    : "text-text-muted hover:text-text-primary"
                             }`}
                         >
                             <Mail size={14} />
-                            Email & Password
+                            <span>Email / Key</span>
                         </button>
                     </div>
                 )}
 
-                {/* ── Auth Body ── */}
+                {/* ── Clerk Container ── */}
                 {hasClerk && !useCustomForm ? (
-                    /* Clerk Auth Container: Isolated without redundant borders or overflow clipping */
-                    <div className="w-full flex justify-center py-1">
+                    <div className="w-full flex justify-center py-2">
                         {isLoginState ? (
                             <SignIn
                                 routing="hash"
-                                fallbackRedirectUrl="/dashboard"
+                                forceRedirectUrl="/dashboard"
                                 signUpUrl="#/register"
                             />
                         ) : (
                             <SignUp
                                 routing="hash"
-                                fallbackRedirectUrl="/dashboard"
+                                forceRedirectUrl="/dashboard"
                                 signInUrl="#/login"
                             />
                         )}
                     </div>
                 ) : (
-                    /* Standard Direct Email/Password Form Card */
-                    <div className="bg-card border border-border rounded-2xl p-6 sm:p-7 shadow-lg space-y-4">
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Error Alert */}
+                    /* ── Direct Form Instrument Card ── */
+                    <div className="surface-instrument p-6 space-y-4 border border-border bg-surface rounded-md shadow-lg">
+                        <form onSubmit={handleSubmit} className="space-y-4 font-sans text-xs">
                             {error && (
-                                <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-xs rounded-xl p-3">
+                                <div className="p-2.5 rounded bg-negative/10 border border-negative/30 text-negative font-mono text-[11px]">
                                     {error}
                                 </div>
                             )}
 
                             {!isLoginState && (
                                 <label className="block space-y-1">
-                                    <span className="text-xs font-semibold text-foreground">Full Name</span>
+                                    <span className="font-mono text-[11px] text-text-secondary uppercase">Operator Name</span>
                                     <div className="relative">
-                                        <User2Icon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                                        <User2Icon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                                         <input
                                             type="text"
                                             required
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
-                                            placeholder="Alex Mercer"
-                                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-elevated border border-border text-foreground placeholder:text-muted-foreground text-xs focus:outline-none focus:border-primary transition-colors"
+                                            placeholder="Alex Chen"
+                                            className="w-full pl-9 pr-3 py-2 rounded bg-surface-muted border border-border text-text-primary placeholder:text-text-muted font-sans text-xs focus:outline-none focus:border-accent transition-colors"
                                         />
                                     </div>
                                 </label>
                             )}
 
                             <label className="block space-y-1">
-                                <span className="text-xs font-semibold text-foreground">Work Email</span>
+                                <span className="font-mono text-[11px] text-text-secondary uppercase">Corporate Email</span>
                                 <div className="relative">
-                                    <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                                    <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                                     <input
                                         type="email"
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="you@company.com"
-                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-elevated border border-border text-foreground placeholder:text-muted-foreground text-xs focus:outline-none focus:border-primary transition-colors"
+                                        placeholder="operator@company.com"
+                                        className="w-full pl-9 pr-3 py-2 rounded bg-surface-muted border border-border text-text-primary placeholder:text-text-muted font-sans text-xs focus:outline-none focus:border-accent transition-colors"
                                     />
                                 </div>
                             </label>
 
                             <label className="block space-y-1">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-xs font-semibold text-foreground">Password</span>
-                                    {isLoginState && (
-                                        <span className="text-[11px] text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                                            Forgot password?
-                                        </span>
-                                    )}
+                                    <span className="font-mono text-[11px] text-text-secondary uppercase">Access Key / Password</span>
                                 </div>
                                 <div className="relative">
-                                    <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                                    <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-surface-elevated border border-border text-foreground placeholder:text-muted-foreground text-xs focus:outline-none focus:border-primary transition-colors"
+                                        placeholder="••••••••••••"
+                                        className="w-full pl-9 pr-9 py-2 rounded bg-surface-muted border border-border text-text-primary placeholder:text-text-muted font-sans text-xs focus:outline-none focus:border-accent transition-colors"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
                                     >
-                                        {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                                        {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                                     </button>
                                 </div>
                             </label>
@@ -195,44 +191,45 @@ export default function Login({ state }: { state: string }) {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-2.5 mt-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer shadow-sm"
+                                className="btn-primary w-full py-2.5 mt-2 gap-2 text-xs font-semibold"
                             >
                                 {loading ? (
-                                    <Loader2 size={16} className="animate-spin" />
+                                    <Loader2 size={15} className="animate-spin" />
                                 ) : (
                                     <>
-                                        {isLoginState ? "Sign In" : "Create Free Account"}
-                                        <ArrowRight size={14} />
+                                        <span>{isLoginState ? "Authenticate" : "Create Console Account"}</span>
+                                        <ArrowRight size={13} />
                                     </>
                                 )}
                             </button>
                         </form>
 
-                        <div className="pt-2 text-center border-t border-border/60">
-                            <p className="text-xs text-muted-foreground">
-                                {isLoginState ? "Don't have an account yet?" : "Already have an account?"}{" "}
+                        <div className="pt-3 text-center border-t border-border">
+                            <p className="text-xs text-text-muted">
+                                {isLoginState ? "Need new workspace credentials?" : "Already registered?"}{" "}
                                 <button
                                     type="button"
                                     onClick={() => { setIsLoginState(!isLoginState); setError(""); }}
-                                    className="text-primary hover:underline font-bold cursor-pointer"
+                                    className="text-text-primary hover:underline font-medium ml-1"
                                 >
-                                    {isLoginState ? "Sign up here" : "Sign in"}
+                                    {isLoginState ? "Create an account" : "Sign in here"}
                                 </button>
                             </p>
                         </div>
                     </div>
                 )}
 
-                {/* ── Back Link ── */}
+                {/* ── Footer Link ── */}
                 <div className="text-center pt-2">
                     <Link
                         to="/"
-                        className="text-xs text-muted-foreground hover:text-foreground transition-colors font-semibold"
+                        className="font-mono text-[11px] text-text-muted hover:text-text-primary transition-colors"
                     >
-                        ← Return to SerpoAI Home
+                        ← RETURN TO SERPOAI TERMINAL
                     </Link>
                 </div>
             </div>
         </div>
     );
 }
+

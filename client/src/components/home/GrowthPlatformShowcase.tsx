@@ -7,6 +7,7 @@ import {
   Layers,
   Code2,
   CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -14,135 +15,142 @@ export default function GrowthPlatformShowcase() {
   const [activeTab, setActiveTab] = useState<"seo_ice" | "geo_search" | "autonomous_pr">("seo_ice");
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border/70">
+    <section id="platform-showcase" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
       {/* ── SECTION HEADER ── */}
       <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-surface-elevated text-xs font-mono font-semibold text-primary">
-          <Layers size={13} />
-          Unified Growth Platform
+        <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
+          <Layers size={11} />
+          Unified Search Growth Operating System
         </div>
 
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
-          Everything You Need to Grow, <br />
-          <span className="text-primary">Without 10 Different Tools.</span>
+        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-normal text-text-primary tracking-tight leading-tight">
+          Everything required to grow, <br />
+          <span className="italic text-accent">without 10 fragmented dashboards.</span>
         </h2>
 
-        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-          Traditional workflows require five different dashboards for site audits, rank tracking, AI overviews, and developer tickets. SerpoAI brings it all together in one unified system.
+        <p className="font-sans text-xs sm:text-sm text-text-secondary max-w-xl mx-auto leading-relaxed">
+          Traditional workflows require separate tools for site audits, rank tracking, AI search citations, and developer tickets. SerpoAI coordinates discovery, scoring, and Git dispatch in a single closed loop.
         </p>
       </div>
 
       {/* ── PILLAR TAB SWITCHER ── */}
       <div className="flex justify-center mb-10">
-        <div className="p-1.5 rounded-2xl bg-surface-elevated border border-border flex flex-wrap items-center justify-center gap-1.5 max-w-2xl w-full">
+        <div className="p-1 rounded bg-surface border border-border flex flex-wrap items-center justify-center gap-1 max-w-2xl w-full">
           <button
             type="button"
             onClick={() => setActiveTab("seo_ice")}
-            className={`flex-1 min-w-[170px] py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 min-w-[170px] py-2 px-3.5 rounded text-xs font-mono font-medium transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === "seo_ice"
-                ? "bg-card text-primary shadow-sm border border-border"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-surface-muted text-text-primary border border-border-strong shadow-2xs font-semibold"
+                : "text-text-muted hover:text-text-primary"
             }`}
           >
-            <Cpu size={15} /> 1. Smart SEO & ICE Fixes
+            <Cpu size={14} className={activeTab === "seo_ice" ? "text-accent" : "text-text-muted"} />
+            <span>01. Deterministic ICE Fixes</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("geo_search")}
-            className={`flex-1 min-w-[170px] py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 min-w-[170px] py-2 px-3.5 rounded text-xs font-mono font-medium transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === "geo_search"
-                ? "bg-card text-primary shadow-sm border border-border"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-surface-muted text-text-primary border border-border-strong shadow-2xs font-semibold"
+                : "text-text-muted hover:text-text-primary"
             }`}
           >
-            <Sparkles size={15} /> 2. AI Search & Citations (GEO)
+            <Sparkles size={14} className={activeTab === "geo_search" ? "text-accent" : "text-text-muted"} />
+            <span>02. AI Citations (GEO)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("autonomous_pr")}
-            className={`flex-1 min-w-[170px] py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+            className={`flex-1 min-w-[170px] py-2 px-3.5 rounded text-xs font-mono font-medium transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === "autonomous_pr"
-                ? "bg-card text-primary shadow-sm border border-border"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-surface-muted text-text-primary border border-border-strong shadow-2xs font-semibold"
+                : "text-text-muted hover:text-text-primary"
             }`}
           >
-            <GitPullRequest size={15} /> 3. Serpo Bot & Execution
+            <GitPullRequest size={14} className={activeTab === "autonomous_pr" ? "text-accent" : "text-text-muted"} />
+            <span>03. Serpo Bot PR Dispatch</span>
           </button>
         </div>
       </div>
 
       {/* ── PILLAR CONTENT PANELS ── */}
-      <div className="surface-card p-6 sm:p-10 rounded-3xl border border-border bg-card shadow-xl transition-all">
+      <div className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-9 shadow-xs transition-all">
         {/* TAB 1: Smart SEO & ICE Scoring */}
         {activeTab === "seo_ice" && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-150">
             <div className="lg:col-span-6 space-y-4">
-              <span className="text-xs font-mono font-bold text-primary uppercase tracking-wider">
-                Pillar 01 • Deterministic Prioritization
+              <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider block">
+                Pillar 01 · Mathematical Prioritization
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                Fix What Actually Moves The Needle with ICE Scoring
+              <h3 className="font-serif text-2xl sm:text-3xl text-text-primary font-normal leading-snug">
+                Fix what actually drives conversions with verified ICE ranking.
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Stop guessing which SEO issues matter. SerpoAI calculates an exact ICE score (Impact × Confidence ÷ Effort) for every crawled page. It automatically generates ready-to-deploy JSON-LD schemas, robots.txt directives, and canonical tags.
+              <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed">
+                Stop guessing which SEO issues move needle metrics. SerpoAI calculates an exact ICE score (Impact × Confidence ÷ Effort) for every discovered anomaly, and synthesizes syntactically verified code patches with zero hallucination.
               </p>
 
-              <div className="space-y-2 pt-2 text-xs font-mono text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Mathematical ICE formula ranks highest traffic-yield fixes first</span>
+              <div className="space-y-2 pt-1 text-xs font-sans text-text-secondary">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Mathematical ICE score orders backlog by expected revenue velocity</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Automatic schema generation (Organization, FAQ, Article, Product)</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Synthesizes Schema.org JSON-LD (SoftwareApplication, FAQ, Article, Organization)</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Sub-second local ML rules with zero external API lag</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Sub-second local ML rules with zero third-party latency</span>
                 </div>
               </div>
 
-              <div className="pt-3">
+              <div className="pt-2">
                 <Link
                   to="/analyze"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl btn-primary text-xs font-bold"
+                  className="btn-primary h-9 px-4 text-xs font-semibold gap-1.5"
                 >
-                  Test Free Site Scan <ArrowRight size={14} />
+                  <span>Launch Site Analysis</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-surface-elevated border border-border space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <span className="font-bold text-foreground flex items-center gap-2">
-                  <Code2 size={15} className="text-primary" /> Recommended Code Patch
+            <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
+                <span className="font-bold text-white flex items-center gap-1.5">
+                  <Code2 size={13} className="text-accent" />
+                  <span>AST Code Patch Preview</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">
+                <span className="badge-instrument text-[9px] py-0 px-1 text-accent border-accent/20">
                   Priority Score: 8.8 / 10
                 </span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-background border border-border text-[11px] text-muted-foreground space-y-1 overflow-x-auto">
-                <div className="text-emerald-500 font-bold">+ &lt;script type="application/ld+json"&gt;</div>
-                <div className="text-emerald-500 font-bold">+   &#123; "@context": "https://schema.org", "@type": "SoftwareApplication" &#125;</div>
-                <div className="text-emerald-500 font-bold">+ &lt;/script&gt;</div>
-                <div className="text-emerald-500 font-bold">+ &lt;link rel="canonical" href="https://example.com/pricing" /&gt;</div>
+              <div className="p-3 rounded bg-black/40 border border-white/5 text-[11px] font-mono space-y-1 overflow-x-auto">
+                <div className="text-white/40 text-[10px] pb-1">// app/routes/pricing.tsx · Injected verified schema</div>
+                <div className="text-[#6FD98F]">+ &lt;script type="application/ld+json"&gt;</div>
+                <div className="text-[#6FD98F]">+   &#123; "@context": "https://schema.org", "@type": "SoftwareApplication",</div>
+                <div className="text-[#6FD98F]">+     "name": "SerpoAI", "applicationCategory": "BusinessApplication" &#125;</div>
+                <div className="text-[#6FD98F]">+ &lt;/script&gt;</div>
+                <div className="text-[#6FD98F]">+ &lt;link rel="canonical" href="https://example.com/pricing" /&gt;</div>
               </div>
 
               <div className="grid grid-cols-3 gap-2 pt-1 text-center">
-                <div className="p-2 rounded-lg bg-card border border-border">
-                  <span className="text-[10px] text-muted-foreground uppercase block">Impact</span>
-                  <span className="font-bold text-foreground">9 / 10</span>
+                <div className="p-2 rounded bg-white/5 border border-white/5">
+                  <span className="text-[9px] text-white/50 uppercase block font-mono">Impact</span>
+                  <span className="font-bold text-white font-mono tabular-nums text-xs">9 / 10</span>
                 </div>
-                <div className="p-2 rounded-lg bg-card border border-border">
-                  <span className="text-[10px] text-muted-foreground uppercase block">Confidence</span>
-                  <span className="font-bold text-emerald-500">95%</span>
+                <div className="p-2 rounded bg-white/5 border border-white/5">
+                  <span className="text-[9px] text-white/50 uppercase block font-mono">Confidence</span>
+                  <span className="font-bold text-[#6FD98F] font-mono tabular-nums text-xs">94.2%</span>
                 </div>
-                <div className="p-2 rounded-lg bg-card border border-border">
-                  <span className="text-[10px] text-muted-foreground uppercase block">Effort</span>
-                  <span className="font-bold text-primary">1 Click</span>
+                <div className="p-2 rounded bg-white/5 border border-white/5">
+                  <span className="text-[9px] text-white/50 uppercase block font-mono">Effort</span>
+                  <span className="font-bold text-accent font-mono text-xs">1-Click</span>
                 </div>
               </div>
             </div>
@@ -151,66 +159,84 @@ export default function GrowthPlatformShowcase() {
 
         {/* TAB 2: AI Search & GEO Radar */}
         {activeTab === "geo_search" && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-150">
             <div className="lg:col-span-6 space-y-4">
-              <span className="text-xs font-mono font-bold text-primary uppercase tracking-wider">
-                Pillar 02 • Next-Gen AI Visibility
+              <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider block">
+                Pillar 02 · Generative Engine Optimization
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                Get Cited by ChatGPT, Perplexity & Google AI Overviews
+              <h3 className="font-serif text-2xl sm:text-3xl text-text-primary font-normal leading-snug">
+                Win verified citations in ChatGPT, Perplexity & Google AI Overviews.
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Over 40% of search traffic now resolves in AI Answer Engines without users clicking through to websites. Generative Engine Optimization (GEO) audits your brand mentions, entity citations, and answer probability.
+              <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed">
+                Over 40% of queries now resolve directly within AI answer engines without traditional link clicks. Generative Engine Optimization (GEO) audits your brand entity mentions, citation footprint, and answer probability against top competitors.
               </p>
 
-              <div className="space-y-2 pt-2 text-xs font-mono text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Measure real citation share across Perplexity, ChatGPT & Gemini</span>
+              <div className="space-y-2 pt-1 text-xs font-sans text-text-secondary">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Tracks real citation share across Perplexity, ChatGPT Search, and Gemini</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Build structured entity triples to feed AI Knowledge Graphs</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Synthesizes structured entity triples to feed AI knowledge representations</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Teardown competitor citation advantages and win primary sources</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Competitor teardown reveals exact citation gaps and primary sources</span>
                 </div>
               </div>
 
-              <div className="pt-3">
+              <div className="pt-2">
                 <Link
                   to="/geo"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl btn-primary text-xs font-bold"
+                  className="btn-primary h-9 px-4 text-xs font-semibold gap-1.5"
                 >
-                  Explore GEO Radar <ArrowRight size={14} />
+                  <span>Explore GEO Radar</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-surface-elevated border border-border space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <span className="font-bold text-foreground flex items-center gap-2">
-                  <Sparkles size={15} className="text-primary" /> AI Citation Presence
+            <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
+                <span className="font-bold text-white flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-accent" />
+                  <span>AI Citation Telemetry</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold">
-                  82% Brand Authority
+                <span className="badge-instrument text-[9px] py-0 px-1 text-accent border-accent/20">
+                  82% Authority Index
                 </span>
               </div>
 
               <div className="space-y-2">
-                <div className="p-3 rounded-xl bg-card border border-border flex items-center justify-between">
-                  <span className="text-foreground font-semibold">Perplexity AI</span>
-                  <span className="text-emerald-500 font-bold">Primary Cited Source (Top 3)</span>
+                <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <div className="text-white text-xs font-semibold">Perplexity AI</div>
+                    <div className="text-white/40 text-[10px]">Top 3 Primary Cited Source</div>
+                  </div>
+                  <span className="text-[#6FD98F] font-bold tabular-nums text-xs">96% Cited</span>
                 </div>
-                <div className="p-3 rounded-xl bg-card border border-border flex items-center justify-between">
-                  <span className="text-foreground font-semibold">ChatGPT Search</span>
-                  <span className="text-emerald-500 font-bold">Quoted in 4/5 Summaries</span>
+
+                <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <div className="text-white text-xs font-semibold">ChatGPT Search</div>
+                    <div className="text-white/40 text-[10px]">Quoted in 4/5 summary answers</div>
+                  </div>
+                  <span className="text-[#6FD98F] font-bold tabular-nums text-xs">88% Quoted</span>
                 </div>
-                <div className="p-3 rounded-xl bg-card border border-border flex items-center justify-between">
-                  <span className="text-foreground font-semibold">Google AI Overviews</span>
-                  <span className="text-primary font-bold">Featured Snippet Anchor</span>
+
+                <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <div className="text-white text-xs font-semibold">Google AI Overviews</div>
+                    <div className="text-white/40 text-[10px]">Featured Snippet Anchor Entity</div>
+                  </div>
+                  <span className="text-accent font-bold tabular-nums text-xs">Primary</span>
                 </div>
+              </div>
+
+              <div className="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-white/60 flex items-center justify-between">
+                <span>Knowledge Graph Entity Triple: Verified</span>
+                <ShieldCheck size={12} className="text-accent" />
               </div>
             </div>
           </div>
@@ -218,68 +244,80 @@ export default function GrowthPlatformShowcase() {
 
         {/* TAB 3: Autonomous Actions & Serpo Bot */}
         {activeTab === "autonomous_pr" && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-in fade-in duration-150">
             <div className="lg:col-span-6 space-y-4">
-              <span className="text-xs font-mono font-bold text-primary uppercase tracking-wider">
-                Pillar 03 • Closed-Loop Execution
+              <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider block">
+                Pillar 03 · Autonomous Execution
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                From Detection to GitHub Pull Request in 1 Click
+              <h3 className="font-serif text-2xl sm:text-3xl text-text-primary font-normal leading-snug">
+                From detection to verified GitHub Pull Request in 1 click.
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Instead of emailing tickets to developers that get lost for months, Serpo Bot dispatches production-ready Pull Requests directly to your repository with automated validation tests and zero production risk.
+              <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed">
+                Instead of emailing audit checklists to developers that sit in backlogs for quarters, Serpo Bot dispatches production-grade Pull Requests directly into your GitHub repository with automated syntax validation and zero deployment risk.
               </p>
 
-              <div className="space-y-2 pt-2 text-xs font-mono text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Serpo Bot opens branch, commits fix, and opens GitHub PR</span>
+              <div className="space-y-2 pt-1 text-xs font-sans text-text-secondary">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Serpo Bot branches, commits verified AST patches, and opens GitHub PR</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Automated Keyword Cannibalization graph detects competing internal URLs</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Keyword Cannibalization Graph surfaces competing URLs fighting for same intent</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-primary" />
-                  <span>Google Search Console Striking Distance scanner finds easy CTR wins</span>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                  <span>Google Search Console Striking Distance scanner uncovers immediate CTR leaps</span>
                 </div>
               </div>
 
-              <div className="pt-3">
+              <div className="pt-2">
                 <Link
                   to="/actions"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl btn-primary text-xs font-bold"
+                  className="btn-primary h-9 px-4 text-xs font-semibold gap-1.5"
                 >
-                  View Action Center <ArrowRight size={14} />
+                  <span>Open Action Center</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-6 p-5 rounded-2xl bg-surface-elevated border border-border space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <span className="font-bold text-foreground flex items-center gap-2">
-                  <GitPullRequest size={15} className="text-primary" /> Serpo Bot Dispatch
+            <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
+                <span className="font-bold text-white flex items-center gap-1.5">
+                  <GitPullRequest size={13} className="text-accent" />
+                  <span>Serpo Bot Dispatch Terminal</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-bold">
-                  PR #42 Ready
+                <span className="badge-instrument text-[9px] py-0 px-1 text-accent border-accent/20">
+                  PR #42 Dispatch Ready
                 </span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-card border border-border space-y-2">
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span>Branch:</span> <code className="text-primary font-bold">serpo/seo-patch-schema</code>
+              <div className="p-3 rounded bg-black/40 border border-white/5 space-y-2">
+                <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <span>Branch:</span>
+                  <code className="text-accent font-bold">serpo/seo-patch-schema</code>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span>Commit:</span> <span className="text-foreground">fix(seo): inject Organization schema</span>
+                <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <span>Commit:</span>
+                  <span className="text-white font-medium">fix(seo): inject Organization schema</span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                  <span>ML Safety Score:</span> <span className="text-emerald-500 font-bold">99.4% Safe</span>
+                <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <span>AST Safety Score:</span>
+                  <span className="text-[#6FD98F] font-bold tabular-nums">99.8% Verified</span>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <span>CI Validation:</span>
+                  <span className="text-[#6FD98F] font-bold">Passing (3/3)</span>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs text-primary font-bold flex items-center justify-between">
-                <span>1-Click Merge Ready</span>
-                <span>Human Approved ✓</span>
+              <div className="p-2.5 rounded bg-accent-soft text-accent border border-accent/20 text-xs font-semibold flex items-center justify-between font-mono">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 size={13} />
+                  <span>Ready to Merge</span>
+                </span>
+                <span className="text-[10px] text-text-secondary">Human Operator Approved ✓</span>
               </div>
             </div>
           </div>

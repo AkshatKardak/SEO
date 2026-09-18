@@ -140,13 +140,13 @@ export default function SerpoBotPRModal({
         {/* Header */}
         <div className="p-5 border-b border-border flex items-center justify-between bg-surface-elevated">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary glow-emerald">
+            <div className="w-9 h-9 rounded-xl bg-accent-soft border border-accent/20 flex items-center justify-center text-accent">
               <GitPullRequest size={20} />
             </div>
             <div>
               <h3 className="font-extrabold text-sm text-foreground flex items-center gap-2">
                 Serpo Bot PR Dispatcher
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accent-soft text-accent border border-accent/20 font-bold">
                   ● AST & ML Verified
                 </span>
               </h3>
@@ -165,8 +165,8 @@ export default function SerpoBotPRModal({
         <div className="p-5 overflow-y-auto space-y-4">
           {status === "success" && prResult ? (
             <div className="text-center py-6 space-y-5 animate-fade-in">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500 mx-auto shadow-lg glow-emerald">
-                <CheckCircle2 size={36} />
+              <div className="w-14 h-14 rounded-2xl bg-accent-soft border border-accent/30 flex items-center justify-center text-accent mx-auto shadow-sm">
+                <CheckCircle2 size={32} />
               </div>
               <div>
                 <h4 className="font-extrabold text-lg text-foreground">Pull Request Opened Successfully!</h4>

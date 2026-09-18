@@ -1,5 +1,8 @@
 import os
-import joblib
+try:
+    import joblib
+except ImportError:
+    joblib = None
 import numpy as np
 from typing import List, Dict, Any, Tuple
 from ..schemas.prediction import OpportunityInput, OpportunityPrediction, ContributingSignal
@@ -32,6 +35,9 @@ class OpportunityRanker:
         self._load_models()
 
     def _load_models(self):
+        if joblib is None:
+            self.is_trained = False
+            return
         try:
             clf_path = os.path.join(ARTIFACTS_DIR, "opportunity_classifier.joblib")
             traffic_path = os.path.join(ARTIFACTS_DIR, "traffic_lift_regressor.joblib")

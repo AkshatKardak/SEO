@@ -13,6 +13,10 @@ import {
   FileCode2,
   Compass,
   Check,
+  GitBranch,
+  Lock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -27,45 +31,45 @@ interface ProcessOption {
 const AVAILABLE_PROCESSES: ProcessOption[] = [
   {
     id: "technical-seo",
-    name: "Technical SEO & Health Audit",
-    desc: "Crawl 60+ technical signals, Core Web Vitals, JSON-LD schemas, and viewport hygiene.",
-    badge: "Lighthouse & DOM",
-    icon: <ShieldCheck size={18} className="text-emerald-400" />,
+    name: "Technical SEO & Schema Health",
+    desc: "Crawl 60+ technical signals, JSON-LD schemas, Core Web Vitals, and viewport hygiene.",
+    badge: "LIGHTHOUSE & DOM",
+    icon: <ShieldCheck size={16} className="text-accent" />,
   },
   {
     id: "rank-tracking",
     name: "Keyword Rank & SERP Tracking",
     desc: "Discover keyword rankings, search volume, position changes, and Google AI Overview captures.",
-    badge: "SERP & Delta",
-    icon: <Target size={18} className="text-amber-400" />,
+    badge: "SERP & DELTA",
+    icon: <Target size={16} className="text-warning" />,
   },
   {
     id: "geo-visibility",
     name: "Generative Engine Optimization (GEO)",
-    desc: "Simulate brand citation authority across Google AI Overviews, Gemini, and Generative Answer Engines.",
-    badge: "AI Citations",
-    icon: <Sparkles size={18} className="text-primary" />,
+    desc: "Simulate brand citation authority across Google AI Overviews, Gemini, and Perplexity.",
+    badge: "AI CITATIONS",
+    icon: <Sparkles size={16} className="text-accent" />,
   },
   {
     id: "competitor-gap",
-    name: "Competitor Intelligence & Gaps",
-    desc: "Benchmark top competitor domains and discover high-intent unranked content opportunities.",
-    badge: "Market Gaps",
-    icon: <Globe size={18} className="text-sky-400" />,
+    name: "Competitor Gaps & Cannibalization",
+    desc: "Benchmark top competitor domains and detect keyword cannibalization across your URLs.",
+    badge: "GRAPH & GAPS",
+    icon: <Globe size={16} className="text-data-1" />,
   },
   {
     id: "action-center",
     name: "Autonomous ICE Action Center",
-    desc: "Calculate mathematical (Impact × Confidence / Effort) scores and generate ready-to-deploy code diffs.",
-    badge: "1-Click Patches",
-    icon: <FileCode2 size={18} className="text-violet-400" />,
+    desc: "Calculate mathematical (Impact × Confidence / Effort) scores and generate ready-to-deploy git diffs.",
+    badge: "GIT PATCHES",
+    icon: <FileCode2 size={16} className="text-data-2" />,
   },
   {
     id: "strategy-roadmap",
     name: "30-60-90 Day Strategic Plan",
     desc: "Synthesize a phased quarterly execution roadmap aligned with your company's North Star metric.",
-    badge: "Phased Roadmap",
-    icon: <Compass size={18} className="text-rose-400" />,
+    badge: "ROADMAP",
+    icon: <Compass size={16} className="text-data-3" />,
   },
 ];
 
@@ -77,11 +81,36 @@ const GOALS = [
   { id: "Beat competitors", label: "Outrank Competitors", desc: "Identifies competitor weak points and authoritative citation gaps", icon: "⚔️" },
 ];
 
+const FRAMEWORKS = [
+  "Next.js (App Router)",
+  "Next.js (Pages Router)",
+  "Astro",
+  "Remix / React Router",
+  "Shopify / Liquid",
+  "WordPress / Headless",
+  "Custom HTML / Static",
+];
+
 export default function Onboarding() {
   const navigate = useNavigate();
   const { createProject } = useProject();
 
+  // Environment Mode: Production vs Private Repo / Staging
+  const [envType, setEnvType] = useState<"production" | "staging">("production");
+
+  // Core Inputs
   const [url, setUrl] = useState("");
+  const [sitemapPath, setSitemapPath] = useState("/sitemap.xml");
+
+  // Private Repo & Staging Fields
+  const [githubRepo, setGithubRepo] = useState("");
+  const [branch, setBranch] = useState("main");
+  const [githubToken, setGithubToken] = useState("");
+  const [showToken, setShowToken] = useState(false);
+  const [stagingUrl, setStagingUrl] = useState("");
+  const [bypassHeader, setBypassHeader] = useState("");
+  const [framework, setFramework] = useState("Next.js (App Router)");
+
   const [selectedProcesses, setSelectedProcesses] = useState<string[]>([
     "technical-seo",
     "rank-tracking",
@@ -99,7 +128,7 @@ export default function Onboarding() {
     setSelectedProcesses((prev) => {
       if (prev.includes(processId)) {
         if (prev.length === 1) {
-          toast.error("Please keep at least one process selected");
+          toast.error("Keep at least one process selected");
           return prev;
         }
         return prev.filter((p) => p !== processId);
@@ -119,21 +148,22 @@ export default function Onboarding() {
 
   const handleStartAnalysis = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) {
-      toast.error("Please enter a website URL");
+    const targetUrl = envType === "production" ? url.trim() : (stagingUrl.trim() || url.trim());
+    if (!targetUrl) {
+      toast.error("Please enter a valid website or staging URL");
       return;
     }
 
     setError("");
     setAnalyzing(true);
-    setCurrentProgressText(`1/${selectedProcesses.length}: Crawling ${url.trim()} and extracting DOM entities...`);
+    setCurrentProgressText(`1/${selectedProcesses.length}: Crawling ${targetUrl} and extracting DOM entities...`);
 
     const progressTimer1 = setTimeout(() => {
       setCurrentProgressText(`2/${selectedProcesses.length}: Analyzing selected growth vectors & technical SEO signals...`);
     }, 4000);
 
     const progressTimer2 = setTimeout(() => {
-      setCurrentProgressText(`3/${selectedProcesses.length}: Multi-agent AI synthesizing knowledge graph and citation authority...`);
+      setCurrentProgressText(`3/${selectedProcesses.length}: Synthesizing knowledge graph and citation authority...`);
     }, 10000);
 
     const progressTimer3 = setTimeout(() => {
@@ -141,211 +171,360 @@ export default function Onboarding() {
     }, 17000);
 
     try {
-      await createProject(url.trim(), undefined, selectedGoal);
+      await createProject(targetUrl, undefined, selectedGoal);
       clearTimeout(progressTimer1);
       clearTimeout(progressTimer2);
       clearTimeout(progressTimer3);
-      toast.success("SerpoAI initialized successfully!");
+      toast.success("Domain connected & telemetry initialized!");
       navigate("/dashboard");
     } catch (err: any) {
       clearTimeout(progressTimer1);
       clearTimeout(progressTimer2);
       clearTimeout(progressTimer3);
       setAnalyzing(false);
-      const msg = err.message || "Failed to analyze website. Please check the URL.";
+      const msg = err.message || "Failed to analyze target. Please verify the URL.";
       setError(msg);
       toast.error(msg);
     }
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 bg-background bg-grid flex items-center justify-center px-4">
-      <div className="w-full max-w-3xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-3">
-            <Sparkles size={13} />
-            Autonomous Growth & SEO Onboarding
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-            Connect Your Website to <span className="gradient-text">SerpoAI</span>
-          </h1>
-          <p className="text-muted-foreground text-sm mt-2 max-w-xl mx-auto leading-relaxed">
-            Customize which growth processes to run, discover high-ROI bottlenecks, and deploy verified code fixes with specialized AI agents.
-          </p>
+    <div className="py-6 sm:py-10 max-w-4xl mx-auto select-none">
+      {/* ── Header ── */}
+      <div className="text-center mb-8 space-y-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-border bg-surface-muted text-[11px] font-mono text-text-secondary">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
+          <span>CONNECT ENVIRONMENT · PRE-RELEASE & PRODUCTION</span>
         </div>
+        <h1 className="font-serif text-3xl sm:text-4xl font-normal text-text-primary tracking-tight">
+          Connect Your System to Serpo<span className="italic text-accent">AI</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-text-secondary max-w-xl mx-auto font-sans leading-relaxed">
+          Configure continuous search telemetry, private git repository access for pre-release validation, and deterministic patch generation.
+        </p>
+      </div>
 
-        {/* Card */}
-        <div className="glass rounded-3xl p-6 sm:p-9 border border-border/80 shadow-2xl relative overflow-hidden backdrop-blur-xl">
-          {error && (
-            <div className="mb-6 p-4 rounded-2xl severity-critical text-xs flex items-center gap-3">
-              <AlertCircle size={18} className="shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+      {/* ── Instrument Card ── */}
+      <div className="surface-instrument p-6 sm:p-8 border border-border bg-surface rounded-md shadow-lg relative">
+        {error && (
+          <div className="mb-6 p-3 rounded bg-negative/10 border border-negative/30 text-negative font-mono text-xs flex items-center gap-2">
+            <AlertCircle size={15} className="shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
 
-          {!analyzing ? (
-            <form onSubmit={handleStartAnalysis} className="space-y-8">
-              {/* Step 1: URL Input */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  1. Enter Your Website URL or Domain
-                </label>
-                <div className="relative">
-                  <Globe size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://yourcompany.com or yoursite.com"
-                    required
-                    autoFocus
-                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-card border border-border text-foreground placeholder-muted-foreground outline-none focus:border-primary/60 transition-colors text-sm font-medium shadow-sm"
-                  />
-                </div>
+        {!analyzing ? (
+          <form onSubmit={handleStartAnalysis} className="space-y-8 font-sans">
+            {/* ── Step 1: Environment Selection Tabs ── */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs text-text-secondary uppercase">
+                  1. Select Target Environment
+                </span>
+                <span className="badge-instrument text-[10px]">
+                  {envType === "production" ? "PUBLIC PRODUCTION" : "PRIVATE GIT / PRE-RELEASE"}
+                </span>
               </div>
 
-              {/* Step 2: Multi-Option Process Selection */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      2. Choose Growth & Analysis Processes
-                    </label>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      Select which pipelines to execute for your website ({selectedProcesses.length} selected).
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleSelectAllProcesses}
-                    className="text-xs text-primary hover:underline font-bold cursor-pointer"
-                  >
-                    {selectedProcesses.length === AVAILABLE_PROCESSES.length ? "Deselect Extra" : "Select All (6)"}
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {AVAILABLE_PROCESSES.map((proc) => {
-                    const isSelected = selectedProcesses.includes(proc.id);
-                    return (
-                      <div
-                        key={proc.id}
-                        onClick={() => toggleProcess(proc.id)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 select-none hover-lift ${
-                          isSelected
-                            ? "bg-card border-primary/60 shadow-md ring-1 ring-primary/30"
-                            : "bg-card border-border hover:border-primary/50"
-                        }`}
-                      >
-                        {/* Checkbox */}
-                        <div
-                          className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                            isSelected
-                              ? "bg-primary text-primary-foreground font-bold shadow-sm"
-                              : "border border-border bg-surface-elevated"
-                          }`}
-                        >
-                          {isSelected && <Check size={12} strokeWidth={3} />}
-                        </div>
-
-                        {/* Details */}
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-xs text-foreground">{proc.name}</span>
-                            <span className="text-[10px] px-2 py-0.2 rounded-full bg-muted font-mono text-muted-foreground font-semibold">
-                              {proc.badge}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-muted-foreground leading-relaxed">{proc.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Step 3: Goal Selection */}
-              <div className="space-y-3">
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  3. Select Primary Growth Objective
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {GOALS.map((goal) => {
-                    const isSelected = selectedGoal === goal.id;
-                    return (
-                      <button
-                        type="button"
-                        key={goal.id}
-                        onClick={() => setSelectedGoal(goal.id)}
-                        className={`p-3.5 rounded-2xl text-left border transition-all cursor-pointer hover-lift ${
-                          isSelected
-                            ? "bg-primary/10 border-primary text-foreground shadow-sm ring-1 ring-primary/30"
-                            : "bg-card border-border text-foreground hover:border-primary/40"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 font-bold text-xs text-foreground mb-1">
-                          <span>{goal.icon}</span>
-                          <span>{goal.label}</span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground leading-relaxed">{goal.desc}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Submit CTA */}
-              <div className="pt-2 space-y-4">
+              {/* Mode Toggle */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-1 rounded bg-surface-muted border border-border">
                 <button
-                  type="submit"
-                  disabled={!url.trim() || selectedProcesses.length === 0}
-                  className="w-full py-4 rounded-2xl btn-glow font-bold text-sm flex items-center justify-center gap-2 shadow-xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  type="button"
+                  onClick={() => setEnvType("production")}
+                  className={`p-3 rounded text-left transition-colors flex items-start gap-2.5 ${
+                    envType === "production"
+                      ? "bg-surface text-text-primary border border-border shadow-xs font-medium"
+                      : "text-text-secondary hover:text-text-primary"
+                  }`}
                 >
-                  <Zap size={18} />
-                  Initialize SerpoAI Growth Engine ({selectedProcesses.length} Processes)
-                  <ArrowRight size={16} />
+                  <Globe size={16} className={envType === "production" ? "text-accent" : "text-text-muted"} />
+                  <div>
+                    <div className="text-xs font-semibold">Production Website</div>
+                    <div className="text-[11px] text-text-muted">Public domain live on Google & AI search engines</div>
+                  </div>
                 </button>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-[11px] text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <ShieldCheck size={14} className="text-success" /> SSRF-Safe Cloud Crawler
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 size={14} className="text-primary" /> Closed-Loop Learning
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-accent" /> ICE Score Prioritization
+                <button
+                  type="button"
+                  onClick={() => setEnvType("staging")}
+                  className={`p-3 rounded text-left transition-colors flex items-start gap-2.5 ${
+                    envType === "staging"
+                      ? "bg-surface text-text-primary border border-border shadow-xs font-medium"
+                      : "text-text-secondary hover:text-text-primary"
+                  }`}
+                >
+                  <Lock size={16} className={envType === "staging" ? "text-accent" : "text-text-muted"} />
+                  <div>
+                    <div className="text-xs font-semibold">Private Repo / Staging (Pre-Release)</div>
+                    <div className="text-[11px] text-text-muted">Test & validate private repos or staging before public launch</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Production Form Fields */}
+              {envType === "production" ? (
+                <div className="space-y-3 pt-2">
+                  <label className="block space-y-1">
+                    <span className="font-mono text-[11px] text-text-secondary uppercase">Website URL or Domain</span>
+                    <div className="relative">
+                      <Globe size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                      <input
+                        type="text"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://company.com or company.com"
+                        required
+                        className="w-full pl-10 pr-3 py-2.5 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                    </div>
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="block space-y-1">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">Sitemap Path (Optional)</span>
+                      <input
+                        type="text"
+                        value={sitemapPath}
+                        onChange={(e) => setSitemapPath(e.target.value)}
+                        placeholder="/sitemap.xml"
+                        className="w-full px-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                    </label>
+
+                    <label className="block space-y-1">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">Tech Stack Preset</span>
+                      <select
+                        value={framework}
+                        onChange={(e) => setFramework(e.target.value)}
+                        className="w-full px-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-sans text-xs focus:outline-none focus:border-accent transition-colors"
+                      >
+                        {FRAMEWORKS.map((f) => (
+                          <option key={f} value={f}>{f}</option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              ) : (
+                /* Private Repo & Staging Fields */
+                <div className="space-y-3 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <label className="block space-y-1 sm:col-span-2">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">
+                        GitHub Repository (owner/repo)
+                      </span>
+                      <div className="relative">
+                        <GitBranch size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                        <input
+                          type="text"
+                          value={githubRepo}
+                          onChange={(e) => setGithubRepo(e.target.value)}
+                          placeholder="acme-corp/marketing-frontend"
+                          className="w-full pl-10 pr-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                        />
+                      </div>
+                    </label>
+
+                    <label className="block space-y-1">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">Branch</span>
+                      <input
+                        type="text"
+                        value={branch}
+                        onChange={(e) => setBranch(e.target.value)}
+                        placeholder="main / staging"
+                        className="w-full px-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="block space-y-1">
+                    <span className="font-mono text-[11px] text-text-secondary uppercase">
+                      GitHub Personal Access Token (PAT) for Private Repos
+                    </span>
+                    <div className="relative">
+                      <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
+                      <input
+                        type={showToken ? "text" : "password"}
+                        value={githubToken}
+                        onChange={(e) => setGithubToken(e.target.value)}
+                        placeholder="ghp_••••••••••••••••••••••••••••••••••••"
+                        className="w-full pl-10 pr-10 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowToken(!showToken)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+                      >
+                        {showToken ? <EyeOff size={14} /> : <Eye size={14} />}
+                      </button>
+                    </div>
+                    <span className="text-[10px] text-text-muted">
+                      Requires <code className="font-mono">repo</code> scope for private repo code inspection and Serpo Bot PR opening.
+                    </span>
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="block space-y-1">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">
+                        Staging URL / Preview Deployment
+                      </span>
+                      <input
+                        type="text"
+                        value={stagingUrl}
+                        onChange={(e) => setStagingUrl(e.target.value)}
+                        placeholder="https://staging.acme.com or Vercel preview"
+                        className="w-full px-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                    </label>
+
+                    <label className="block space-y-1">
+                      <span className="font-mono text-[11px] text-text-secondary uppercase">
+                        Custom Bypass / Basic Auth Header
+                      </span>
+                      <input
+                        type="text"
+                        value={bypassHeader}
+                        onChange={(e) => setBypassHeader(e.target.value)}
+                        placeholder="X-Bypass-Key: secret or Basic token"
+                        className="w-full px-3 py-2 rounded bg-surface-muted border border-border text-text-primary font-mono text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Step 2: Growth & Analysis Pipelines ── */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="font-mono text-xs text-text-secondary uppercase">
+                    2. Select Autonomous Pipelines ({selectedProcesses.length}/6 Active)
                   </span>
                 </div>
-              </div>
-            </form>
-          ) : (
-            /* Loading State */
-            <div className="py-14 text-center space-y-6">
-              <div className="relative w-20 h-20 mx-auto">
-                <div className="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-                <div className="absolute inset-3 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <Sparkles size={24} className="animate-pulse" />
-                </div>
+                <button
+                  type="button"
+                  onClick={handleSelectAllProcesses}
+                  className="font-mono text-xs text-accent hover:underline font-medium"
+                >
+                  {selectedProcesses.length === AVAILABLE_PROCESSES.length ? "Minimal Core" : "Select All (6)"}
+                </button>
               </div>
 
-              <div>
-                <h3 className="text-lg font-bold text-foreground mb-1">Building Your SerpoAI Growth Engine</h3>
-                <p className="text-xs text-primary font-mono">{currentProgressText}</p>
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {AVAILABLE_PROCESSES.map((proc) => {
+                  const isSelected = selectedProcesses.includes(proc.id);
+                  return (
+                    <div
+                      key={proc.id}
+                      onClick={() => toggleProcess(proc.id)}
+                      className={`p-3 rounded border transition-colors cursor-pointer flex items-start gap-2.5 ${
+                        isSelected
+                          ? "bg-surface border-border-strong text-text-primary shadow-xs"
+                          : "bg-surface-muted/40 border-border text-text-secondary hover:text-text-primary"
+                      }`}
+                    >
+                      <div
+                        className={`w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 border ${
+                          isSelected
+                            ? "bg-accent-fill text-[#111508] border-transparent font-bold"
+                            : "border-border bg-surface"
+                        }`}
+                      >
+                        {isSelected && <Check size={11} strokeWidth={3} />}
+                      </div>
 
-              <div className="max-w-md mx-auto bg-muted/60 rounded-full h-2 overflow-hidden border border-border/50">
-                <div className="h-full bg-primary animate-pulse w-3/4 rounded-full" />
-              </div>
-
-              <div className="flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
-                <span>Executing {selectedProcesses.length} selected processes in parallel</span>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-xs text-text-primary">{proc.name}</span>
+                          <span className="badge-instrument text-[9px] py-0 px-1">{proc.badge}</span>
+                        </div>
+                        <p className="text-[11px] text-text-secondary leading-normal">{proc.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          )}
-        </div>
+
+            {/* ── Step 3: North Star Objective ── */}
+            <div className="space-y-3">
+              <span className="font-mono text-xs text-text-secondary uppercase">
+                3. Primary Growth Metric
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {GOALS.map((goal) => {
+                  const isSelected = selectedGoal === goal.id;
+                  return (
+                    <button
+                      type="button"
+                      key={goal.id}
+                      onClick={() => setSelectedGoal(goal.id)}
+                      className={`p-2.5 rounded text-left border transition-colors cursor-pointer ${
+                        isSelected
+                          ? "bg-surface border-accent text-text-primary font-medium shadow-xs"
+                          : "bg-surface-muted/40 border-border text-text-secondary hover:text-text-primary hover:bg-surface-muted"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 text-xs font-semibold mb-0.5 text-text-primary">
+                        <span>{goal.icon}</span>
+                        <span>{goal.label}</span>
+                      </div>
+                      <p className="text-[10px] text-text-muted">{goal.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ── Action CTA ── */}
+            <div className="pt-2 space-y-3">
+              <button
+                type="submit"
+                disabled={(!url.trim() && !stagingUrl.trim()) || selectedProcesses.length === 0}
+                className="btn-primary w-full py-3 text-xs sm:text-sm font-semibold gap-2 disabled:opacity-40"
+              >
+                <Zap size={15} />
+                <span>Initialize SerpoAI Telemetry ({selectedProcesses.length} Pipelines)</span>
+                <ArrowRight size={15} />
+              </button>
+
+              <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] font-mono text-text-muted">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck size={13} className="text-positive" /> SSRF-Safe Cloud Crawler
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 size={13} className="text-accent" /> Closed-Loop Learning
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-data-2" /> Mathematical ICE Prioritization
+                </span>
+              </div>
+            </div>
+          </form>
+        ) : (
+          /* Telemetry Scanning State */
+          <div className="py-12 text-center space-y-5">
+            <div className="w-12 h-12 rounded-full border-2 border-accent border-t-transparent animate-spin mx-auto" />
+
+            <div className="space-y-1">
+              <h3 className="font-serif text-xl font-normal text-text-primary">
+                Connecting Telemetry Stream
+              </h3>
+              <p className="font-mono text-xs text-accent">{currentProgressText}</p>
+            </div>
+
+            <div className="max-w-xs mx-auto bg-surface-muted rounded-full h-1.5 overflow-hidden border border-border">
+              <div className="h-full bg-accent animate-pulse w-2/3 rounded-full" />
+            </div>
+
+            <p className="text-[11px] font-mono text-text-muted">
+              Executing {selectedProcesses.length} pipelines across organic SERP, entity graph, and generative answer models.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+

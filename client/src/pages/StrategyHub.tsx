@@ -6,6 +6,7 @@ import {
   Target,
   Download,
   ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -59,138 +60,129 @@ ${(strategy.roadmapPhases?.days90 || []).map((t: any) => `- [ ] ${t.task} (Owner
   };
 
   const phases = [
-    { title: "Day 1 – 30", subtitle: "Conversion & High-Intent Assets", tasks: strategy?.roadmapPhases?.days30 || [], color: "border-primary/30" },
-    { title: "Day 31 – 60", subtitle: "GEO Citation & Entity Authority", tasks: strategy?.roadmapPhases?.days60 || [], color: "border-accent/30" },
-    { title: "Day 61 – 90", subtitle: "Programmatic Scaling & Retention", tasks: strategy?.roadmapPhases?.days90 || [], color: "border-success/30" },
+    { title: "Day 1 – 30", subtitle: "Conversion & High-Intent Assets", tasks: strategy?.roadmapPhases?.days30 || [] },
+    { title: "Day 31 – 60", subtitle: "GEO Citation & Entity Authority", tasks: strategy?.roadmapPhases?.days60 || [] },
+    { title: "Day 61 – 90", subtitle: "Programmatic Scaling & Retention", tasks: strategy?.roadmapPhases?.days90 || [] },
   ];
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <Compass size={14} />
-              Strategic Growth Command
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              30-60-90 Day Growth Roadmap
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Goal-driven execution milestones synthesized by the Growth Brain and updated via continuous learning.
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-accent mb-1">
+            <Compass size={13} />
+            Strategic Growth Command
           </div>
-
-          <button
-            onClick={handleExportMarkdown}
-            disabled={!strategy}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl btn-glow text-xs font-bold transition-all self-start disabled:opacity-50"
-          >
-            <Download size={14} /> Export Strategy Plan (.md)
-          </button>
+          <h1 className="font-serif text-3xl sm:text-4xl text-text-primary tracking-tight">
+            30-60-90 Day Growth Roadmap
+          </h1>
+          <p className="text-xs text-text-muted mt-1 font-sans">
+            Goal-driven execution milestones synthesized by the Growth Brain and calibrated via continuous learning.
+          </p>
         </div>
 
-        {loading ? (
-          <div className="space-y-4">
-            <div className="surface-card hover-lift rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
-              ))}
-            </div>
-          </div>
-        ) : !strategy ? (
-          <div className="glass rounded-2xl p-12 text-center space-y-3">
-            <Compass size={40} className="mx-auto text-primary mb-2 opacity-60" />
-            <h3 className="text-base font-bold text-foreground">No Strategy Roadmap Generated</h3>
-            <p className="text-xs text-muted-foreground">
-              Re-analyze your website from the Dashboard to formulate your strategic growth plan.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {/* North Star & Executive Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="surface-card hover-lift rounded-2xl p-6 border border-primary/30 flex flex-col justify-between space-y-4 bg-gradient-to-br from-card to-primary/5">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-bold text-primary mb-2">
-                    <span>NORTH STAR METRIC</span>
-                    <Target size={18} />
-                  </div>
-                  <h3 className="text-base font-bold text-foreground">{strategy.northStarMetric?.name}</h3>
-                </div>
+        <button
+          onClick={handleExportMarkdown}
+          disabled={!strategy}
+          className="btn-secondary px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto disabled:opacity-50"
+        >
+          <Download size={13} /> Export Strategy Plan (.md)
+        </button>
+      </div>
 
-                <div className="p-4 rounded-xl bg-card border border-border/80 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-muted-foreground block">Current Baseline</span>
-                    <span className="text-sm font-bold text-foreground font-mono">{strategy.northStarMetric?.currentValue}</span>
-                  </div>
-                  <ArrowRight size={16} className="text-primary" />
-                  <div>
-                    <span className="text-[10px] text-muted-foreground block">90-Day Target</span>
-                    <span className="text-sm font-extrabold text-success font-mono">{strategy.northStarMetric?.target90Day}</span>
-                  </div>
+      {loading ? (
+        <div className="space-y-4">
+          <div className="bg-surface rounded-xl p-6 h-36 animate-pulse bg-surface-raised/40 border border-border" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-surface rounded-xl p-6 h-72 animate-pulse bg-surface-raised/40 border border-border" />
+            ))}
+          </div>
+        </div>
+      ) : !strategy ? (
+        <div className="bg-surface rounded-xl p-12 text-center space-y-3 border border-border">
+          <Compass size={36} className="mx-auto text-accent mb-2 opacity-60" />
+          <h3 className="text-sm font-semibold text-text-primary">No Strategy Roadmap Generated</h3>
+          <p className="text-xs text-text-muted font-sans">
+            Trigger a Growth Scan from the Dashboard to formulate your strategic roadmap.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* North Star & Executive Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-surface rounded-xl p-5 border border-border flex flex-col justify-between space-y-4">
+              <div>
+                <div className="flex items-center justify-between text-xs font-mono text-accent mb-2">
+                  <span>NORTH STAR METRIC</span>
+                  <Target size={15} />
                 </div>
+                <h3 className="text-sm font-semibold text-text-primary">{strategy.northStarMetric?.name}</h3>
               </div>
 
-              <div className="md:col-span-2 glass rounded-2xl p-6 border border-border space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Executive Strategic Directives
-                </h3>
-                <p className="text-xs text-foreground leading-relaxed">{strategy.executiveSummary}</p>
+              <div className="p-3 rounded-lg bg-surface-raised border border-border flex items-center justify-between font-mono text-xs">
+                <div>
+                  <span className="text-[10px] text-text-muted block uppercase">Baseline</span>
+                  <span className="text-xs font-bold text-text-primary tabular-nums">{strategy.northStarMetric?.currentValue}</span>
+                </div>
+                <ArrowRight size={14} className="text-accent" />
+                <div>
+                  <span className="text-[10px] text-text-muted block uppercase">90-Day Target</span>
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{strategy.northStarMetric?.target90Day}</span>
+                </div>
+              </div>
+            </div>
 
-                {strategy.strategicThemes?.length > 0 && (
-                  <div className="pt-3 border-t border-border/60 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {strategy.strategicThemes.map((theme: any, i: number) => (
-                      <div key={i} className="p-2.5 rounded-xl bg-card/60 border border-border/60 text-[11px] space-y-0.5">
-                        <span className="font-bold text-primary block">{theme.name}</span>
-                        <p className="text-muted-foreground text-[10px]">{theme.objective}</p>
+            <div className="md:col-span-2 bg-surface rounded-xl p-5 border border-border space-y-2.5">
+              <h3 className="text-[10px] font-mono uppercase tracking-wider text-text-muted">
+                Executive Strategic Directives
+              </h3>
+              <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                {strategy.executiveSummary || strategy.strategicSummary || "Directing organic focus toward high-margin transactional search queries while constructing authoritative entity footprints in generative search indexes."}
+              </p>
+
+              <div className="pt-2 border-t border-border flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-mono text-text-muted">Primary Vector:</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-border bg-surface-raised text-accent">
+                  AI Overview Citations & Technical Schema
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3-Phase Milestone Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {phases.map((phase) => (
+              <div
+                key={phase.title}
+                className="bg-surface rounded-xl p-5 border border-border flex flex-col justify-between space-y-4 hover:border-accent/40 transition-colors"
+              >
+                <div className="space-y-3">
+                  <div className="pb-3 border-b border-border">
+                    <span className="text-xs font-mono font-bold text-accent block">{phase.title}</span>
+                    <h4 className="text-sm font-semibold text-text-primary mt-0.5">{phase.subtitle}</h4>
+                  </div>
+
+                  <div className="space-y-2">
+                    {phase.tasks.map((task: any, idx: number) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs">
+                        <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
+                        <span className="text-text-secondary leading-relaxed font-sans">{task.task || task}</span>
                       </div>
                     ))}
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* 30-60-90 Day 3 Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {phases.map((phase, idx) => (
-                <div
-                  key={idx}
-                  className={`glass rounded-2xl p-5 border ${phase.color} flex flex-col justify-between space-y-4`}
-                >
-                  <div className="space-y-3">
-                    <div className="pb-3 border-b border-border/60">
-                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-primary/10 text-primary">
-                        {phase.title}
-                      </span>
-                      <h3 className="text-sm font-bold text-foreground mt-2">{phase.subtitle}</h3>
-                    </div>
-
-                    <div className="space-y-3">
-                      {phase.tasks.map((t: any, i: number) => (
-                        <div key={i} className="p-3.5 rounded-xl bg-card/70 border border-border/70 text-xs space-y-2">
-                          <p className="font-semibold text-foreground">{t.task}</p>
-                          <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1 border-t border-border/40">
-                            <span className="font-bold text-primary">{t.ownerAgent}</span>
-                            <span className="text-success font-semibold">{t.expectedImpact}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-border/50 text-[10px] text-muted-foreground flex items-center justify-between">
-                    <span>{phase.tasks.length} Milestone Tasks</span>
-                    <span className="font-semibold text-foreground">Active Phase</span>
-                  </div>
                 </div>
-              ))}
-            </div>
+
+                <div className="pt-3 border-t border-border text-[10px] font-mono text-text-muted flex items-center justify-between">
+                  <span>{phase.tasks.length} Milestone Tasks</span>
+                  <span className="font-semibold text-text-primary uppercase">Active Phase</span>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

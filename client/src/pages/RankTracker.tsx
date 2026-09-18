@@ -127,13 +127,7 @@ export default function RankTracker() {
     }
   };
 
-  const getPositionBadge = (pos: number | null) => {
-    if (pos === null) return { text: "Not Ranked", cls: "text-muted-foreground bg-muted/50 border border-border" };
-    if (pos <= 3)  return { text: `#${pos}`, cls: "text-success bg-success/10 border border-success/25" };
-    if (pos <= 10) return { text: `#${pos}`, cls: "text-primary bg-primary/10 border border-primary/25" };
-    if (pos <= 20) return { text: `#${pos}`, cls: "text-accent bg-accent/10 border border-accent/25" };
-    return { text: `#${pos}`, cls: "text-danger bg-danger/10 border border-danger/25" };
-  };
+
 
   const getChangeIndicator = (change: number) => {
     if (change > 0) return { icon: <TrendingUp size={13} />, text: `+${change}`, cls: "text-success" };
@@ -170,191 +164,192 @@ export default function RankTracker() {
   }, []);
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background bg-grid">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* ── Page Header ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">
-              <span className="gradient-text">Rank Tracker</span>
-            </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Track keyword positions on Google — auto-refreshed on your schedule.
-            </p>
+    <div className="space-y-6">
+      {/* ── Page Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-accent mb-1">
+            <Target size={13} />
+            Search Engine Position Index
           </div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="btn-glow px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 self-start"
-            id="add-keyword-btn"
-          >
-            <Plus size={18} />
-            Track Keyword
-          </button>
+          <h1 className="font-serif text-3xl sm:text-4xl text-text-primary tracking-tight">
+            Rank Tracker
+          </h1>
+          <p className="text-xs text-text-muted mt-1 font-sans">
+            Track daily keyword positions on Google · Auto-refreshed on scheduled intervals.
+          </p>
         </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="btn-primary px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto"
+          id="add-keyword-btn"
+        >
+          <Plus size={15} />
+          Track Keyword
+        </button>
+      </div>
 
-        {/* ── Navigation Tabs ── */}
-        <div className="flex items-center gap-2 mb-6 border-b border-border/70 pb-3 flex-wrap">
-          <button
-            onClick={() => setActiveTab("rankings")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "rankings"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            }`}
-          >
-            <Target size={14} /> Keyword Rankings
-          </button>
-          <button
-            onClick={() => setActiveTab("cannibalization")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "cannibalization"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            }`}
-          >
-            <AlertCircle size={14} /> Cannibalization Graph (ML)
-          </button>
-          <button
-            onClick={() => setActiveTab("gsc_quick_wins")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeTab === "gsc_quick_wins"
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            }`}
-          >
-            <TrendingUp size={14} /> GSC Striking Distance Quick Wins (ML)
-          </button>
+      {/* ── Navigation Tabs ── */}
+      <div className="flex items-center gap-2 border-b border-border pb-3 flex-wrap">
+        <button
+          onClick={() => setActiveTab("rankings")}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
+            activeTab === "rankings"
+              ? "btn-primary font-semibold"
+              : "btn-secondary text-text-muted"
+          }`}
+        >
+          <Target size={13} /> Keyword Rankings
+        </button>
+        <button
+          onClick={() => setActiveTab("cannibalization")}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
+            activeTab === "cannibalization"
+              ? "btn-primary font-semibold"
+              : "btn-secondary text-text-muted"
+          }`}
+        >
+          <AlertCircle size={13} /> Cannibalization Graph (ML)
+        </button>
+        <button
+          onClick={() => setActiveTab("gsc_quick_wins")}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
+            activeTab === "gsc_quick_wins"
+              ? "btn-primary font-semibold"
+              : "btn-secondary text-text-muted"
+          }`}
+        >
+          <TrendingUp size={13} /> GSC Quick Wins (ML)
+        </button>
+      </div>
+
+      {activeTab === "cannibalization" && (
+        <div className="animate-in fade-in duration-200">
+          <KeywordCannibalizationGraph />
         </div>
+      )}
 
-        {activeTab === "cannibalization" && (
-          <div className="mb-10 animate-in fade-in duration-200">
-            <KeywordCannibalizationGraph />
-          </div>
-        )}
+      {activeTab === "gsc_quick_wins" && (
+        <div className="animate-in fade-in duration-200">
+          <GSCQuickWinsDetector />
+        </div>
+      )}
 
-        {activeTab === "gsc_quick_wins" && (
-          <div className="mb-10 animate-in fade-in duration-200">
-            <GSCQuickWinsDetector />
-          </div>
-        )}
-
-        {activeTab === "rankings" && (
-          <>
-            {/* ── Schedule Selector ── */}
-            <div className="glass rounded-xl px-5 py-4 mb-6">
-              <ScheduleSelector
-                current={schedulePreference}
-                onChange={(val) => setSchedulePreference(val)}
-              />
-            </div>
-
-            {/* ── Summary Stats ── */}
-        {keywords.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            {[
-              { label: "Total Tracked", value: keywords.length, icon: <Target size={16} />, color: "text-accent" },
-              { label: "In Top 10", value: top10, icon: <BarChart2 size={16} />, color: "text-primary" },
-              { label: "Improved", value: improved, icon: <TrendingUp size={16} />, color: "text-success" },
-            ].map((stat) => (
-              <div key={stat.label} className="glass p-4">
-                <div className={`flex items-center gap-2 mb-1 ${stat.color}`}>
-                  {stat.icon}
-                  <span className="text-xs text-muted-foreground">{stat.label}</span>
-                </div>
-                <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* ── Filters Row ── */}
-        <div className="mb-5 flex flex-col md:flex-row gap-3">
-          <div className="glass rounded-xl px-4 py-2.5 flex items-center gap-2 flex-1">
-            <Search size={16} className="text-muted-foreground" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search keywords or domains..."
-              className="bg-transparent text-sm text-foreground placeholder-muted-foreground outline-none flex-1"
+      {activeTab === "rankings" && (
+        <>
+          {/* ── Schedule Selector ── */}
+          <div className="bg-surface border border-border rounded-xl px-5 py-4 mb-4">
+            <ScheduleSelector
+              current={schedulePreference}
+              onChange={(val) => setSchedulePreference(val)}
             />
           </div>
-          <div className="flex gap-3">
-            <div className="glass rounded-xl px-4 py-2.5 flex items-center gap-2">
-              <ArrowUpDown size={14} className="text-muted-foreground" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                aria-label="Sort keywords by"
-                className="bg-transparent text-sm text-foreground outline-none appearance-none pr-2 cursor-pointer"
-              >
-                <option value="newest" className="bg-card">Newest First</option>
-                <option value="rank_asc" className="bg-card">Best Ranked</option>
-                <option value="rank_desc" className="bg-card">Worst Ranked</option>
-                <option value="change" className="bg-card">Biggest Gain</option>
-              </select>
+
+          {/* ── Summary Stats ── */}
+          {keywords.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+              {[
+                { label: "Total Tracked", value: keywords.length, icon: <Target size={14} />, color: "text-text-primary" },
+                { label: "In Top 10", value: top10, icon: <BarChart2 size={14} />, color: "text-accent" },
+                { label: "Improved", value: improved, icon: <TrendingUp size={14} />, color: "text-emerald-500" },
+              ].map((stat) => (
+                <div key={stat.label} className="bg-surface border border-border rounded-xl p-4 flex flex-col justify-between">
+                  <div className={`flex items-center gap-2 mb-1 text-xs font-mono text-text-muted`}>
+                    {stat.icon}
+                    <span>{stat.label}</span>
+                  </div>
+                  <p className={`font-mono text-2xl font-bold tracking-tight ${stat.color} tabular-nums`}>{stat.value}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Filters Row ── */}
+          <div className="mb-4 flex flex-col md:flex-row gap-3">
+            <div className="bg-surface border border-border rounded-lg px-3.5 py-2 flex items-center gap-2 flex-1">
+              <Search size={14} className="text-text-muted" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search keywords or domains..."
+                className="bg-transparent text-xs text-text-primary placeholder-text-muted outline-none flex-1 font-sans"
+              />
+            </div>
+            <div className="flex gap-3">
+              <div className="bg-surface border border-border rounded-lg px-3.5 py-2 flex items-center gap-2 text-xs">
+                <ArrowUpDown size={13} className="text-text-muted" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  aria-label="Sort keywords by"
+                  className="bg-transparent text-xs text-text-primary outline-none appearance-none pr-2 cursor-pointer font-mono"
+                >
+                  <option value="newest" className="bg-surface text-text-primary">Newest First</option>
+                  <option value="rank_asc" className="bg-surface text-text-primary">Best Ranked</option>
+                  <option value="rank_desc" className="bg-surface text-text-primary">Worst Ranked</option>
+                  <option value="change" className="bg-surface text-text-primary">Biggest Gain</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
         {/* ── Keywords List ── */}
         {loading ? (
-          <div className="flex items-center justify-center py-32">
-            <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <div className="flex items-center justify-center py-24">
+            <div className="size-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
           </div>
         ) : processed.length === 0 && keywords.length === 0 ? (
           /* Empty State */
-          <div className="glass rounded-2xl p-14 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
-              <Target size={32} className="text-primary" />
+          <div className="bg-surface border border-border rounded-xl p-12 text-center">
+            <div className="w-12 h-12 rounded-lg bg-surface-raised border border-border flex items-center justify-center mx-auto mb-3 text-accent">
+              <Target size={24} />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">No keywords tracked yet</h3>
-            <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
-              Add your first keyword and website URL to start monitoring your Google rankings daily.
+            <h3 className="text-base font-semibold text-text-primary mb-1">No keywords tracked yet</h3>
+            <p className="text-xs text-text-muted mb-5 max-w-sm mx-auto font-sans">
+              Add your target search terms and domain to monitor Google search positioning and cannibalization.
             </p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="btn-glow px-5 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2"
+              className="btn-primary px-4 py-2 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5"
             >
-              <Plus size={16} />
-              Track Your First Keyword
+              <Plus size={14} />
+              Track First Keyword
             </button>
           </div>
         ) : processed.length === 0 ? (
-          <div className="glass rounded-2xl p-10 text-center">
-            <Filter size={32} className="mx-auto text-muted-foreground mb-3 opacity-50" />
-            <p className="text-muted-foreground text-sm">No keywords match your search.</p>
+          <div className="bg-surface border border-border rounded-xl p-10 text-center">
+            <Filter size={28} className="mx-auto text-text-muted mb-2 opacity-50" />
+            <p className="text-xs text-text-muted font-sans">No keywords match your search query.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {processed.map((kw) => {
               const pos = currentPosition(kw);
               const change = positionChange(kw);
               const best = bestPosition(kw);
-              const badge = getPositionBadge(pos);
               const changeInfo = getChangeIndicator(change);
               const domain = getDomain(kw.targetUrl);
 
               return (
                 <div
                   key={kw._id}
-                  className="glass rounded-xl p-5 hover:border-primary/20 transition-all"
+                  className="bg-surface border border-border rounded-xl p-4 hover:border-accent/40 transition-colors"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center gap-4">
 
                     {/* Position Badge */}
-                    <div className="flex items-center gap-4 lg:w-36 shrink-0">
-                      <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-lg font-bold ${badge.cls}`}>
+                    <div className="flex items-center gap-3 lg:w-32 shrink-0">
+                      <div className={`w-12 h-12 rounded-lg border border-border bg-surface-raised flex items-center justify-center font-mono text-base font-bold tabular-nums ${pos && pos <= 10 ? 'text-accent' : 'text-text-primary'}`}>
                         {pos !== null ? `#${pos}` : "—"}
                       </div>
                       {pos !== null && (
-                        <div className="text-center">
-                          <div className={`flex items-center gap-1 text-xs font-semibold ${changeInfo.cls}`}>
+                        <div>
+                          <div className={`flex items-center gap-1 text-[11px] font-mono font-semibold ${changeInfo.cls}`}>
                             {changeInfo.icon}
                             {changeInfo.text}
                           </div>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">vs prev</p>
+                          <p className="text-[10px] font-mono text-text-muted">delta</p>
                         </div>
                       )}
                     </div>
@@ -363,16 +358,16 @@ export default function RankTracker() {
                     <div className="flex-1 min-w-0">
                       <Link
                         to={`/rank/${kw._id}`}
-                        className="text-base font-semibold text-foreground hover:text-primary transition-colors block truncate"
+                        className="text-sm font-semibold text-text-primary hover:text-accent transition-colors block truncate"
                       >
                         "{kw.keyword}"
                       </Link>
                       <div className="flex items-center gap-2 mt-1">
-                        <Globe size={12} className="text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground truncate">{domain}</span>
+                        <Globe size={11} className="text-text-muted" />
+                        <span className="text-xs font-mono text-text-muted truncate">{domain}</span>
                       </div>
                       {kw.lastChecked && (
-                        <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1 mt-1 text-[10px] font-mono text-text-muted">
                           <Clock size={10} />
                           {new Date(kw.lastChecked).toLocaleString()}
                         </div>
@@ -380,35 +375,35 @@ export default function RankTracker() {
                     </div>
 
                     {/* Best Rank + History count */}
-                    <div className="hidden md:flex items-center gap-6 shrink-0">
+                    <div className="hidden md:flex items-center gap-6 shrink-0 font-mono text-xs">
                       <div className="text-center">
-                        <p className="text-sm font-bold text-primary">{best !== null ? `#${best}` : "—"}</p>
-                        <p className="text-[10px] text-muted-foreground">Best</p>
+                        <p className="font-bold text-text-primary tabular-nums">{best !== null ? `#${best}` : "—"}</p>
+                        <p className="text-[10px] text-text-muted uppercase">Peak</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-bold text-accent">{kw.history.length}</p>
-                        <p className="text-[10px] text-muted-foreground">Checks</p>
+                        <p className="font-bold text-accent tabular-nums">{kw.history.length}</p>
+                        <p className="text-[10px] text-text-muted uppercase">Crawls</p>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex items-center gap-1 shrink-0">
                       <Link
                         to={`/rank/${kw._id}`}
-                        className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-all"
+                        className="p-1.5 rounded-lg hover:bg-surface-raised text-text-muted hover:text-text-primary transition-colors"
                         title="View Details"
                       >
-                        <ExternalLink size={16} />
+                        <ExternalLink size={14} />
                       </Link>
                       <button
                         onClick={() => handleDelete(kw._id)}
                         disabled={deleting === kw._id}
-                        className="p-2 rounded-lg hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all disabled:opacity-40"
+                        className="p-1.5 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-colors disabled:opacity-40"
                         title="Remove"
                       >
                         {deleting === kw._id
-                          ? <Loader2 size={16} className="animate-spin" />
-                          : <Trash2 size={16} />
+                          ? <Loader2 size={14} className="animate-spin" />
+                          : <Trash2 size={14} />
                         }
                       </button>
                     </div>
@@ -420,24 +415,23 @@ export default function RankTracker() {
         )}
         </>
       )}
-      </div>
 
       {/* ── Add Keyword Modal ── */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl p-6 w-full max-w-md shadow-2xl shadow-black/50">
-            <div className="flex items-center justify-between mb-6">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-xl p-6 w-full max-w-md shadow-xl">
+            <div className="flex items-center justify-between mb-5">
               <div>
-                <h2 className="text-lg font-bold text-foreground">Track New Keyword</h2>
-                <p className="text-xs text-muted-foreground mt-0.5">We'll check Google and find your position.</p>
+                <h2 className="text-base font-semibold text-text-primary">Track New Keyword</h2>
+                <p className="text-xs text-text-muted mt-0.5 font-sans">We'll check Google and find your position.</p>
               </div>
               <button
                 type="button"
                 onClick={() => { setShowAddModal(false); setAddError(""); }}
-                className="text-muted-foreground hover:text-foreground p-1 rounded-lg hover:bg-muted transition-colors"
+                className="text-text-muted hover:text-text-primary p-1 rounded-lg hover:bg-surface-raised transition-colors"
                 title="Close"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
@@ -450,55 +444,55 @@ export default function RankTracker() {
 
             <form onSubmit={handleAdd} className="space-y-4">
               <div>
-                <label htmlFor="modal-keyword" className="block text-sm font-medium text-foreground mb-1.5">
-                  Keyword
+                <label htmlFor="modal-keyword" className="block text-xs font-mono font-medium text-text-secondary mb-1">
+                  Keyword Target
                 </label>
                 <div className="relative">
-                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                   <input
                     id="modal-keyword"
                     type="text"
                     value={newKeyword}
                     onChange={(e) => setNewKeyword(e.target.value)}
-                    placeholder='e.g., "best seo tools 2026"'
+                    placeholder='e.g., "ai code assistant"'
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder-muted-foreground outline-none focus:border-primary/50 transition-colors text-sm"
+                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted outline-none focus:border-accent transition-colors text-xs font-sans"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="modal-url" className="block text-sm font-medium text-foreground mb-1.5">
-                  Your Website URL
+                <label htmlFor="modal-url" className="block text-xs font-mono font-medium text-text-secondary mb-1">
+                  Website URL
                 </label>
                 <div className="relative">
-                  <Globe size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <Globe size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                   <input
                     id="modal-url"
                     type="text"
                     value={newUrl}
                     onChange={(e) => setNewUrl(e.target.value)}
-                    placeholder="e.g., yoursite.com"
+                    placeholder="e.g., example.com"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-muted border border-border text-foreground placeholder-muted-foreground outline-none focus:border-primary/50 transition-colors text-sm"
+                    className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface border border-border text-text-primary placeholder-text-muted outline-none focus:border-accent transition-colors text-xs font-mono"
                   />
                 </div>
               </div>
 
-              <div className="severity-info rounded-xl p-3 text-xs">
-                💡 We'll search Google for your keyword and find your website's position (up to top 100 results). Updated on your chosen schedule.
+              <div className="p-3 rounded-lg bg-surface-raised border border-border text-xs text-text-muted font-sans leading-relaxed">
+                We query Google Search for your keyword and locate your domain's exact rank up to position 100 on your chosen schedule.
               </div>
 
               <button
                 type="submit"
                 disabled={adding}
-                className="w-full py-3 rounded-xl btn-glow font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full py-2.5 rounded-lg btn-primary font-semibold text-xs flex items-center justify-center gap-1.5 disabled:opacity-40"
               >
                 {adding ? (
-                  <Loader2 size={18} className="animate-spin" />
+                  <Loader2 size={14} className="animate-spin" />
                 ) : (
                   <>
-                    <Target size={18} />
+                    <Target size={14} />
                     Start Tracking
                   </>
                 )}

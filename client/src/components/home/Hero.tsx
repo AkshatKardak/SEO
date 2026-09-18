@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  Sparkles,
-  Target,
   Globe,
 } from "lucide-react";
 
@@ -21,263 +19,155 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-      {/* ── Radiant Ambient Glow Orbs ── */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-primary/15 rounded-full blur-[110px] pointer-events-none opacity-60 animate-pulse-glow" />
-      <div className="absolute top-48 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-[90px] pointer-events-none" />
-      <div className="absolute top-60 right-10 w-80 h-80 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
+    <section className="relative pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto select-none">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* ── Left Column: Precision Headline & Immediate Action (55% = 7 cols) ── */}
+        <div className="lg:col-span-7 space-y-6">
+          {/* Status Chip */}
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded border border-border bg-surface text-[11px] font-mono text-text-secondary">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
+            <span>CONTINUOUS SEARCH TELEMETRY · DISCOVER → PRIORITIZE → EXECUTE</span>
+          </div>
 
-      {/* ── Floating Badges ── */}
-      <div className="hidden xl:flex absolute top-36 right-8 z-20 animate-float items-center gap-2 px-3.5 py-2 rounded-2xl glass-card border border-primary/30 shadow-xl text-xs font-mono">
-        <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
-        <span className="font-bold text-foreground">Serpo Bot:</span>
-        <span className="text-primary font-semibold">99.8% AST Safe</span>
-      </div>
+          {/* Precision Heading */}
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-[44px] font-normal text-text-primary tracking-tight leading-[1.12]">
+            Turn search data into <span className="italic text-accent">measurable</span> growth.
+          </h1>
 
-      <div className="hidden xl:flex absolute top-72 left-8 z-20 animate-float-delayed items-center gap-2.5 px-3.5 py-2 rounded-2xl glass-card border border-primary/30 shadow-xl text-xs font-mono">
-        <Sparkles size={14} className="text-primary" />
-        <span className="font-bold text-foreground">GSC Quick Wins:</span>
-        <span className="text-emerald-500 font-semibold">+142% CTR Lift</span>
-      </div>
-      {/* ── Headline & Positioning ── */}
-      <div className="max-w-3xl mx-auto text-center space-y-5">
-        {/* Restrained Subheading Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-card text-xs font-semibold text-muted-foreground shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-primary inline-block" />
-          <span className="text-foreground font-semibold">Autonomous Search Growth OS</span>
-          <span className="text-muted-foreground">·</span>
-          <span>DISCOVER → PRIORITIZE → EXECUTE</span>
-        </div>
+          {/* Subtitle */}
+          <p className="font-sans text-sm sm:text-base text-text-secondary leading-relaxed max-w-xl">
+            SerpoAI discovers your highest-impact SEO and AI-search opportunities, predicts what matters with mathematical ICE scoring, and opens verified git pull requests that move actual conversions.
+          </p>
 
-        {/* Primary Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground tracking-tight leading-[1.1]">
-          Turn Search Data <br />
-          <span className="text-primary font-black">Into Measurable Growth.</span>
-        </h1>
-
-        {/* Supporting Copy */}
-        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          SerpoAI discovers your highest-impact SEO and AI-search opportunities, predicts what matters,
-          helps execute approved fixes, and measures what actually moves traffic, conversions and revenue.
-        </p>
-
-        {/* ── Input & Immediate Action Bar ── */}
-        <div className="pt-2 max-w-xl mx-auto">
-          <form
-            onSubmit={handleAnalyze}
-            className="p-1.5 rounded-2xl bg-card border border-border shadow-md flex flex-col sm:flex-row items-center gap-2"
-          >
-            <div className="flex items-center gap-2 px-3.5 py-2 w-full bg-transparent">
-              <Globe size={16} className="text-muted-foreground shrink-0" />
-              <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://yourwebsite.com"
-                className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none font-medium"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl btn-primary text-xs font-bold whitespace-nowrap cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
+          {/* Input & Direct Action */}
+          <div className="max-w-xl space-y-2.5">
+            <form
+              onSubmit={handleAnalyze}
+              className="p-1 rounded-md border border-border bg-surface shadow-xs flex flex-col sm:flex-row items-center gap-2"
             >
-              Analyze Website <ArrowRight size={14} />
-            </button>
-          </form>
+              <div className="flex items-center gap-2 px-3 py-1.5 w-full bg-transparent">
+                <Globe size={15} className="text-text-muted shrink-0" />
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://yourcompany.com"
+                  className="w-full bg-transparent text-xs text-text-primary placeholder:text-text-muted focus:outline-none font-mono"
+                />
+              </div>
 
-          {/* Core Engine Vectors */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-3.5 text-xs text-muted-foreground">
-            <span className="text-[11px] font-semibold text-foreground/80">Vectors:</span>
-            {["SEO", "GEO", "Technical", "Content", "Competitors", "Analytics"].map((tag) => (
+              <button
+                type="submit"
+                className="btn-primary w-full sm:w-auto h-9 px-4 text-xs font-semibold shrink-0 gap-1.5"
+              >
+                <span>Analyze</span>
+                <ArrowRight size={13} />
+              </button>
+            </form>
+
+            {/* Quiet Links */}
+            <div className="flex flex-wrap items-center gap-5 pt-1 text-xs font-sans text-text-muted">
+              <a
+                href="#platform-showcase"
+                className="hover:text-text-primary transition-colors flex items-center gap-1"
+              >
+                <span>Read the documentation</span>
+                <span>→</span>
+              </a>
+              <a
+                href="#growth-loop"
+                className="hover:text-text-primary transition-colors flex items-center gap-1"
+              >
+                <span>View architecture & pipelines</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Vector Badges */}
+          <div className="flex flex-wrap items-center gap-2 pt-2 text-[11px] font-mono text-text-muted">
+            <span className="uppercase text-text-secondary text-[10px]">PIPELINES:</span>
+            {["SEO Signals", "GEO Citations", "ICE Regressor", "Cannibalization Graph", "Git PR Bot"].map((item) => (
               <span
-                key={tag}
-                className="px-2.5 py-0.5 rounded-md bg-muted text-[11px] font-mono font-medium text-foreground/80 border border-border hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary transition-all cursor-pointer"
+                key={item}
+                className="px-2 py-0.5 rounded border border-border bg-surface text-text-secondary text-[10px]"
               >
-                {tag}
+                {item}
               </span>
             ))}
           </div>
         </div>
 
-        {/* Primary CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Link
-            to="/onboarding"
-            className="px-6 py-2.5 rounded-xl btn-primary text-xs font-bold flex items-center gap-2 shadow-sm"
-          >
-            Run Growth Scan <ArrowRight size={14} />
-          </Link>
-          <a
-            href="#growth-loop"
-            className="px-5 py-2.5 rounded-xl btn-secondary text-xs font-semibold text-foreground flex items-center gap-1.5"
-          >
-            See How It Works
-          </a>
-        </div>
-      </div>
-
-      {/* ── 03. REALISTIC HERO PRODUCT PREVIEW ── */}
-      <div className="mt-14 max-w-5xl mx-auto">
-        <div className="surface-card rounded-2xl border border-border/80 shadow-2xl overflow-hidden bg-card card-interactive glow-emerald transition-all">
-          {/* Dashboard Window Chrome */}
-          <div className="px-4 py-3 bg-muted/40 border-b border-border flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
-                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
-                <span className="w-2.5 h-2.5 rounded-full bg-border inline-block" />
-              </div>
-              <span className="text-xs font-mono font-bold text-foreground flex items-center gap-1.5">
-                <span className="text-primary font-bold">SERPOAI</span> GROWTH ENGINE · <span className="text-muted-foreground font-normal">cloudflow.io</span>
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-primary/10 text-primary text-[11px] font-mono font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                Autonomous Telemetry Active
-              </span>
-            </div>
-          </div>
-
-          {/* Top 4 Metric Cards */}
-          <div className="p-4 sm:p-6 grid grid-cols-2 lg:grid-cols-4 gap-3 border-b border-border bg-card">
-            {[
-              { label: "Growth Score", value: "82", delta: "+6.4%", desc: "Composite health index" },
-              { label: "AI Visibility (GEO)", value: "74%", delta: "+12%", desc: "Generative engine citations" },
-              { label: "Technical Health", value: "91", delta: "Good", desc: "Core Web Vitals & schema" },
-              { label: "Growth Opportunity", value: "88", delta: "High ROI", desc: "ICE-prioritized backlog" },
-            ].map((m) => (
-              <div
-                key={m.label}
-                className="p-3.5 rounded-xl bg-surface-elevated border border-border space-y-1 hover-lift cursor-pointer hover:border-primary/50 transition-all"
-              >
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground font-medium">{m.label}</span>
-                  <span className="font-mono text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.2 rounded">
-                    {m.delta}
-                  </span>
+        {/* ── Right Column: Live Instrument Terminal Simulation (45% = 5 cols) ── */}
+        <div className="lg:col-span-5">
+          <div className="surface-instrument rounded-md border border-border bg-[#10151B] text-[#E8EDF2] shadow-2xl overflow-hidden font-mono text-xs">
+            {/* Terminal Window Chrome */}
+            <div className="h-9 px-3.5 bg-[#151C24] border-b border-white/10 flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#F08A78]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#F2C05C]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#6FD98F]" />
                 </div>
-                <div className="text-2xl font-black font-mono text-foreground tracking-tight">{m.value}</div>
-                <p className="text-[11px] text-muted-foreground truncate">{m.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Interactive Preview Body */}
-          <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left: High-Impact Opportunities */}
-            <div className="lg:col-span-7 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
-                  <Target size={14} className="text-primary" />
-                  HIGH-IMPACT OPPORTUNITIES (ICE RANKED)
+                <span className="text-[11px] text-white/50 pl-1">
+                  serpo-telemetry-daemon --stream
                 </span>
-                <span className="text-[11px] font-mono text-muted-foreground">ML Prioritized</span>
               </div>
 
-              <div className="space-y-2">
-                {[
-                  {
-                    title: "Inject SoftwareApplication JSON-LD schema on pricing page",
-                    type: "Structured Data",
-                    ice: "Score 9.4",
-                    impact: "+14% CTR",
-                    agent: "SEO Agent",
-                  },
-                  {
-                    title: "Publish Brand vs Competitor comparison matrix (/vs/competitor)",
-                    type: "Content & GEO",
-                    ice: "Score 9.1",
-                    impact: "+32% CVR",
-                    agent: "Content Agent",
-                  },
-                  {
-                    title: "Resolve 4 canonical conflicts & compress above-the-fold hero",
-                    type: "Technical SEO",
-                    ice: "Score 8.7",
-                    impact: "-210ms LCP",
-                    agent: "SEO Agent",
-                  },
-                ].map((opp, idx) => (
-                  <div
-                    key={opp.title}
-                    className="p-3.5 rounded-xl border border-border bg-card flex items-start justify-between gap-3 hover-lift cursor-pointer hover:border-primary/50 transition-all"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold font-mono text-primary">{idx + 1}.</span>
-                        <span className="text-xs font-bold text-foreground">{opp.title}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                        <span className="font-mono text-muted-foreground">{opp.type}</span>
-                        <span>·</span>
-                        <span className="text-primary font-medium">{opp.agent}</span>
-                      </div>
-                    </div>
-
-                    <div className="text-right shrink-0">
-                      <span className="text-xs font-bold font-mono text-foreground block">{opp.ice}</span>
-                      <span className="text-[10px] font-bold font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded inline-block mt-0.5">
-                        {opp.impact}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center gap-1.5 text-[10px] text-accent">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
+                <span>ACTIVE</span>
               </div>
             </div>
 
-            {/* Right: AI Search Visibility & Growth Graph */}
-            <div className="lg:col-span-5 space-y-4">
-              {/* AI Search Presence */}
-              <div className="p-4 rounded-xl border border-border bg-surface-elevated space-y-3 hover-lift transition-all">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
-                    <Sparkles size={13} className="text-primary" />
-                    AI SEARCH VISIBILITY
-                  </span>
-                  <span className="text-[11px] font-mono text-primary font-bold">74% Avg Citation</span>
-                </div>
-
-                <div className="space-y-2">
-                  {[
-                    { engine: "Google AI Overviews", score: "78%", width: "78%" },
-                    { engine: "Gemini AI Search", score: "74%", width: "74%" },
-                    { engine: "Generative Answer Engines", score: "71%", width: "71%" },
-                    { engine: "AI Research & Citations", score: "66%", width: "66%" },
-                  ].map((e) => (
-                    <div key={e.engine} className="space-y-1 hover:translate-x-1 transition-transform cursor-pointer">
-                      <div className="flex justify-between text-[11px]">
-                        <span className="text-muted-foreground">{e.engine}</span>
-                        <span className="font-mono font-semibold text-foreground">{e.score}</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full rounded-full bg-primary" style={{ width: e.width }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Terminal Log Stream */}
+            <div className="p-4 space-y-2.5 text-[11px] leading-relaxed">
+              <div className="text-white/40 text-[10px]">
+                # Engine Loop: SCAN → PRIORITIZE → EXECUTE → MEASURE
               </div>
 
-              {/* Growth Graph Chain */}
-              <div className="p-3.5 rounded-xl border border-border bg-card space-y-2 hover-lift transition-all">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block">
-                  GROWTH GRAPH ATTRIBUTION CHAIN
-                </span>
-                <div className="flex items-center justify-between text-[11px] font-mono text-foreground font-semibold">
-                  <span>Impressions</span>
-                  <span className="text-muted-foreground">→</span>
-                  <span>Traffic</span>
-                  <span className="text-muted-foreground">→</span>
-                  <span>Engagement</span>
-                  <span className="text-muted-foreground">→</span>
-                  <span className="text-primary font-bold">Revenue</span>
+              <div className="text-white/70">
+                <span className="text-white/40">[06:18:01.042]</span> <span className="text-accent">SCAN</span>: 18 striking-distance keywords detected (Pos 4–10)
+              </div>
+
+              <div className="text-white/70">
+                <span className="text-white/40">[06:18:01.218]</span> <span className="text-data-1">ML REGRESSOR</span>: Traffic lift potential: +14,200 visits/mo
+              </div>
+
+              <div className="text-white/70">
+                <span className="text-white/40">[06:18:01.401]</span> <span className="text-warning">ICE ENGINE</span>: Priority #1 → JSON-LD Schema (Score: 94.2)
+              </div>
+
+              {/* Code Patch Diff Box */}
+              <div className="my-2 p-2 rounded bg-[#0A0E12] border border-white/10 text-[10px] space-y-0.5">
+                <div className="text-white/40 flex items-center justify-between pb-1 border-b border-white/5">
+                  <span>PATCH PREVIEW: Header.tsx</span>
+                  <span className="text-accent">AST Safe: 99.8%</span>
                 </div>
-                <div className="text-[10px] text-muted-foreground pt-1 flex items-center justify-between border-t border-border/50">
-                  <span>Closed-loop tracking</span>
-                  <span className="text-primary font-semibold">+18.4% MRR Attribution</span>
-                </div>
+                <div className="text-negative font-mono">- &lt;meta name="description" content="Old description" /&gt;</div>
+                <div className="text-positive font-mono">+ &lt;script type="application/ld+json"&gt;</div>
+                <div className="text-positive font-mono">+   &#123; "@context": "https://schema.org", "@type": "SoftwareApplication" &#125;</div>
+                <div className="text-positive font-mono">+ &lt;/script&gt;</div>
+              </div>
+
+              <div className="text-white/70">
+                <span className="text-white/40">[06:18:01.835]</span> <span className="text-accent">PR DISPATCHER</span>: Opened branch <code className="text-accent">serpo/schema-fix</code>
+              </div>
+
+              <div className="text-white/70">
+                <span className="text-white/40">[06:18:02.040]</span> <span className="text-[#6FD98F]">CLOSED LOOP</span>: Verification passed. Telemetry active.
+              </div>
+            </div>
+
+            {/* Oscilloscope Latency Strip */}
+            <div className="px-4 py-2 border-t border-white/10 bg-[#151C24]/80 flex items-center justify-between text-[10px] text-white/50 tabular-nums">
+              <div className="flex items-center gap-2">
+                <span>P99: 142ms</span>
+                <span>·</span>
+                <span>ANOMALIES: 0</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-accent">
+                <span>GEO CITATIONS: 68.4%</span>
               </div>
             </div>
           </div>
@@ -286,3 +176,4 @@ export default function Hero() {
     </section>
   );
 }
+

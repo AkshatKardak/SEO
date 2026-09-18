@@ -200,54 +200,52 @@ export default function Report() {
   const infoCount = issues.filter((i) => i.severity === "info").length;
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div ref={reportRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div ref={reportRef} className="space-y-6">
+      <div className="border-b border-border pb-5">
+        <Link to="/dashboard" className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-text-muted hover:text-text-primary mb-3 transition-colors">
+          <ArrowLeft size={14} />
+          Back to Dashboard
+        </Link>
 
-        <div className="mb-8">
-          <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
-            <ArrowLeft size={16} />
-            Back to Dashboard
-          </Link>
-
-          <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-medium text-foreground truncate">
-                {new URL(analysis.url).hostname}
-              </h1>
-              <div className="flex items-center gap-3 mt-1">
-                <a href={analysis.url} target="_blank" rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-primary truncate flex items-center gap-1 transition-colors">
-                  {analysis.url}<ExternalLink size={12} />
-                </a>
-                <span className="text-xs text-muted-foreground">
-                  {new Date(analysis.createdAt).toLocaleDateString()} at {new Date(analysis.createdAt).toLocaleTimeString()}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button onClick={generateShareLink} disabled={sharing}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-card border border-border text-foreground hover:border-primary/40 hover:text-primary transition-all disabled:opacity-50">
-                {sharing ? <Loader2 size={15} className="animate-spin" /> : copied ? <Check size={15} className="text-success" /> : <Share2 size={15} />}
-                {copied ? "Copied!" : "Share"}
-              </button>
-              <button onClick={exportPDF} disabled={exportingPDF}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium btn-glow disabled:opacity-50">
-                {exportingPDF ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
-                {exportingPDF ? "Exporting..." : "Export PDF"}
-              </button>
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-serif text-text-primary truncate">
+              {new URL(analysis.url).hostname}
+            </h1>
+            <div className="flex items-center gap-3 mt-1 font-mono text-xs text-text-muted">
+              <a href={analysis.url} target="_blank" rel="noopener noreferrer"
+                className="text-text-muted hover:text-accent truncate flex items-center gap-1 transition-colors">
+                {analysis.url}<ExternalLink size={12} />
+              </a>
+              <span className="text-[11px]">
+                {new Date(analysis.createdAt).toLocaleDateString()} at {new Date(analysis.createdAt).toLocaleTimeString()}
+              </span>
             </div>
           </div>
 
-          {shareUrl && !copied && (
-            <div className="mt-3 flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground max-w-xl">
-              <Globe size={12} className="shrink-0 text-primary" />
-              <span className="truncate flex-1">{shareUrl}</span>
-              <button onClick={() => { navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-                className="text-primary hover:underline shrink-0">Copy</button>
-            </div>
-          )}
+          <div className="flex items-center gap-2 shrink-0">
+            <button onClick={generateShareLink} disabled={sharing}
+              className="btn-secondary flex items-center gap-2 px-3 py-2 rounded-md text-xs font-mono uppercase tracking-wider transition-all disabled:opacity-50">
+              {sharing ? <Loader2 size={14} className="animate-spin" /> : copied ? <Check size={14} className="text-success" /> : <Share2 size={14} />}
+              {copied ? "Copied!" : "Share"}
+            </button>
+            <button onClick={exportPDF} disabled={exportingPDF}
+              className="btn-primary flex items-center gap-2 px-3 py-2 rounded-md text-xs font-mono uppercase tracking-wider disabled:opacity-50">
+              {exportingPDF ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+              {exportingPDF ? "Exporting..." : "Export PDF"}
+            </button>
+          </div>
         </div>
+
+        {shareUrl && !copied && (
+          <div className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-md bg-surface-raised border border-border text-xs font-mono text-text-muted max-w-xl">
+            <Globe size={12} className="shrink-0 text-accent" />
+            <span className="truncate flex-1">{shareUrl}</span>
+            <button onClick={() => { navigator.clipboard.writeText(shareUrl); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+              className="text-accent hover:underline shrink-0">Copy</button>
+          </div>
+        )}
+      </div>
 
         {/* Score Hero */}
         <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-6">
@@ -498,7 +496,6 @@ export default function Report() {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

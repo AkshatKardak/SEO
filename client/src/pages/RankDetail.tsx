@@ -319,114 +319,112 @@ export default function RankDetail() {
   ];
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Back + Header */}
-        <div className="mb-8">
-          <Link
-            to="/rank-tracker"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors"
+    <div className="space-y-6">
+      {/* Back + Header */}
+      <div className="border-b border-border pb-5">
+        <Link
+          to="/rank-tracker"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-text-primary mb-3 transition-colors uppercase tracking-wider"
+        >
+          <ArrowLeft size={14} />
+          Back to Rank Tracker
+        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
+              "<span className="italic text-accent">{tracking.keyword}</span>"
+            </h1>
+            <div className="flex items-center gap-2 mt-1 text-xs font-mono text-text-muted">
+              <Globe size={14} />
+              <span>{tracking.domain}</span>
+              <a
+                href={tracking.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline flex items-center gap-1"
+              >
+                Visit <ExternalLink size={12} />
+              </a>
+            </div>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing || tracking.status === "checking"}
+            className="btn-secondary px-3 py-2 rounded-md text-xs font-mono uppercase tracking-wider flex items-center gap-2 disabled:opacity-50 self-start"
           >
-            <ArrowLeft size={16} />
-            Back to Rank Tracker
-          </Link>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-medium text-foreground">
-                "<span className="gradient-text">{tracking.keyword}</span>"
-              </h1>
-              <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                <Globe size={14} />
-                <span>{tracking.domain}</span>
-                <a
-                  href={tracking.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline flex items-center gap-1"
-                >
-                  Visit <ExternalLink size={12} />
-                </a>
-              </div>
-            </div>
-            <button
-              onClick={handleRefresh}
-              disabled={refreshing || tracking.status === "checking"}
-              className="glass px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 hover:bg-muted/50 transition-all disabled:opacity-50 self-start text-foreground"
-            >
-              <RefreshCw size={16} className={refreshing ? "animate-spin" : ""} />
-              Refresh Now
-            </button>
-          </div>
+            <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
+            Refresh Now
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Hero */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-surface border border-border rounded-lg p-5 text-center">
+          <p className="text-[10px] font-mono uppercase text-text-muted mb-2 flex items-center justify-center gap-1">
+            <Target size={12} />
+            Current Position
+          </p>
+          {tracking.status === "checking" ? (
+            <Loader2 size={28} className="animate-spin mx-auto text-accent" />
+          ) : (
+            <p className={`text-4xl font-mono tabular-nums font-bold ${getPositionColor(tracking.currentPosition)}`}>
+              {tracking.currentPosition ? `#${tracking.currentPosition}` : "Not Ranked"}
+            </p>
+          )}
+          {tracking.currentPage && (
+            <p className="text-[11px] font-mono text-text-muted mt-1">Page {tracking.currentPage}</p>
+          )}
         </div>
 
-        {/* Stats Hero */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="glass-strong rounded-2xl p-6 text-center">
-            <p className="text-xs text-muted-foreground mb-2 flex items-center justify-center gap-1">
-              <Target size={14} />
-              Current Position
-            </p>
-            {tracking.status === "checking" ? (
-              <Loader2 size={32} className="animate-spin mx-auto text-primary" />
-            ) : (
-              <p className={`text-4xl font-bold ${getPositionColor(tracking.currentPosition)}`}>
-                {tracking.currentPosition ? `#${tracking.currentPosition}` : "Not Ranked"}
-              </p>
-            )}
-            {tracking.currentPage && (
-              <p className="text-xs text-muted-foreground mt-1">Page {tracking.currentPage}</p>
-            )}
+        <div className="bg-surface border border-border rounded-lg p-5 text-center">
+          <p className="text-[10px] font-mono uppercase text-text-muted mb-2 flex items-center justify-center gap-1">
+            <TrendingUp size={12} />
+            Position Change
+          </p>
+          <div className={`text-3xl font-mono tabular-nums font-bold flex items-center justify-center gap-2 ${change.class}`}>
+            {change.icon}
+            {change.text}
           </div>
-
-          <div className="glass rounded-2xl p-6 text-center">
-            <p className="text-xs text-muted-foreground mb-2 flex items-center justify-center gap-1">
-              <TrendingUp size={14} />
-              Position Change
-            </p>
-            <div className={`text-3xl font-bold flex items-center justify-center gap-2 ${change.class}`}>
-              {change.icon}
-              {change.text}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">since last check</p>
-          </div>
-
-          <div className="glass rounded-2xl p-6 text-center">
-            <p className="text-xs text-muted-foreground mb-2 flex items-center justify-center gap-1">
-              <Trophy size={14} />
-              Best Position
-            </p>
-            <p className={`text-3xl font-bold ${getPositionColor(tracking.bestPosition)}`}>
-              {tracking.bestPosition ? `#${tracking.bestPosition}` : "—"}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">all time</p>
-          </div>
-
-          <div className="glass rounded-2xl p-6 text-center">
-            <p className="text-xs text-muted-foreground mb-2 flex items-center justify-center gap-1">
-              <Calendar size={14} />
-              Data Points
-            </p>
-            <p className="text-3xl font-bold text-accent">{tracking.rankHistory.length}</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {tracking.lastChecked
-                ? `Last: ${new Date(tracking.lastChecked).toLocaleDateString()}`
-                : "Never checked"}
-            </p>
-          </div>
+          <p className="text-[11px] font-mono text-text-muted mt-1">since last check</p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mb-6 overflow-x-auto pb-1">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                activeTab === tab.id
-                  ? "bg-primary text-primary-foreground"
-                  : "glass text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              }`}
+        <div className="bg-surface border border-border rounded-lg p-5 text-center">
+          <p className="text-[10px] font-mono uppercase text-text-muted mb-2 flex items-center justify-center gap-1">
+            <Trophy size={12} />
+            Best Position
+          </p>
+          <p className={`text-3xl font-mono tabular-nums font-bold ${getPositionColor(tracking.bestPosition)}`}>
+            {tracking.bestPosition ? `#${tracking.bestPosition}` : "—"}
+          </p>
+          <p className="text-[11px] font-mono text-text-muted mt-1">all time</p>
+        </div>
+
+        <div className="bg-surface border border-border rounded-lg p-5 text-center">
+          <p className="text-[10px] font-mono uppercase text-text-muted mb-2 flex items-center justify-center gap-1">
+            <Calendar size={12} />
+            Data Points
+          </p>
+          <p className="text-3xl font-mono tabular-nums font-bold text-accent">{tracking.rankHistory.length}</p>
+          <p className="text-[11px] font-mono text-text-muted mt-1">
+            {tracking.lastChecked
+              ? `Last: ${new Date(tracking.lastChecked).toLocaleDateString()}`
+              : "Never checked"}
+          </p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-border pb-2 overflow-x-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all whitespace-nowrap border ${
+              activeTab === tab.id
+                ? "bg-accent/15 text-accent border-accent font-semibold"
+                : "bg-surface border-border text-text-muted hover:text-text-primary hover:border-border-strong"
+            }`}
               style={activeTab === tab.id ? { color: "var(--background)" } : {}}
             >
               {tab.label}
@@ -637,7 +635,6 @@ export default function RankDetail() {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

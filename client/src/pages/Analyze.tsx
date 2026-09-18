@@ -155,69 +155,68 @@ export default function Analyze() {
     : [];
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background bg-grid overflow-x-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ── Header ── */}
-        <div className="text-center mb-8 mt-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-4">
-            <Zap size={12} />
-            AI-Powered Website Analysis
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-medium text-foreground mb-3">
-            Analyze <span className="gradient-text">Any Website</span>
-          </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Pick the analyses you need and get a structured, evidence-based report — including a weighted AI Growth Score.
-          </p>
+    <div className="space-y-6">
+      {/* ── Header ── */}
+      <div className="text-center mb-6 pt-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono uppercase tracking-wider mb-3">
+          <Zap size={12} />
+          AI-Powered Website Analysis
         </div>
+        <h1 className="text-3xl sm:text-4xl font-serif text-text-primary mb-2 tracking-tight">
+          Analyze <span className="italic text-accent">Any Website</span>
+        </h1>
+        <p className="text-xs text-text-muted max-w-xl mx-auto">
+          Pick the analyses you need and get a structured, evidence-based report — including a weighted AI Growth Score.
+        </p>
+      </div>
 
-        {/* ── URL Form ── */}
-        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-          <div className="border border-primary/25 rounded-2xl p-1.5 px-2 flex items-center gap-2 bg-card shadow-lg shadow-black/10 focus-within:border-primary/50 transition-colors">
-            <div className="flex items-center gap-3 flex-1 px-3 min-w-0">
-              <Search size={20} className="text-muted-foreground shrink-0" />
-              <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter website URL (e.g., example.com)"
-                className="w-full bg-transparent text-foreground placeholder-muted-foreground outline-none text-base py-3 min-w-0"
-                autoFocus
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={!url.trim() || phase === "running" || selected.size === 0}
-              className="btn-glow px-5 sm:px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-semibold shrink-0"
-            >
-              {phase === "running" ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
-              <span className="hidden sm:inline">Analyze</span>
-            </button>
+      {/* ── URL Form ── */}
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+        <div className="border border-border rounded-md p-1 px-2 flex items-center gap-2 bg-surface focus-within:border-accent transition-colors">
+          <div className="flex items-center gap-3 flex-1 px-3 min-w-0">
+            <Search size={18} className="text-text-muted shrink-0" />
+            <input
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Enter website URL (e.g., example.com)"
+              className="w-full bg-transparent text-text-primary placeholder-text-muted outline-none text-sm py-2 min-w-0 font-mono"
+              autoFocus
+            />
           </div>
-        </form>
-
-        <div className="mt-4 text-center text-sm text-muted-foreground">
-          Try:{" "}
-          {EXAMPLES.map((ex, i) => (
-            <span key={ex}>
-              <button onClick={() => setUrl(ex)} className="text-primary hover:underline">{ex}</button>
-              {i < EXAMPLES.length - 1 ? ", " : ""}
-            </span>
-          ))}
+          <button
+            type="submit"
+            disabled={!url.trim() || phase === "running" || selected.size === 0}
+            className="btn-primary px-4 py-2 rounded-md flex items-center gap-2 text-xs font-mono uppercase tracking-wider shrink-0 disabled:opacity-50"
+          >
+            {phase === "running" ? <Loader2 size={14} className="animate-spin" /> : <ArrowRight size={14} />}
+            <span className="hidden sm:inline">Analyze</span>
+          </button>
         </div>
+      </form>
 
-        {/* ── Analysis Selection ── */}
-        <div className="mt-8 max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-foreground">Choose analyses</h2>
-            <button
-              onClick={toggleAll}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors ${
-                allSelected
-                  ? "bg-primary/15 border-primary/30 text-primary"
-                  : "bg-card border-border text-muted-foreground hover:text-foreground"
-              }`}
-            >
+      <div className="text-center text-xs font-mono text-text-muted">
+        Try:{" "}
+        {EXAMPLES.map((ex, i) => (
+          <span key={ex}>
+            <button onClick={() => setUrl(ex)} className="text-accent hover:underline">{ex}</button>
+            {i < EXAMPLES.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </div>
+
+      {/* ── Analysis Selection ── */}
+      <div className="mt-6 max-w-3xl mx-auto">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs font-mono uppercase tracking-wider text-text-muted">Choose analyses</h2>
+          <button
+            onClick={toggleAll}
+            className={`text-xs font-mono px-2.5 py-1 rounded-md border transition-colors ${
+              allSelected
+                ? "bg-accent/15 border-accent text-accent font-medium"
+                : "bg-surface border-border text-text-muted hover:text-text-primary"
+            }`}
+          >
               {allSelected ? "Full analysis ✓" : "Select all"}
             </button>
           </div>
@@ -330,7 +329,6 @@ export default function Analyze() {
           </div>
         )}
       </div>
-    </div>
   );
 }
 
@@ -338,8 +336,8 @@ export default function Analyze() {
 
 function Card({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
-    <div className="glass p-5 mb-4">
-      {title && <h3 className="text-sm font-semibold text-foreground mb-3">{title}</h3>}
+    <div className="bg-surface border border-border rounded-lg p-5 mb-4">
+      {title && <h3 className="text-sm font-serif text-text-primary mb-3">{title}</h3>}
       {children}
     </div>
   );

@@ -1,5 +1,8 @@
 import os
-import joblib
+try:
+    import joblib
+except ImportError:
+    joblib = None
 import numpy as np
 from typing import List, Dict, Any
 
@@ -11,6 +14,9 @@ class GSCCTREngine:
         self._load_model()
 
     def _load_model(self):
+        if joblib is None:
+            self.model = None
+            return
         model_path = os.path.join(ARTIFACTS_DIR, "ctr_curve_model.joblib")
         if os.path.exists(model_path):
             try:

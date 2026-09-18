@@ -92,196 +92,194 @@ export default function Experiments() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-accent mb-1">
-              <FlaskConical size={14} />
-              Scientific Growth Engine
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Growth Experiments
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Test hypotheses, measure baseline vs. target metric progression, and continuously store verified learnings in Growth Memory.
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-accent mb-1">
+            <FlaskConical size={14} />
+            Scientific Growth Engine
           </div>
-
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl btn-glow text-xs font-bold transition-all self-start"
-          >
-            <Plus size={16} /> New Growth Experiment
-          </button>
+          <h1 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
+            Growth <span className="italic text-accent">Experiments</span>
+          </h1>
+          <p className="text-xs text-text-muted mt-1">
+            Test hypotheses, measure baseline vs. target metric progression, and continuously store verified learnings in Growth Memory.
+          </p>
         </div>
 
-        {/* Experiments List */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[1, 2].map((i) => (
-              <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
-            ))}
-          </div>
-        ) : experiments.length === 0 ? (
-          <div className="glass rounded-2xl p-12 text-center space-y-3">
-            <FlaskConical size={40} className="mx-auto text-accent mb-2 opacity-60" />
-            <h3 className="text-base font-bold text-foreground">No active experiments yet</h3>
-            <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-              Create an experiment or execute an opportunity from the Dashboard to begin measuring outcomes.
-            </p>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 rounded-xl btn-glow text-xs font-bold inline-flex items-center gap-1.5"
-            >
-              <Plus size={14} /> Launch First Test
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {experiments.map((exp) => (
-              <div
-                key={exp._id}
-                className="glass rounded-2xl p-5 border border-border/80 hover:border-primary/40 transition-all flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
-                      {exp.type}
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-md capitalize ${
-                        exp.status === "running"
-                          ? "bg-primary/10 text-primary border border-primary/20"
-                          : "bg-success/10 text-success border border-success/20"
-                      }`}
-                    >
-                      {exp.status}
-                    </span>
-                  </div>
-
-                  <h3 className="text-sm font-bold text-foreground">{exp.title}</h3>
-                  <p className="text-xs text-muted-foreground italic">
-                    Hypothesis: "{exp.hypothesis}"
-                  </p>
-
-                  {/* Metrics Box */}
-                  <div className="grid grid-cols-3 gap-2 p-3 bg-card/70 rounded-xl border border-border/50 text-[11px] text-center">
-                    <div>
-                      <span className="text-muted-foreground block text-[10px]">Baseline</span>
-                      <span className="font-bold text-foreground">{exp.baselineValue}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block text-[10px]">Current / Target</span>
-                      <span className="font-bold text-primary">
-                        {exp.currentValue || exp.baselineValue} → {exp.targetValue}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block text-[10px]">Expected</span>
-                      <span className="font-bold text-success">{exp.expectedImpact || "+20%"}</span>
-                    </div>
-                  </div>
-
-                  {exp.learnings && (
-                    <div className="p-2.5 rounded-xl bg-accent/5 border border-accent/20 text-xs text-foreground">
-                      <span className="font-bold text-accent block text-[10px] uppercase">
-                        Stored Growth Learning:
-                      </span>
-                      {exp.learnings}
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-3 border-t border-border/50 flex items-center justify-between">
-                  <span className="text-[10px] text-muted-foreground">
-                    Confidence: {exp.confidence || 80}%
-                  </span>
-
-                  {exp.status === "running" && (
-                    <button
-                      onClick={() => setEvaluatingExp(exp)}
-                      className="px-3 py-1.5 rounded-xl btn-glow text-xs font-bold flex items-center gap-1.5"
-                    >
-                      <Award size={12} /> Evaluate Outcome
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-md btn-primary text-xs font-mono uppercase tracking-wider transition-all self-start"
+        >
+          <Plus size={14} /> New Growth Experiment
+        </button>
       </div>
+
+      {/* Experiments List */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2].map((i) => (
+            <div key={i} className="bg-surface border border-border rounded-lg p-6 h-48 animate-pulse" />
+          ))}
+        </div>
+      ) : experiments.length === 0 ? (
+        <div className="bg-surface border border-border rounded-lg p-12 text-center space-y-3">
+          <FlaskConical size={40} className="mx-auto text-accent mb-2 opacity-60" />
+          <h3 className="text-base font-serif text-text-primary">No active experiments yet</h3>
+          <p className="text-xs text-text-muted max-w-sm mx-auto">
+            Create an experiment or execute an opportunity from the Dashboard to begin measuring outcomes.
+          </p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-4 py-2 rounded-md btn-primary text-xs font-mono inline-flex items-center gap-1.5"
+          >
+            <Plus size={14} /> Launch First Test
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {experiments.map((exp) => (
+            <div
+              key={exp._id}
+              className="bg-surface rounded-lg p-5 border border-border hover:border-border-strong transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-surface-raised border border-border text-text-muted">
+                    {exp.type}
+                  </span>
+                  <span
+                    className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${
+                      exp.status === "running"
+                        ? "border-accent/40 bg-accent/10 text-accent font-semibold"
+                        : "border-success/40 bg-success/10 text-success font-semibold"
+                    }`}
+                  >
+                    {exp.status}
+                  </span>
+                </div>
+
+                <h3 className="text-sm font-serif text-text-primary">{exp.title}</h3>
+                <p className="text-xs text-text-muted italic">
+                  Hypothesis: "{exp.hypothesis}"
+                </p>
+
+                {/* Metrics Box */}
+                <div className="grid grid-cols-3 gap-2 p-3 bg-surface-raised rounded-md border border-border text-[11px] text-center font-mono">
+                  <div>
+                    <span className="text-text-muted block text-[10px] uppercase">Baseline</span>
+                    <span className="font-semibold text-text-primary tabular-nums">{exp.baselineValue}</span>
+                  </div>
+                  <div>
+                    <span className="text-text-muted block text-[10px] uppercase">Current / Target</span>
+                    <span className="font-semibold text-accent tabular-nums">
+                      {exp.currentValue || exp.baselineValue} → {exp.targetValue}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-text-muted block text-[10px] uppercase">Expected</span>
+                    <span className="font-semibold text-success tabular-nums">{exp.expectedImpact || "+20%"}</span>
+                  </div>
+                </div>
+
+                {exp.learnings && (
+                  <div className="p-2.5 rounded-md bg-surface-raised border border-accent/30 text-xs text-text-secondary">
+                    <span className="font-mono text-accent block text-[10px] uppercase">
+                      Stored Growth Learning:
+                    </span>
+                    {exp.learnings}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-3 border-t border-border flex items-center justify-between">
+                <span className="text-[10px] font-mono tabular-nums text-text-muted">
+                  Confidence: {exp.confidence || 80}%
+                </span>
+
+                {exp.status === "running" && (
+                  <button
+                    onClick={() => setEvaluatingExp(exp)}
+                    className="px-3 py-1.5 rounded-md btn-secondary text-xs font-mono flex items-center gap-1.5"
+                  >
+                    <Award size={12} /> Evaluate Outcome
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Create Experiment Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-foreground">Launch Growth Experiment</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-muted-foreground hover:text-foreground">
-                <X size={20} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-lg max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="text-sm font-serif text-text-primary">Launch Growth Experiment</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-text-muted hover:text-text-primary">
+                <X size={18} />
               </button>
             </div>
 
             <form onSubmit={handleCreate} className="space-y-3">
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">Experiment Title</label>
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">Experiment Title</label>
                 <input
                   type="text"
                   value={newExp.title}
                   onChange={(e) => setNewExp({ ...newExp, title: e.target.value })}
                   placeholder='e.g., "Add social proof logos above pricing CTA"'
                   required
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs text-text-primary outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">Hypothesis</label>
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">Hypothesis</label>
                 <textarea
                   value={newExp.hypothesis}
                   onChange={(e) => setNewExp({ ...newExp, hypothesis: e.target.value })}
                   placeholder="e.g., Adding trusted customer logos will increase visitor confidence and lift signup conversions."
                   required
                   rows={2}
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none resize-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs text-text-primary outline-none focus:border-accent resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-foreground block mb-1">Metric</label>
+                  <label className="text-xs font-mono uppercase text-text-muted block mb-1">Metric</label>
                   <input
                     type="text"
                     value={newExp.metric}
                     onChange={(e) => setNewExp({ ...newExp, metric: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                    className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs font-mono text-text-primary outline-none focus:border-accent"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-foreground block mb-1">Target Value</label>
+                  <label className="text-xs font-mono uppercase text-text-muted block mb-1">Target Value</label>
                   <input
                     type="text"
                     value={newExp.targetValue}
                     onChange={(e) => setNewExp({ ...newExp, targetValue: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                    className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs font-mono text-text-primary outline-none focus:border-accent"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 pt-3">
+              <div className="flex items-center gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-card border border-border text-xs font-bold text-foreground"
+                  className="flex-1 py-2 rounded-md btn-secondary text-xs font-mono"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2 rounded-md btn-primary text-xs font-mono flex items-center justify-center gap-1.5"
                 >
                   <Play size={12} fill="currentColor" /> Start Experiment
                 </button>
@@ -293,22 +291,22 @@ export default function Experiments() {
 
       {/* Evaluate Outcome Modal */}
       {evaluatingExp && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-foreground">Evaluate Experiment Results</h3>
-              <button onClick={() => setEvaluatingExp(null)} className="text-muted-foreground hover:text-foreground">
-                <X size={20} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-lg max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="text-sm font-serif text-text-primary">Evaluate Experiment Results</h3>
+              <button onClick={() => setEvaluatingExp(null)} className="text-text-muted hover:text-text-primary">
+                <X size={18} />
               </button>
             </div>
 
-            <p className="text-xs text-muted-foreground">
-              Experiment: <strong>"{evaluatingExp.title}"</strong> (Baseline: {evaluatingExp.baselineValue})
+            <p className="text-xs text-text-muted">
+              Experiment: <strong className="text-text-primary">"{evaluatingExp.title}"</strong> (Baseline: {evaluatingExp.baselineValue})
             </p>
 
             <form onSubmit={handleEvaluate} className="space-y-3">
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">
                   Observed Outcome Metric Value
                 </label>
                 <input
@@ -317,16 +315,16 @@ export default function Experiments() {
                   onChange={(e) => setObservedValue(e.target.value)}
                   placeholder="e.g., 2.7% conversion"
                   required
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs font-mono text-text-primary outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">Result Outcome</label>
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">Result Outcome</label>
                 <select
                   value={winnerChoice}
                   onChange={(e) => setWinnerChoice(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs text-text-primary outline-none focus:border-accent"
                 >
                   <option value="Variant B (AI Growth)">Variant B (AI Growth Won)</option>
                   <option value="Variant A (Original)">Variant A (Control Won)</option>
@@ -334,17 +332,17 @@ export default function Experiments() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-2 pt-3">
+              <div className="flex items-center gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setEvaluatingExp(null)}
-                  className="flex-1 py-2.5 rounded-xl bg-card border border-border text-xs font-bold text-foreground"
+                  className="flex-1 py-2 rounded-md btn-secondary text-xs font-mono"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2 rounded-md btn-primary text-xs font-mono flex items-center justify-center gap-1.5"
                 >
                   <CheckCircle2 size={14} /> Persist Learning to Memory
                 </button>

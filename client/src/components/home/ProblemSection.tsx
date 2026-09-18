@@ -1,38 +1,44 @@
-import { CheckCircle2, Ban, Zap } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export default function ProblemSection() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border/70">
-      <div className="max-w-3xl mx-auto text-center space-y-4 mb-14">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-warning/10 border border-warning/20 text-warning text-xs font-bold font-mono uppercase">
-          The Problem With Traditional SEO
+    <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
+      <div className="max-w-3xl mx-auto text-center space-y-3 mb-12">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-border bg-surface text-[11px] font-mono text-warning">
+          <span>PARADIGM SHIFT · OBSERVABILITY VS CHECKLISTS</span>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-          SEO is broken into 100-page checklists with zero business attribution.
+
+        <h2 className="font-serif text-3xl sm:text-4xl font-normal text-text-primary tracking-tight">
+          Search optimization was built for <span className="italic text-negative">checklists</span>, not revenue attribution.
         </h2>
-        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-          Traditional SEO tools dump hundreds of trivial warnings into your lap, leave execution to overworked engineers, and remain completely blind to modern AI search engines and answer citations.
+
+        <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed max-w-xl mx-auto">
+          Legacy tools dump 200+ disconnected warnings into Jira, leave execution to busy developers, and remain completely blind to AI Overviews and answer citations.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {/* The Old Way */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-border bg-card space-y-5 card-interactive hover:border-danger/40 transition-all">
-          <div className="flex items-center gap-2.5 text-danger font-bold text-sm uppercase tracking-wider font-mono">
-            <Ban size={18} />
-            The Old Way: Disconnected Audits
+        <div className="surface-instrument p-6 sm:p-7 rounded-md border border-border bg-surface space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border">
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-negative">
+              LEGACY AUDIT DUMPS
+            </span>
+            <span className="badge-instrument text-[10px] text-negative bg-negative/10 border-negative/20">
+              UNATTRIBUTED
+            </span>
           </div>
 
-          <div className="space-y-3.5 text-xs text-muted-foreground">
+          <div className="space-y-3 text-xs text-text-secondary font-sans">
             {[
-              "Endless lists of 200+ warnings with no mathematical priority",
-              "Zero understanding of whether a fix will drive revenue or bounce",
-              "Completely blind to AI answer engines and generative citations",
-              "Requires manual copy-pasting into tickets for engineers to code",
-              "No closed-loop memory to learn from previous wins and failures",
+              "Hundreds of trivial warnings with zero mathematical priority",
+              "No regression model to predict if a fix will drive conversions",
+              "Completely blind to Google AI Overviews and answer engine citations",
+              "Manual copy-pasting code snippets into engineering backlogs",
+              "No closed-loop memory to learn from previous successes or failures",
             ].map((text) => (
-              <div key={text} className="flex items-start gap-3">
-                <span className="text-danger font-bold text-sm mt-0.5">✕</span>
+              <div key={text} className="flex items-start gap-2.5">
+                <XCircle size={14} className="text-negative shrink-0 mt-0.5" />
                 <span className="leading-relaxed">{text}</span>
               </div>
             ))}
@@ -40,22 +46,26 @@ export default function ProblemSection() {
         </div>
 
         {/* The SerpoAI Way */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-primary/40 bg-gradient-to-br from-card via-card to-primary/5 space-y-5 shadow-lg card-interactive glow-emerald transition-all">
-          <div className="flex items-center gap-2.5 text-primary font-bold text-sm uppercase tracking-wider font-mono">
-            <Zap size={18} />
-            The SerpoAI Way: Autonomous Growth OS
+        <div className="surface-instrument p-6 sm:p-7 rounded-md border border-accent/40 bg-surface space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border">
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-accent">
+              SERPOAI AUTONOMOUS ENGINE
+            </span>
+            <span className="badge-instrument text-[10px] text-accent bg-accent-soft/30 border-accent/20">
+              CLOSED-LOOP
+            </span>
           </div>
 
-          <div className="space-y-3.5 text-xs text-foreground">
+          <div className="space-y-3 text-xs text-text-primary font-sans">
             {[
               "ICE-prioritized backlog ranked by mathematical (Impact × Confidence ÷ Effort)",
-              "Machine learning predictions on expected traffic and conversion lift",
-              "Deep Generative Engine Optimization (GEO) across Google AI Overviews, Gemini, & Generative Search",
-              "High-trust Action Center with 1-click verified code patches and human approval",
-              "Persistent Growth Memory that learns which changes move actual revenue",
+              "Machine learning regressors predicting expected traffic & conversion lift",
+              "Generative Engine Optimization (GEO) tracking citations in AI search models",
+              "1-click verified code patches opened as native GitHub Pull Requests",
+              "Persistent growth graph memory continuously measuring attribution",
             ].map((text) => (
-              <div key={text} className="flex items-start gap-3">
-                <CheckCircle2 size={16} className="text-primary shrink-0 mt-0.5" />
+              <div key={text} className="flex items-start gap-2.5">
+                <CheckCircle2 size={14} className="text-positive shrink-0 mt-0.5" />
                 <span className="leading-relaxed font-medium">{text}</span>
               </div>
             ))}
@@ -65,3 +75,4 @@ export default function ProblemSection() {
     </section>
   );
 }
+

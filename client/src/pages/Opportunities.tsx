@@ -101,220 +101,218 @@ export default function Opportunities() {
     });
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <Sparkles size={14} />
-              Prioritized Opportunity Engine
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Growth Backlog
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Ranked by ICE formula: (Impact × Confidence) ÷ Effort
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-accent mb-1">
+            <Sparkles size={13} />
+            Prioritized Opportunity Engine
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-card border border-border text-foreground">
-              {filtered.length} Opportunities
-            </span>
-          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-text-primary tracking-tight">
+            Growth Backlog
+          </h1>
+          <p className="text-xs text-text-muted mt-1 font-sans">
+            Ranked by mathematical ICE formula: (Impact × Confidence) ÷ Effort
+          </p>
         </div>
 
-        {/* Filter Bar */}
-        <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
-          {/* Search */}
-          <div className="glass rounded-xl px-3 py-2 flex items-center gap-2 flex-1 w-full">
-            <Search size={16} className="text-muted-foreground" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search opportunities or agents..."
-              className="bg-transparent text-xs text-foreground placeholder-muted-foreground outline-none w-full"
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-mono font-semibold px-3 py-1.5 rounded-lg bg-surface border border-border text-text-primary">
+            {filtered.length} Opportunities
+          </span>
+        </div>
+      </div>
 
-          {/* Sort */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <div className="glass rounded-xl px-3 py-2 flex items-center gap-2 text-xs">
-              <ArrowUpDown size={14} className="text-muted-foreground" />
-              <select
-                value={sortBy}
-                onChange={(e: any) => setSortBy(e.target.value)}
-                className="bg-transparent text-xs text-foreground outline-none cursor-pointer"
-              >
-                <option value="priority" className="bg-card">Highest Priority (ICE)</option>
-                <option value="impact" className="bg-card">Highest Impact</option>
-                <option value="effort" className="bg-card">Lowest Effort</option>
-              </select>
-            </div>
-          </div>
+      {/* Filter Bar */}
+      <div className="flex flex-col md:flex-row items-center gap-3">
+        {/* Search */}
+        <div className="bg-surface border border-border rounded-lg px-3 py-2 flex items-center gap-2 flex-1 w-full">
+          <Search size={14} className="text-text-muted" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search opportunities or agents..."
+            className="bg-transparent text-xs text-text-primary placeholder-text-muted outline-none w-full font-sans"
+          />
         </div>
 
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-6 scrollbar-none">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-[11px] font-bold shrink-0 transition-all ${
-                selectedCategory === cat
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "glass text-muted-foreground hover:text-foreground"
-              }`}
+        {/* Sort */}
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <div className="bg-surface border border-border rounded-lg px-3 py-2 flex items-center gap-2 text-xs">
+            <ArrowUpDown size={13} className="text-text-muted" />
+            <select
+              value={sortBy}
+              onChange={(e: any) => setSortBy(e.target.value)}
+              className="bg-transparent text-xs text-text-primary outline-none cursor-pointer font-mono"
             >
-              {cat.replace("_", " ")}
-            </button>
+              <option value="priority" className="bg-surface text-text-primary">Highest Priority (ICE)</option>
+              <option value="impact" className="bg-surface text-text-primary">Highest Impact</option>
+              <option value="effort" className="bg-surface text-text-primary">Lowest Effort</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Category Pills */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-3 py-1 rounded-lg text-xs font-mono shrink-0 transition-all ${
+              selectedCategory === cat
+                ? "bg-surface text-text-primary border border-border shadow-xs font-semibold"
+                : "text-text-muted hover:text-text-primary"
+            }`}
+          >
+            {cat.replace("_", " ")}
+          </button>
+        ))}
+      </div>
+
+      {/* List */}
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-surface border border-border rounded-xl p-6 h-28 animate-pulse bg-surface-raised/40" />
           ))}
         </div>
-
-        {/* List */}
-        {loading ? (
-          <div className="space-y-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="glass rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="glass rounded-2xl p-12 text-center">
-            <Lightbulb size={40} className="mx-auto text-muted-foreground mb-3 opacity-50" />
-            <h3 className="text-base font-bold text-foreground">No matching opportunities found</h3>
-            <p className="text-xs text-muted-foreground mt-1">Try resetting your category or search filter.</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {filtered.map((opp) => (
-              <div
-                key={opp._id}
-                className="surface-card hover-lift rounded-2xl p-5 border border-border transition-all bg-card"
-              >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  {/* Left: ICE Priority badge + Title */}
-                  <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-xs font-black text-primary">{opp.priorityScore}</span>
-                      <span className="text-[8px] font-bold text-muted-foreground uppercase">ICE</span>
-                    </div>
-
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
-                          {opp.type}
-                        </span>
-                        <span className="text-[10px] font-bold text-primary flex items-center gap-1">
-                          <Bot size={12} /> {opp.assignedAgent}
-                        </span>
-                        {opp.requiresApproval && (
-                          <span className="text-[10px] text-amber-500 font-semibold">
-                            · Requires Human Approval
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-sm font-bold text-foreground">{opp.title}</h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{opp.description}</p>
-                    </div>
+      ) : filtered.length === 0 ? (
+        <div className="bg-surface border border-border rounded-xl p-12 text-center">
+          <Lightbulb size={36} className="mx-auto text-text-muted mb-3 opacity-50" />
+          <h3 className="text-sm font-semibold text-text-primary">No matching opportunities found</h3>
+          <p className="text-xs text-text-muted mt-1 font-sans">Try resetting your category or search filter.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((opp) => (
+            <div
+              key={opp._id}
+              className="bg-surface rounded-xl p-5 border border-border hover:border-accent/40 transition-colors"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                {/* Left: ICE Priority badge + Title */}
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div className="w-11 h-11 rounded-lg bg-surface-raised border border-border flex flex-col items-center justify-center shrink-0">
+                    <span className="text-xs font-mono font-bold text-accent tabular-nums">{opp.priorityScore}</span>
+                    <span className="text-[8px] font-mono text-text-muted uppercase">ICE</span>
                   </div>
 
-                  {/* Middle: ICE Breakdown */}
-                  <div className="hidden sm:flex items-center gap-4 shrink-0 px-4 py-2 bg-card/60 rounded-xl border border-border/40 text-[11px]">
-                    <div className="text-center">
-                      <span className="text-muted-foreground block text-[10px]">Impact</span>
-                      <span className="font-extrabold text-foreground">{opp.impactScore}/10</span>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-muted-foreground block text-[10px]">Effort</span>
-                      <span className="font-extrabold text-foreground">{opp.effortScore}/10</span>
-                    </div>
-                    <div className="text-center">
-                      <span className="text-muted-foreground block text-[10px]">Confidence</span>
-                      <span className="font-extrabold text-foreground">{Math.round(opp.confidenceScore * 100)}%</span>
-                    </div>
-                  </div>
-
-                  {/* Right: Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => setSelectedOpp(opp)}
-                      className="px-3 py-2 rounded-xl bg-card border border-border text-xs font-semibold hover:bg-muted text-foreground transition-colors"
-                    >
-                      View Evidence
-                    </button>
-                    <button
-                      onClick={() => handleExecute(opp)}
-                      disabled={executingId === opp._id || opp.status === "executed"}
-                      className="px-4 py-2 rounded-xl btn-glow text-xs font-bold transition-all flex items-center gap-1.5 disabled:opacity-40"
-                    >
-                      {executingId === opp._id ? (
-                        "Dispatching..."
-                      ) : opp.status === "executed" ? (
-                        "Executed"
-                      ) : (
-                        <>
-                          <Play size={12} fill="currentColor" /> Execute
-                        </>
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-border bg-surface-raised text-text-secondary">
+                        {opp.type}
+                      </span>
+                      <span className="text-[10px] font-mono text-accent flex items-center gap-1">
+                        <Bot size={11} /> {opp.assignedAgent}
+                      </span>
+                      {opp.requiresApproval && (
+                        <span className="text-[10px] font-mono text-amber-500">
+                          · Requires Approval
+                        </span>
                       )}
-                    </button>
+                    </div>
+                    <h3 className="text-sm font-semibold text-text-primary">{opp.title}</h3>
+                    <p className="text-xs text-text-muted line-clamp-2 leading-relaxed font-sans">{opp.description}</p>
                   </div>
                 </div>
+
+                {/* Middle: ICE Breakdown */}
+                <div className="hidden sm:flex items-center gap-4 shrink-0 px-3.5 py-1.5 bg-surface-raised rounded-lg border border-border text-[10px] font-mono">
+                  <div className="text-center">
+                    <span className="text-text-muted block text-[9px] uppercase">Impact</span>
+                    <span className="font-bold text-text-primary tabular-nums">{opp.impactScore}/10</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-text-muted block text-[9px] uppercase">Effort</span>
+                    <span className="font-bold text-text-primary tabular-nums">{opp.effortScore}/10</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-text-muted block text-[9px] uppercase">Confidence</span>
+                    <span className="font-bold text-text-primary tabular-nums">{Math.round(opp.confidenceScore * 100)}%</span>
+                  </div>
+                </div>
+
+                {/* Right: Actions */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setSelectedOpp(opp)}
+                    className="btn-secondary px-3 py-1.5 rounded-lg text-xs"
+                  >
+                    View Evidence
+                  </button>
+                  <button
+                    onClick={() => handleExecute(opp)}
+                    disabled={executingId === opp._id || opp.status === "executed"}
+                    className="btn-primary px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40"
+                  >
+                    {executingId === opp._id ? (
+                      "Dispatching..."
+                    ) : opp.status === "executed" ? (
+                      "Executed"
+                    ) : (
+                      <>
+                        <Play size={11} fill="currentColor" /> Execute
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Evidence Inspection Modal */}
       {selectedOpp && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-border bg-surface-raised text-accent">
                   {selectedOpp.type}
                 </span>
-                <h3 className="text-base font-bold text-foreground mt-2">{selectedOpp.title}</h3>
+                <h3 className="text-base font-semibold text-text-primary mt-2">{selectedOpp.title}</h3>
               </div>
               <button
                 onClick={() => setSelectedOpp(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+                className="p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-raised transition-colors"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
-            <p className="text-xs text-muted-foreground leading-relaxed">{selectedOpp.description}</p>
+            <p className="text-xs text-text-muted leading-relaxed font-sans">{selectedOpp.description}</p>
 
-            <div className="p-4 rounded-xl bg-muted/50 border border-border space-y-2">
-              <p className="text-xs font-bold text-foreground">Evidence Discovered on Site:</p>
-              <ul className="space-y-1.5 text-xs text-muted-foreground">
+            <div className="p-3.5 rounded-lg bg-surface-raised border border-border space-y-2">
+              <p className="text-xs font-mono font-semibold text-text-primary">Evidence Discovered on Site:</p>
+              <ul className="space-y-1.5 text-xs text-text-secondary font-sans">
                 {selectedOpp.evidence?.map((ev: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
-                    <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                    <CheckCircle2 size={13} className="text-accent shrink-0 mt-0.5" />
                     <span>{ev}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-xs">
-              <p className="font-bold text-primary mb-1">Recommended Action:</p>
-              <p className="text-foreground">{selectedOpp.recommendedAction}</p>
+            <div className="p-3 rounded-lg border border-border bg-surface text-xs font-sans">
+              <p className="font-mono text-[10px] text-accent font-semibold uppercase mb-1">Recommended Action</p>
+              <p className="text-text-primary">{selectedOpp.recommendedAction}</p>
             </div>
 
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => handleDismiss(selectedOpp._id)}
-                className="py-2.5 px-4 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 text-xs font-bold transition-colors"
+                className="py-2 px-3 rounded-lg border border-red-500/20 text-red-500 bg-red-500/5 hover:bg-red-500/10 text-xs font-mono transition-colors"
               >
                 Dismiss
               </button>
               <button
                 onClick={() => setSelectedOpp(null)}
-                className="flex-1 py-2.5 rounded-xl bg-card border border-border text-xs font-bold text-foreground hover:bg-muted"
+                className="btn-secondary flex-1 py-2 rounded-lg text-xs"
               >
                 Close
               </button>
@@ -323,9 +321,9 @@ export default function Opportunities() {
                   handleExecute(selectedOpp);
                   setSelectedOpp(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5"
+                className="btn-primary flex-1 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5"
               >
-                <Play size={12} fill="currentColor" /> Deploy {selectedOpp.assignedAgent}
+                <Play size={11} fill="currentColor" /> Deploy {selectedOpp.assignedAgent}
               </button>
             </div>
           </div>

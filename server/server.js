@@ -23,6 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/seo", seoRouter);
 app.use("/api/rank", rankRouter);
 app.use("/api/analysis", analysisRouter);
+app.use("/api", apiV1Router);
 app.use("/api/v1", apiV1Router);
 
 const PORT = process.env.PORT || 5000;

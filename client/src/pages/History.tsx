@@ -98,24 +98,22 @@ export default function History() {
     useEffect(() => { fetchAnalyses(); }, [fetchAnalyses]);
 
     return (
-        <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl font-medium text-foreground">
-                            Analysis <span className="gradient-text">History</span>
-                        </h1>
-                        <p className="text-muted-foreground text-sm mt-1">View and manage all your past SEO analyses.</p>
-                    </div>
-                    <Link
-                        to="/analyze"
-                        className="bg-primary px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity self-start"
-                        style={{ color: "var(--background)" }}
-                    >
-                        New Analysis
-                    </Link>
+        <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
+                        Analysis <span className="italic text-accent">History</span>
+                    </h1>
+                    <p className="text-xs text-text-muted mt-1">View and manage all your past SEO analyses.</p>
                 </div>
+                <Link
+                    to="/analyze"
+                    className="btn-primary px-4 py-2 rounded-md text-xs font-mono uppercase tracking-wider self-start"
+                >
+                    New Analysis
+                </Link>
+            </div>
 
                 {/* Error */}
                 {error && (
@@ -303,6 +301,5 @@ export default function History() {
                     </div>
                 )}
             </div>
-        </div>
     );
 }

@@ -69,146 +69,144 @@ export default function SiteAudit() {
   const cwv = audit?.coreWebVitals;
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <ShieldCheck size={14} />
-              Technical Health & Core Web Vitals
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Technical Site Audit
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Deep crawl inspection of indexing, schemas, canonicals, mobile responsiveness, and Core Web Vitals.
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-accent mb-1">
+            <ShieldCheck size={13} />
+            Technical Health & Core Web Vitals
           </div>
-
-          <button
-            onClick={handleRunAudit}
-            disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl btn-glow text-xs font-bold transition-all self-start disabled:opacity-50"
-          >
-            <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
-            {refreshing ? "Crawling & Auditing..." : "Re-Run Full Technical Audit"}
-          </button>
+          <h1 className="font-serif text-3xl sm:text-4xl text-text-primary tracking-tight">
+            Technical Site Audit
+          </h1>
+          <p className="text-xs text-text-muted mt-1 font-sans">
+            Deep crawl inspection of DOM hygiene, schema tags, canonicals, mobile viewport, and Core Web Vitals.
+          </p>
         </div>
 
-        {loading ? (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="surface-card hover-lift rounded-2xl p-6 h-28 animate-pulse bg-muted/40" />
-              ))}
-            </div>
-            <div className="surface-card hover-lift rounded-2xl p-6 h-72 animate-pulse bg-muted/40" />
+        <button
+          onClick={handleRunAudit}
+          disabled={refreshing}
+          className="btn-primary px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto disabled:opacity-50"
+        >
+          <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
+          {refreshing ? "Crawling & Auditing..." : "Run Full Technical Audit"}
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-surface rounded-xl p-6 h-28 animate-pulse bg-surface-raised/40 border border-border" />
+            ))}
           </div>
-        ) : (
-          <div className="space-y-6">
-            {/* Overview Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="surface-card hover-lift rounded-2xl p-5 border border-primary/30 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-2xl font-black">
-                  {score}
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-foreground">Technical Health</p>
-                  <p className="text-[11px] text-muted-foreground">Overall audit index</p>
-                </div>
+          <div className="bg-surface rounded-xl p-6 h-72 animate-pulse bg-surface-raised/40 border border-border" />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Overview Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="bg-surface rounded-xl p-4 border border-border flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-lg bg-surface-raised border border-border flex items-center justify-center text-accent font-mono text-xl font-bold tabular-nums">
+                {score}
               </div>
-
-              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase">Largest Contentful Paint</span>
-                <p className="text-2xl font-black text-success mt-1">{cwv?.lcp?.value || "1.8s"}</p>
-                <p className="text-[11px] text-muted-foreground">LCP Speed: Good</p>
-              </div>
-
-              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase">Interaction to Next Paint</span>
-                <p className="text-2xl font-black text-success mt-1">{cwv?.fidInp?.value || "42ms"}</p>
-                <p className="text-[11px] text-muted-foreground">INP Responsiveness: Good</p>
-              </div>
-
-              <div className="surface-card hover-lift rounded-2xl p-5 border border-border">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase">Cumulative Layout Shift</span>
-                <p className="text-2xl font-black text-success mt-1">{cwv?.cls?.value || "0.03"}</p>
-                <p className="text-[11px] text-muted-foreground">CLS Stability: Good</p>
+              <div>
+                <p className="text-xs font-semibold text-text-primary">Technical Health</p>
+                <p className="text-[11px] font-mono text-text-muted">DOM Audit Index</p>
               </div>
             </div>
 
-            {/* Issues Breakdown & Auto-Fix */}
-            <div className="surface-card hover-lift rounded-2xl p-6 border border-border space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-foreground">Diagnostic Issues & Auto-Fix Actions</h3>
-                  <p className="text-xs text-muted-foreground">
-                    {audit?.issuesSummary?.critical || 0} Critical · {audit?.issuesSummary?.warnings || 0} Warnings · {audit?.issuesSummary?.notices || 0} Notices
-                  </p>
-                </div>
+            <div className="bg-surface rounded-xl p-4 border border-border">
+              <span className="text-[10px] font-mono text-text-muted uppercase">Largest Contentful Paint</span>
+              <p className="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">{cwv?.lcp?.value || "1.8s"}</p>
+              <p className="text-[10px] font-mono text-text-muted">LCP Speed: Optimal</p>
+            </div>
+
+            <div className="bg-surface rounded-xl p-4 border border-border">
+              <span className="text-[10px] font-mono text-text-muted uppercase">Interaction to Next Paint</span>
+              <p className="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">{cwv?.fidInp?.value || "42ms"}</p>
+              <p className="text-[10px] font-mono text-text-muted">INP: Nominal</p>
+            </div>
+
+            <div className="bg-surface rounded-xl p-4 border border-border">
+              <span className="text-[10px] font-mono text-text-muted uppercase">Cumulative Layout Shift</span>
+              <p className="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">{cwv?.cls?.value || "0.03"}</p>
+              <p className="text-[10px] font-mono text-text-muted">CLS: Stable</p>
+            </div>
+          </div>
+
+          {/* Issues Breakdown & Auto-Fix */}
+          <div className="bg-surface rounded-xl p-5 border border-border space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div>
+                <h3 className="font-sans font-semibold text-sm text-text-primary">Diagnostic Findings & Code Patches</h3>
+                <p className="text-[11px] font-mono text-text-muted mt-0.5">
+                  {audit?.issuesSummary?.critical || 0} Critical · {audit?.issuesSummary?.warnings || 0} Warnings · {audit?.issuesSummary?.notices || 0} Notices
+                </p>
               </div>
+            </div>
 
-              {issues.length === 0 ? (
-                <div className="text-center py-8 text-xs text-muted-foreground space-y-2">
-                  <CheckCircle2 size={36} className="mx-auto text-success" />
-                  <p>No critical technical SEO issues found!</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {issues.map((issue: any) => (
-                    <div
-                      key={issue.id}
-                      className="p-4 rounded-xl bg-card/70 border border-border/70 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
-                    >
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase border ${
-                              issue.severity === "critical"
-                                ? "bg-danger/10 text-danger border-danger/20"
-                                : issue.severity === "warning"
-                                ? "bg-warning/10 text-warning border-warning/20"
-                                : "bg-muted text-muted-foreground border-border"
-                            }`}
-                          >
-                            {issue.severity}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold">
-                            {issue.category}
-                          </span>
-                          <span className="font-bold text-foreground">{issue.title}</span>
-                        </div>
-                        <p className="text-muted-foreground text-[11px]">{issue.description}</p>
-                        {issue.recommendedFix && (
-                          <p className="text-[11px] text-primary font-mono bg-primary/5 p-1.5 rounded-lg">
-                            Fix: {issue.recommendedFix}
-                          </p>
-                        )}
-                      </div>
-
-                      {issue.autoFixable && (
-                        <button
-                          onClick={() => handleAutoFix(issue.id)}
-                          disabled={fixingId === issue.id}
-                          className="px-4 py-2 rounded-xl btn-glow text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 self-start md:self-center"
+            {issues.length === 0 ? (
+              <div className="text-center py-8 text-xs text-text-muted space-y-2">
+                <CheckCircle2 size={32} className="mx-auto text-emerald-500" />
+                <p className="font-semibold text-text-primary">No critical technical SEO issues detected!</p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {issues.map((issue: any) => (
+                  <div
+                    key={issue.id}
+                    className="p-3.5 rounded-lg bg-surface-raised border border-border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
+                  >
+                    <div className="space-y-1 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded uppercase border ${
+                            issue.severity === "critical"
+                              ? "bg-red-500/10 text-red-500 border-red-500/20"
+                              : issue.severity === "warning"
+                              ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                              : "bg-surface text-text-muted border-border"
+                          }`}
                         >
-                          {fixingId === issue.id ? (
-                            <Loader2 size={13} className="animate-spin" />
-                          ) : (
-                            <Bot size={13} />
-                          )}
-                          Deploy SEO Agent Fix
-                        </button>
+                          {issue.severity}
+                        </span>
+                        <span className="text-[10px] font-mono text-text-muted uppercase">
+                          {issue.category}
+                        </span>
+                        <span className="font-semibold text-text-primary">{issue.title}</span>
+                      </div>
+                      <p className="text-text-muted text-xs font-sans leading-relaxed">{issue.description}</p>
+                      {issue.recommendedFix && (
+                        <p className="text-xs font-mono text-accent bg-surface p-1.5 rounded border border-border">
+                          Fix: {issue.recommendedFix}
+                        </p>
                       )}
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+
+                    {issue.autoFixable && (
+                      <button
+                        onClick={() => handleAutoFix(issue.id)}
+                        disabled={fixingId === issue.id}
+                        className="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1.5 self-start md:self-center"
+                      >
+                        {fixingId === issue.id ? (
+                          <Loader2 size={13} className="animate-spin" />
+                        ) : (
+                          <Bot size={13} />
+                        )}
+                        Deploy SEO Fix
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

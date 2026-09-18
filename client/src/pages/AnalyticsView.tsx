@@ -75,70 +75,68 @@ export default function AnalyticsView() {
   const integrations = data?.integrations || [];
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <TrendingUp size={14} />
-              Growth Graph & Closed-Loop Analytics
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Outcome Measurement
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Track the full business chain: Visibility → Traffic → Engagement → Signup → Activation → Revenue.
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-accent mb-1">
+            <TrendingUp size={14} />
+            Growth Graph & Closed-Loop Analytics
           </div>
-
-          <button
-            onClick={() => setShowIntegrateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl btn-glow text-xs font-bold transition-all self-start"
-          >
-            <Plus size={16} /> Connect Analytics Integration
-          </button>
+          <h1 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
+            Outcome <span className="italic text-accent">Measurement</span>
+          </h1>
+          <p className="text-xs text-text-muted mt-1">
+            Track the full business chain: Visibility → Traffic → Engagement → Signup → Activation → Revenue.
+          </p>
         </div>
 
-        {loading ? (
-          <div className="space-y-4">
-            <div className="surface-card hover-lift rounded-2xl p-6 h-36 animate-pulse bg-muted/40" />
-            <div className="surface-card hover-lift rounded-2xl p-6 h-48 animate-pulse bg-muted/40" />
-          </div>
-        ) : (
-          <>
-            {/* Closed Loop Strategic Pivot Callout */}
-            {closedLoop && (
-              <div className="mb-8 p-6 rounded-2xl glass border border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sparkles size={16} className="text-primary" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
-                      Growth Analyst · Closed-Loop Strategy Verdict
-                    </h3>
-                  </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                Confidence: {closedLoop.confidence || "High"}
-              </span>
+        <button
+          onClick={() => setShowIntegrateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-md btn-primary text-xs font-mono uppercase tracking-wider transition-all self-start"
+        >
+          <Plus size={14} /> Connect Analytics Integration
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="space-y-4">
+          <div className="bg-surface border border-border rounded-lg p-6 h-36 animate-pulse" />
+          <div className="bg-surface border border-border rounded-lg p-6 h-48 animate-pulse" />
+        </div>
+      ) : (
+        <>
+          {/* Closed Loop Strategic Pivot Callout */}
+          {closedLoop && (
+            <div className="p-5 rounded-lg bg-surface border border-accent/40 relative space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={14} className="text-accent" />
+                  <h3 className="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
+                    Growth Analyst · Closed-Loop Strategy Verdict
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-accent/40 bg-accent/10 text-accent">
+                  Confidence: {closedLoop.confidence || "High"}
+                </span>
+              </div>
+
+              <h2 className="text-lg font-serif text-text-primary">{closedLoop.headline}</h2>
+              <p className="text-xs text-text-secondary leading-relaxed">{closedLoop.strategicInsight}</p>
+
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-text-muted">
+                  Next Strategic Action: <strong className="text-text-primary">{closedLoop.nextBestActionRecommendation}</strong>
+                </span>
+                <span className="text-[11px] font-mono tabular-nums font-semibold text-success">
+                  {closedLoop.trafficChange} Traffic · {closedLoop.conversionChange} Conversion
+                </span>
+              </div>
             </div>
-
-            <h2 className="text-lg font-bold text-foreground">{closedLoop.headline}</h2>
-            <p className="text-xs text-muted-foreground leading-relaxed">{closedLoop.strategicInsight}</p>
-
-            <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">
-                Next Strategic Action: <strong className="text-foreground">{closedLoop.nextBestActionRecommendation}</strong>
-              </span>
-              <span className="text-[11px] font-bold text-success font-mono">
-                {closedLoop.trafficChange} Traffic · {closedLoop.conversionChange} Conversion
-              </span>
-            </div>
-          </div>
-        )}
-
+          )}
         {/* The 6-Step Growth Graph Funnel */}
-        <div className="surface-card hover-lift rounded-2xl p-6 border border-border mb-8">
-          <h3 className="text-sm font-bold text-foreground mb-4">Growth Graph Funnel Breakdown</h3>
+        <div className="bg-surface border border-border rounded-lg p-5">
+          <h3 className="text-xs font-mono uppercase tracking-wider text-text-muted mb-4">Growth Graph Funnel Breakdown</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
             {[
@@ -151,17 +149,17 @@ export default function AnalyticsView() {
             ].map((node) => (
               <div
                 key={node.step}
-                className="p-4 rounded-xl bg-card/70 border border-border/70 flex flex-col justify-between space-y-2 relative"
+                className="p-3 rounded-md bg-surface-raised border border-border flex flex-col justify-between space-y-2"
               >
                 <div>
-                  <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-text-muted">
                     <span>{node.step}</span>
                     <span>{node.icon}</span>
                   </div>
-                  <p className="text-xl font-extrabold text-foreground mt-2">{node.value}</p>
-                  <p className="text-[11px] text-muted-foreground">{node.label}</p>
+                  <p className="text-lg font-mono tabular-nums font-bold text-text-primary mt-2">{node.value}</p>
+                  <p className="text-[11px] text-text-muted">{node.label}</p>
                 </div>
-                <div className="pt-2 border-t border-border/40 text-[10px] font-bold text-success">
+                <div className="pt-2 border-t border-border text-[10px] font-mono tabular-nums font-semibold text-success">
                   {node.change}
                 </div>
               </div>
@@ -170,20 +168,20 @@ export default function AnalyticsView() {
         </div>
 
         {/* Top Landing Pages & Channel Attribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top Landing Pages */}
-          <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
-            <h3 className="text-sm font-bold text-foreground mb-4">Top Landing Pages & Conversion Rates</h3>
-            <div className="space-y-2.5">
+          <div className="bg-surface border border-border rounded-lg p-5">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-text-muted mb-4">Top Landing Pages & Conversion Rates</h3>
+            <div className="space-y-2">
               {(snapshot?.topLandingPages || []).map((page: any) => (
                 <div
                   key={page.path}
-                  className="p-3 rounded-xl bg-card/60 border border-border/60 flex items-center justify-between text-xs"
+                  className="p-3 rounded-md bg-surface-raised border border-border flex items-center justify-between text-xs"
                 >
-                  <span className="font-mono text-foreground font-semibold">{page.path}</span>
-                  <div className="flex items-center gap-4 text-muted-foreground">
+                  <span className="font-mono text-text-primary font-medium">{page.path}</span>
+                  <div className="flex items-center gap-4 text-text-muted font-mono tabular-nums">
                     <span>{page.sessions} sessions</span>
-                    <strong className="text-primary font-bold">{page.conversions} signups</strong>
+                    <strong className="text-accent font-semibold">{page.conversions} signups</strong>
                   </div>
                 </div>
               ))}
@@ -191,17 +189,17 @@ export default function AnalyticsView() {
           </div>
 
           {/* Traffic Sources */}
-          <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
-            <h3 className="text-sm font-bold text-foreground mb-4">Traffic Source Attribution</h3>
+          <div className="bg-surface border border-border rounded-lg p-5">
+            <h3 className="text-xs font-mono uppercase tracking-wider text-text-muted mb-4">Traffic Source Attribution</h3>
             <div className="space-y-3">
               {(snapshot?.sourceAttribution || []).map((src: any) => (
                 <div key={src.channel} className="space-y-1 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-foreground">{src.channel}</span>
-                    <span className="font-mono text-primary font-bold">{src.percentage}%</span>
+                    <span className="font-medium text-text-primary">{src.channel}</span>
+                    <span className="font-mono tabular-nums text-accent font-semibold">{src.percentage}%</span>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-primary h-full rounded-full" style={{ width: `${src.percentage}%` }} />
+                  <div className="w-full bg-surface-raised rounded-full h-1.5 overflow-hidden border border-border">
+                    <div className="bg-accent h-full rounded-full" style={{ width: `${src.percentage}%` }} />
                   </div>
                 </div>
               ))}
@@ -210,10 +208,10 @@ export default function AnalyticsView() {
         </div>
 
         {/* Connected Integrations */}
-        <div className="surface-card hover-lift rounded-2xl p-6 border border-border">
+        <div className="bg-surface border border-border rounded-lg p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-foreground">Active Analytics Integrations</h3>
-            <span className="text-xs text-muted-foreground">Tokens encrypted server-side</span>
+            <h3 className="text-xs font-mono uppercase tracking-wider text-text-muted">Active Analytics Integrations</h3>
+            <span className="text-[10px] font-mono text-text-muted">Encrypted server-side</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -226,30 +224,30 @@ export default function AnalyticsView() {
               return (
                 <div
                   key={provider.id}
-                  className="p-4 rounded-xl bg-card/60 border border-border flex flex-col justify-between space-y-3"
+                  className="p-4 rounded-md bg-surface-raised border border-border flex flex-col justify-between space-y-3"
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xl">{provider.icon}</span>
+                      <span className="text-lg">{provider.icon}</span>
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${
                           isConnected
-                            ? "bg-success/15 text-success border border-success/30"
-                            : "bg-muted text-muted-foreground"
+                            ? "border-success/40 bg-success/10 text-success font-semibold"
+                            : "border-border text-text-muted bg-surface"
                         }`}
                       >
                         {isConnected ? "Connected" : "Available"}
                       </span>
                     </div>
-                    <h4 className="text-xs font-bold text-foreground mt-2">{provider.label}</h4>
-                    <p className="text-[11px] text-muted-foreground">{provider.desc}</p>
+                    <h4 className="text-xs font-serif text-text-primary mt-2">{provider.label}</h4>
+                    <p className="text-[11px] text-text-muted">{provider.desc}</p>
                   </div>
 
                   <div>
                     {isConnected ? (
                       <button
                         onClick={() => handleDisconnect(provider.id)}
-                        className="text-[11px] text-danger hover:underline font-semibold"
+                        className="text-[11px] font-mono text-danger hover:underline"
                       >
                         Disconnect
                       </button>
@@ -259,7 +257,7 @@ export default function AnalyticsView() {
                           setSelectedProvider(provider.id);
                           setShowIntegrateModal(true);
                         }}
-                        className="text-[11px] text-primary hover:underline font-bold"
+                        className="text-[11px] font-mono text-accent hover:underline font-medium"
                       >
                         + Configure Connection
                       </button>
@@ -271,27 +269,26 @@ export default function AnalyticsView() {
           </div>
         </div>
         </>
-        )}
-      </div>
+      )}
 
       {/* Connect Integration Modal */}
       {showIntegrateModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-foreground">Connect Analytics Provider</h3>
-              <button onClick={() => setShowIntegrateModal(false)} className="text-muted-foreground hover:text-foreground">
-                <X size={20} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="text-sm font-serif text-text-primary">Connect Analytics Provider</h3>
+              <button onClick={() => setShowIntegrateModal(false)} className="text-text-muted hover:text-text-primary">
+                <X size={18} />
               </button>
             </div>
 
             <form onSubmit={handleConnect} className="space-y-3">
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">Provider</label>
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">Provider</label>
                 <select
                   value={selectedProvider}
                   onChange={(e) => setSelectedProvider(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs text-text-primary outline-none focus:border-accent"
                 >
                   <option value="google_analytics_4">Google Analytics 4 (GA4)</option>
                   <option value="google_search_console">Google Search Console (GSC)</option>
@@ -300,7 +297,7 @@ export default function AnalyticsView() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-foreground block mb-1">
+                <label className="text-xs font-mono uppercase text-text-muted block mb-1">
                   {selectedProvider === "google_analytics_4"
                     ? "GA4 Property ID"
                     : selectedProvider === "posthog"
@@ -320,26 +317,26 @@ export default function AnalyticsView() {
                   }
                   placeholder="e.g., 9-digit Property ID or API Key"
                   required
-                  className="w-full px-3 py-2 rounded-xl bg-muted border border-border text-xs text-foreground outline-none"
+                  className="w-full px-3 py-2 rounded-md bg-surface-raised border border-border text-xs font-mono text-text-primary outline-none focus:border-accent"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-[11px] text-muted-foreground">
+              <div className="p-3 rounded-md bg-surface-raised border border-border text-[11px] font-mono text-text-muted">
                 🔒 OAuth tokens and API secrets are securely encrypted server-side and never exposed to client browsers.
               </div>
 
-              <div className="flex items-center gap-2 pt-3">
+              <div className="flex items-center gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowIntegrateModal(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-card border border-border text-xs font-bold text-foreground"
+                  className="flex-1 py-2 rounded-md btn-secondary text-xs font-mono"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={connecting}
-                  className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2 rounded-md btn-primary text-xs font-mono flex items-center justify-center gap-1.5"
                 >
                   {connecting ? "Connecting..." : "Save Connection"}
                 </button>

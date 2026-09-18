@@ -82,194 +82,192 @@ export default function ActionCenter() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-28 pb-20 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <ShieldCheck size={14} />
-              Human-In-The-Loop Approval System
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Action Center
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Review and authorize high-impact changes prepared by specialized AI agents before they affect production.
-            </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-accent mb-1">
+            <ShieldCheck size={14} />
+            Human-In-The-Loop Approval System
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setActiveTab("pending")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === "pending"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "glass text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Pending Authorization ({pendingActions.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("history")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeTab === "history"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "glass text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Action History ({historyActions.length})
-            </button>
-          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl text-text-primary tracking-tight">
+            Action Center
+          </h1>
+          <p className="text-xs text-text-muted mt-1 font-sans">
+            Review and authorize high-impact changes prepared by specialized AI agents before production deployment.
+          </p>
         </div>
 
-        {/* List */}
-        {loading ? (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="glass rounded-2xl p-6 h-32 animate-pulse bg-muted/40" />
-            ))}
-          </div>
-        ) : activeTab === "pending" && pendingActions.length === 0 ? (
-          <div className="glass rounded-2xl p-12 text-center space-y-2">
-            <CheckCircle2 size={40} className="mx-auto text-success mb-2" />
-            <h3 className="text-base font-bold text-foreground">All Clear! No Pending Actions</h3>
-            <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-              When agents formulate code diffs, SEO changes, or content drafts requiring approval, they will appear here.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {(activeTab === "pending" ? pendingActions : historyActions).map((action) => (
-              <div
-                key={action._id}
-                className="glass rounded-2xl p-5 border border-border/80 hover:border-primary/40 transition-all space-y-4"
-              >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  {/* Title & info */}
-                  <div className="space-y-1.5 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-muted text-muted-foreground">
-                        {action.actionType?.replace("_", " ")}
-                      </span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getRiskBadge(action.riskLevel)}`}>
-                        Risk: {action.riskLevel || "LOW"}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        {new Date(action.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab("pending")}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
+              activeTab === "pending"
+                ? "btn-primary font-semibold"
+                : "btn-secondary text-text-muted"
+            }`}
+          >
+            Pending ({pendingActions.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
+              activeTab === "history"
+                ? "btn-primary font-semibold"
+                : "btn-secondary text-text-muted"
+            }`}
+          >
+            History ({historyActions.length})
+          </button>
+        </div>
+      </div>
 
-                    <h3 className="text-base font-bold text-foreground">{action.title}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{action.description}</p>
+      {/* List */}
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-surface rounded-xl p-6 h-32 animate-pulse bg-surface-raised/40 border border-border" />
+          ))}
+        </div>
+      ) : activeTab === "pending" && pendingActions.length === 0 ? (
+        <div className="bg-surface rounded-xl p-12 text-center space-y-2 border border-border">
+          <CheckCircle2 size={36} className="mx-auto text-emerald-500 mb-2" />
+          <h3 className="text-sm font-semibold text-text-primary">All Clear · No Pending Actions</h3>
+          <p className="text-xs text-text-muted max-w-sm mx-auto font-sans">
+            When agents formulate code diffs, SEO changes, or schema tags requiring approval, they will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {(activeTab === "pending" ? pendingActions : historyActions).map((action) => (
+            <div
+              key={action._id}
+              className="bg-surface rounded-xl p-5 border border-border hover:border-accent/40 transition-colors space-y-4"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                {/* Title & info */}
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-border bg-surface-raised text-text-secondary">
+                      {action.actionType?.replace("_", " ")}
+                    </span>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${getRiskBadge(action.riskLevel)}`}>
+                      RISK: {action.riskLevel || "LOW"}
+                    </span>
+                    <span className="text-[10px] font-mono text-text-muted">
+                      {new Date(action.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
 
-                  {/* Right Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => setPreviewAction(action)}
-                      className="px-3.5 py-2 rounded-xl bg-card border border-border text-xs font-semibold hover:bg-muted text-foreground transition-colors flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <Eye size={14} /> Preview Diff
-                    </button>
-
-                    <button
-                      onClick={() => setSerpoModalAction(action)}
-                      className="px-3.5 py-2 rounded-xl bg-primary/10 border border-primary/25 text-xs font-bold hover:bg-primary/20 text-primary transition-colors flex items-center gap-1.5 cursor-pointer"
-                      title="Dispatch PR via Serpo Bot"
-                    >
-                      <GitPullRequest size={14} /> Dispatch PR
-                    </button>
-
-                    {action.status === "pending_approval" ? (
-                      <>
-                        <button
-                          onClick={() => setRejectingId(action._id)}
-                          className="px-3.5 py-2 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 text-xs font-bold transition-colors"
-                        >
-                          Reject
-                        </button>
-                        <button
-                          onClick={() => handleApprove(action._id)}
-                          disabled={processingId === action._id}
-                          className="px-4 py-2 rounded-xl btn-glow text-xs font-bold transition-all flex items-center gap-1.5 disabled:opacity-40"
-                        >
-                          {processingId === action._id ? (
-                            <Loader2 size={14} className="animate-spin" />
-                          ) : (
-                            <CheckCircle2 size={14} />
-                          )}
-                          Approve
-                        </button>
-                      </>
-                    ) : (
-                      <span
-                        className={`text-xs font-bold px-3 py-1.5 rounded-xl capitalize ${
-                          action.status === "approved" || action.status === "executed"
-                            ? "bg-success/15 text-success"
-                            : "bg-danger/15 text-danger"
-                        }`}
-                      >
-                        {action.status}
-                      </span>
-                    )}
-                  </div>
+                  <h3 className="text-sm font-semibold text-text-primary">{action.title}</h3>
+                  <p className="text-xs text-text-muted line-clamp-2 leading-relaxed">{action.description}</p>
                 </div>
 
-                {/* Expected Impact callout */}
-                {action.expectedImpact && (
-                  <div className="p-2.5 rounded-xl bg-primary/5 border border-primary/15 text-xs flex items-center justify-between text-muted-foreground">
-                    <span>
-                      Expected Impact: <strong className="text-foreground">{action.expectedImpact}</strong>
+                {/* Right Actions */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setPreviewAction(action)}
+                    className="btn-secondary px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5"
+                  >
+                    <Eye size={13} /> Preview Diff
+                  </button>
+
+                  <button
+                    onClick={() => setSerpoModalAction(action)}
+                    className="btn-secondary px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 text-accent hover:border-accent/40"
+                    title="Dispatch PR via Serpo Bot"
+                  >
+                    <GitPullRequest size={13} /> Dispatch PR
+                  </button>
+
+                  {action.status === "pending_approval" ? (
+                    <>
+                      <button
+                        onClick={() => setRejectingId(action._id)}
+                        className="px-3 py-1.5 rounded-lg border border-red-500/20 text-red-600 dark:text-red-400 bg-red-500/5 hover:bg-red-500/10 text-xs font-mono transition-colors"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => handleApprove(action._id)}
+                        disabled={processingId === action._id}
+                        className="btn-primary px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40"
+                      >
+                        {processingId === action._id ? (
+                          <Loader2 size={13} className="animate-spin" />
+                        ) : (
+                          <CheckCircle2 size={13} />
+                        )}
+                        Approve
+                      </button>
+                    </>
+                  ) : (
+                    <span
+                      className={`text-[11px] font-mono px-2.5 py-1 rounded border capitalize ${
+                        action.status === "approved" || action.status === "executed"
+                          ? "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5"
+                          : "border-red-500/30 text-red-600 dark:text-red-400 bg-red-500/5"
+                      }`}
+                    >
+                      {action.status}
                     </span>
-                    <span className="text-[10px]">Audit Log Verified</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+
+              {/* Expected Impact callout */}
+              {action.expectedImpact && (
+                <div className="p-2.5 rounded-lg bg-surface-raised border border-border text-xs flex items-center justify-between text-text-muted font-mono">
+                  <span>
+                    Expected Impact: <strong className="text-text-primary">{action.expectedImpact}</strong>
+                  </span>
+                  <span className="text-[10px]">Audit Log Verified</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Preview & Diff Modal */}
       {previewAction && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-surface border border-border rounded-xl max-w-2xl w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-primary/10 text-primary">
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border border-border bg-surface-raised text-accent">
                   {previewAction.actionType}
                 </span>
-                <h3 className="text-base font-bold text-foreground mt-2">{previewAction.title}</h3>
+                <h3 className="text-base font-semibold text-text-primary mt-2">{previewAction.title}</h3>
               </div>
               <button
                 onClick={() => setPreviewAction(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+                className="p-1 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-raised transition-colors"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
-            <p className="text-xs text-muted-foreground">{previewAction.description}</p>
+            <p className="text-xs text-text-muted leading-relaxed">{previewAction.description}</p>
 
             {/* Proposed changes payload display */}
-            <div className="space-y-2">
-              <p className="text-xs font-bold text-foreground">Proposed Payload & Code Diff:</p>
-              <pre className="p-4 rounded-xl bg-muted/70 text-foreground font-mono text-xs overflow-x-auto border border-border/80 max-h-72">
+            <div className="space-y-1.5">
+              <p className="text-xs font-mono font-semibold text-text-primary">Proposed Payload & Code Diff:</p>
+              <pre className="p-3.5 rounded-lg bg-surface-raised text-text-primary font-mono text-xs overflow-x-auto border border-border max-h-72 leading-relaxed">
                 {JSON.stringify(previewAction.proposedChanges || previewAction, null, 2)}
               </pre>
             </div>
 
             {/* Rejection input if active */}
             {rejectingId === previewAction._id && (
-              <div className="p-3 rounded-xl bg-danger/10 border border-danger/30 space-y-2">
-                <label className="text-xs font-bold text-danger block">Rejection Feedback:</label>
+              <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 space-y-2">
+                <label className="text-xs font-mono font-bold text-red-500 block">Rejection Feedback:</label>
                 <input
                   type="text"
                   value={rejectReason}
                   onChange={(e) => setRejectReason(e.target.value)}
                   placeholder="Explain why this action is rejected to update Growth Memory..."
-                  className="w-full px-3 py-2 rounded-lg bg-card border border-danger/30 text-xs text-foreground outline-none"
+                  className="w-full px-3 py-1.5 rounded-md bg-surface border border-border text-xs text-text-primary outline-none focus:border-accent"
                 />
               </div>
             )}
@@ -278,7 +276,7 @@ export default function ActionCenter() {
             <div className="flex items-center gap-2 pt-3 flex-wrap">
               <button
                 onClick={() => setPreviewAction(null)}
-                className="py-2.5 px-4 rounded-xl bg-card border border-border text-xs font-bold text-foreground hover:bg-muted cursor-pointer"
+                className="btn-secondary py-2 px-3.5 rounded-lg text-xs"
               >
                 Close
               </button>
@@ -289,24 +287,24 @@ export default function ActionCenter() {
                   setPreviewAction(null);
                   setSerpoModalAction(target);
                 }}
-                className="py-2.5 px-4 rounded-xl bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                className="btn-secondary py-2 px-3.5 rounded-lg text-xs text-accent flex items-center gap-1.5"
               >
-                <GitPullRequest size={14} /> Dispatch PR via Serpo Bot
+                <GitPullRequest size={13} /> Dispatch PR via Serpo Bot
               </button>
 
               {previewAction.status === "pending_approval" && (
                 <>
                   <button
                     onClick={() => handleReject(previewAction._id)}
-                    className="py-2.5 px-4 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 text-xs font-bold cursor-pointer"
+                    className="py-2 px-3.5 rounded-lg border border-red-500/20 text-red-500 bg-red-500/5 hover:bg-red-500/10 text-xs font-mono transition-colors"
                   >
                     Reject
                   </button>
                   <button
                     onClick={() => handleApprove(previewAction._id)}
-                    className="flex-1 py-2.5 rounded-xl btn-glow text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="btn-primary flex-1 py-2 px-3.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5"
                   >
-                    <CheckCircle2 size={14} /> Authorize & Deploy
+                    <CheckCircle2 size={13} /> Authorize & Deploy
                   </button>
                 </>
               )}
