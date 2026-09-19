@@ -29,9 +29,44 @@ function ClerkAuthBridge({ children }: { children: React.ReactNode }) {
     const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
     const [localUser, setLocalUser] = useState<User | null>(null);
 
+    // Auto-sync Clerk user with backend to obtain a verified MongoDB JWT session
+    useEffect(() => {
+        let isMounted = true;
+        if (isSignedIn && clerkUser) {
+            const email = clerkUser.primaryEmailAddress?.emailAddress;
+            if (email) {
+                localStorage.setItem("user_email", email);
+            }
+
+            authAPI.syncClerk({
+                clerkId: clerkUser.id,
+                email,
+                name: clerkUser.fullName || clerkUser.firstName || clerkUser.username || "Operator",
+            }).then((res) => {
+                if (isMounted && res?.token) {
+                    localStorage.setItem("token", res.token);
+                    setToken(res.token);
+                    if (res.user) {
+                        setLocalUser(res.user);
+                        localStorage.setItem("user", JSON.stringify(res.user));
+                    }
+                }
+            }).catch((err) => {
+                console.warn("Clerk backend sync notice:", err.message);
+            });
+        } else if (isLoaded && !isSignedIn) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user");
+            setToken(null);
+            setLocalUser(null);
+        }
+        return () => { isMounted = false; };
+    }, [isLoaded, isSignedIn, clerkUser]);
+
     const user: User | null = isSignedIn && clerkUser
         ? {
-            _id: clerkUser.id,
+            _id: localUser?._id || clerkUser.id,
             name: clerkUser.fullName || clerkUser.firstName || clerkUser.username || "User",
             email: clerkUser.primaryEmailAddress?.emailAddress || "",
             plan: "Pro Growth",
@@ -39,14 +74,18 @@ function ClerkAuthBridge({ children }: { children: React.ReactNode }) {
         }
         : localUser;
 
-    const effectiveToken = isSignedIn ? (token || "clerk-active-session") : token;
+    const effectiveToken = token || (isSignedIn ? "clerk-active-session" : null);
 
     const login = async (newToken: string) => {
         localStorage.setItem("token", newToken);
         setToken(newToken);
         try {
             const data = await authAPI.getUser();
-            setLocalUser(data.user ?? data);
+            const u = data.user ?? data;
+            setLocalUser(u);
+            if (u.email) {
+                localStorage.setItem("user_email", u.email);
+            }
         } catch {
             // fallback
         }
@@ -54,6 +93,8 @@ function ClerkAuthBridge({ children }: { children: React.ReactNode }) {
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("user");
         setToken(null);
         setLocalUser(null);
         if (isSignedIn) {
@@ -86,8 +127,18 @@ function StandardAuthProvider({ children }: { children: React.ReactNode }) {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
             authAPI.getUser()
-                .then((data) => setUser(data.user ?? data))
-                .catch(() => { localStorage.removeItem("token"); setToken(null); })
+                .then((data) => {
+                    const u = data.user ?? data;
+                    setUser(u);
+                    if (u.email) {
+                        localStorage.setItem("user_email", u.email);
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user_email");
+                    setToken(null);
+                })
                 .finally(() => setLoading(false));
         } else {
             setLoading(false);
@@ -98,11 +149,17 @@ function StandardAuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("token", newToken);
         setToken(newToken);
         const data = await authAPI.getUser();
-        setUser(data.user ?? data);
+        const u = data.user ?? data;
+        setUser(u);
+        if (u.email) {
+            localStorage.setItem("user_email", u.email);
+        }
     };
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("user");
         setToken(null);
         setUser(null);
     };

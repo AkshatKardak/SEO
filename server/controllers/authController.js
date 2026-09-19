@@ -82,3 +82,39 @@ export const updateSchedule = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const clerkSync = async (req, res) => {
+  try {
+    const { clerkId, email, name } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required for Clerk synchronization" });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    let user = await User.findOne({ email: cleanEmail });
+
+    if (!user) {
+      const placeholderPassword = await bcrypt.hash(
+        typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36),
+        10
+      );
+      user = await User.create({
+        name: name?.trim() || cleanEmail.split("@")[0] || "Operator",
+        email: cleanEmail,
+        password: placeholderPassword,
+      });
+
+      // Send welcome email (non-blocking)
+      sendWelcomeEmail({ name: user.name, email: user.email });
+    }
+
+    const token = generateToken(user._id);
+    const safeUser = await User.findById(user._id).select("-password");
+
+    return res.status(200).json({ success: true, token, user: safeUser });
+  } catch (error) {
+    console.error("Clerk sync error:", error.message);
+    return res.status(500).json({ success: false, message: error.message || "Failed to sync Clerk user" });
+  }
+};
+

@@ -3,16 +3,35 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // ─── Helper ───────────────────────────────────────────────
 const getToken = () => localStorage.getItem("token");
+const getUserEmail = () => {
+  try {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      const u = JSON.parse(userStr);
+      if (u.email) return u.email;
+    }
+  } catch {
+    // Ignore JSON parse error
+  }
+  return localStorage.getItem("user_email") || "";
+};
 
 const request = async (endpoint: string, options: RequestInit = {}) => {
   const token = getToken();
+  const userEmail = getUserEmail();
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(token && token !== "clerk-active-session" && token !== "null" && token !== "undefined"
+      ? { Authorization: `Bearer ${token}` }
+      : {}),
+    ...(userEmail ? { "x-user-email": userEmail } : {}),
+    ...((options.headers as Record<string, string>) || {}),
+  };
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
+    headers,
   });
 
   const data = await res.json();
@@ -36,6 +55,12 @@ export const authAPI = {
     request("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
+    }),
+
+  syncClerk: ({ clerkId, email, name }: { clerkId: string; email?: string; name?: string }) =>
+    request("/api/auth/clerk-sync", {
+      method: "POST",
+      body: JSON.stringify({ clerkId, email, name }),
     }),
 
   getUser: () => request("/api/auth/user"),
