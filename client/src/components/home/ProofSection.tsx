@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 
 interface ComparisonRow {
@@ -42,7 +43,13 @@ const COMPARISON: ComparisonRow[] = [
 export default function ProofSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
-      <div className="max-w-3xl mx-auto text-center space-y-4 mb-14">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto text-center space-y-4 mb-14"
+      >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
           Architectural Comparison
         </div>
@@ -52,9 +59,15 @@ export default function ProofSection() {
         <p className="font-sans text-xs sm:text-sm text-text-secondary max-w-xl mx-auto leading-relaxed">
           Traditional software monitors search decline in retrospect. SerpoAI executes continuous engineering patches that defend and expand organic market share.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="surface-instrument rounded-md border border-border bg-surface max-w-5xl mx-auto overflow-hidden shadow-xs">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+        className="surface-instrument rounded-md border border-border bg-surface max-w-5xl mx-auto overflow-hidden shadow-xs"
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-left font-mono text-xs">
             <thead>
@@ -93,8 +106,7 @@ export default function ProofSection() {
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
-

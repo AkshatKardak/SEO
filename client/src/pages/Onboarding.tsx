@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useProject } from "../context/ProjectContext";
 import {
   Globe,
@@ -189,7 +190,12 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="py-6 sm:py-10 max-w-4xl mx-auto select-none">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="py-6 sm:py-10 max-w-4xl mx-auto select-none"
+    >
       {/* ── Header ── */}
       <div className="text-center mb-8 space-y-2">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-border bg-surface-muted text-[11px] font-mono text-text-secondary">
@@ -524,7 +530,7 @@ export default function Onboarding() {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

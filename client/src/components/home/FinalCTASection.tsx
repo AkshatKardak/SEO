@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
-  Sparkles,
   ShieldCheck,
   Zap,
   Cpu,
@@ -102,28 +102,28 @@ const GLOSSARY_TERMS: GlossaryItem[] = [
 
 const TRUST_PILLARS = [
   {
-    icon: Cpu,
-    title: "Instant Smart Audits",
-    description: "Local scikit-learn models evaluate 60+ DOM hygiene vectors in sub-second iterations.",
-    tag: "Deterministic ML",
-  },
-  {
     icon: ShieldCheck,
-    title: "Human-in-the-Loop",
-    description: "Every code patch is presented as a verifiable AST diff. Zero unreviewed commits.",
-    tag: "Zero Prod Risk",
-  },
-  {
-    icon: Sparkles,
-    title: "GEO Citation Radar",
-    description: "Audit entity citation frequency across Perplexity, ChatGPT Search, and Google AI Overviews.",
-    tag: "Next-Gen GEO",
+    title: "Zero-Risk Human-in-the-Loop",
+    description: "Every code diff is generated on an isolated Git branch. Nothing merges without review.",
+    tag: "GOVERNANCE",
   },
   {
     icon: Lock,
-    title: "Hardened Security",
-    description: "SSRF-protected crawlers, Clerk authentication, and isolated sandboxed execution.",
-    tag: "Enterprise Safe",
+    title: "SSRF-Protected Telemetry",
+    description: "Crawl daemons enforce network-level SSRF filters against internal IPs, subnets, and loopbacks.",
+    tag: "SECURITY",
+  },
+  {
+    icon: Cpu,
+    title: "AST Syntax Guardian",
+    description: "All generated schemas and JSX diffs are parsed by AST linters to guarantee 0 hydration errors.",
+    tag: "INTEGRITY",
+  },
+  {
+    icon: GitPullRequest,
+    title: "Direct GitHub Integration",
+    description: "Standard OAuth webhook connectors supporting both public production and private repositories.",
+    tag: "WORKFLOW",
   },
 ];
 
@@ -132,36 +132,46 @@ export default function FinalCTASection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleFAQ = (index: number) => {
-    setOpenIndex((prev) => (prev === index ? null : index));
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
-      {/* ── SECTION HEADER ── */}
-      <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
+      {/* ── FAQ HEADER ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto text-center space-y-4 mb-14"
+      >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
           <HelpCircle size={11} />
-          Architecture & System Knowledge
+          Frequently Asked Questions
         </div>
 
-        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[42px] font-normal text-text-primary tracking-tight leading-tight">
-          Autonomous search, <br />
-          <span className="italic text-accent">engineered for precision.</span>
+        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[40px] font-normal text-text-primary tracking-tight leading-tight">
+          Clear answers on <span className="italic text-accent">how SerpoAI works</span>.
         </h2>
 
         <p className="font-sans text-xs sm:text-sm text-text-secondary max-w-xl mx-auto leading-relaxed">
           How SerpoAI coordinates deterministic ML rule sets, generative answer engine optimization, and human-in-the-loop GitHub dispatch.
         </p>
-      </div>
+      </motion.div>
 
       {/* ── ARCHITECTURE TRUST PILLARS ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-14">
         {TRUST_PILLARS.map((pillar, idx) => {
           const Icon = pillar.icon;
           return (
-            <div
+            <motion.div
               key={idx}
-              className="surface-instrument p-4.5 rounded-md border border-border bg-surface flex flex-col justify-between shadow-2xs"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              whileHover={{ y: -2 }}
+              className="surface-instrument p-4.5 rounded-md border border-border bg-surface flex flex-col justify-between shadow-2xs transition-shadow hover:shadow-sm"
             >
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
@@ -179,7 +189,7 @@ export default function FinalCTASection() {
                   {pillar.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -217,11 +227,21 @@ export default function FinalCTASection() {
                 </div>
               </button>
 
-              {isOpen && (
-                <div className="px-4 pb-4 text-xs font-sans text-text-secondary leading-relaxed border-t border-border/60 pt-3">
-                  {faq.answer}
-                </div>
-              )}
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 pb-4 text-xs font-sans text-text-secondary leading-relaxed border-t border-border/60 pt-3">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           );
         })}
@@ -244,8 +264,9 @@ export default function FinalCTASection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {GLOSSARY_TERMS.map((item, idx) => (
-            <div
+            <motion.div
               key={idx}
+              whileHover={{ y: -1 }}
               className="p-3.5 rounded border border-border bg-surface hover:border-border-strong transition-colors space-y-1"
             >
               <div className="font-mono text-xs font-semibold text-text-primary flex items-center gap-1.5">
@@ -255,13 +276,19 @@ export default function FinalCTASection() {
               <p className="text-xs font-sans text-text-secondary leading-relaxed pl-3">
                 {item.definition}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
       {/* ── REFINED LAUNCHPAD (PRECISION INSTRUMENT) ── */}
-      <div className="surface-instrument p-8 sm:p-12 rounded-md border border-border bg-surface text-center max-w-4xl mx-auto space-y-5 shadow-xs relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
+        className="surface-instrument p-8 sm:p-12 rounded-md border border-border bg-surface text-center max-w-4xl mx-auto space-y-5 shadow-xs relative overflow-hidden"
+      >
         <div className="badge-instrument text-[10px] font-mono text-accent border-accent/20">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
           <span>SERPO ENGINE · READY FOR URL INGESTION</span>
@@ -277,22 +304,26 @@ export default function FinalCTASection() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
-          <button
+          <motion.button
             type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => navigate("/analyze")}
-            className="btn-primary w-full sm:w-auto h-9 px-5 text-xs font-semibold gap-1.5"
+            className="btn-primary w-full sm:w-auto h-9 px-5 text-xs font-semibold gap-1.5 cursor-pointer"
           >
             <span>Launch Growth Engine</span>
             <ArrowRight size={13} />
-          </button>
+          </motion.button>
 
-          <a
+          <motion.a
             href="#growth-loop"
-            className="btn-secondary w-full sm:w-auto h-9 px-4 text-xs font-medium gap-1.5"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn-secondary w-full sm:w-auto h-9 px-4 text-xs font-medium gap-1.5 cursor-pointer"
           >
             <Layers size={13} className="text-text-muted" />
             <span>Review Operating Architecture</span>
-          </a>
+          </motion.a>
         </div>
 
         {/* System Trust Subtext */}
@@ -307,9 +338,7 @@ export default function FinalCTASection() {
             <Zap size={12} className="text-accent" /> Zero Production Risk
           </span>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
-
-

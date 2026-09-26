@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   Globe,
@@ -18,29 +19,56 @@ export default function Hero() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  };
+
   return (
     <section className="relative pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto select-none">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* ── Left Column: Precision Headline & Immediate Action (55% = 7 cols) ── */}
-        <div className="lg:col-span-7 space-y-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="lg:col-span-7 space-y-6"
+        >
           {/* Status Chip */}
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded border border-border bg-surface text-[11px] font-mono text-text-secondary">
+          <motion.div
+            variants={itemVariants}
+            className="inline-flex items-center gap-2 px-2.5 py-1 rounded border border-border bg-surface text-[11px] font-mono text-text-secondary"
+          >
             <div className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
             <span>CONTINUOUS SEARCH TELEMETRY · DISCOVER → PRIORITIZE → EXECUTE</span>
-          </div>
+          </motion.div>
 
           {/* Precision Heading */}
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-[44px] font-normal text-text-primary tracking-tight leading-[1.12]">
+          <motion.h1
+            variants={itemVariants}
+            className="font-serif text-4xl sm:text-5xl lg:text-[44px] font-normal text-text-primary tracking-tight leading-[1.12]"
+          >
             Turn search data into <span className="italic text-accent">measurable</span> growth.
-          </h1>
+          </motion.h1>
 
           {/* Subtitle */}
-          <p className="font-sans text-sm sm:text-base text-text-secondary leading-relaxed max-w-xl">
+          <motion.p
+            variants={itemVariants}
+            className="font-sans text-sm sm:text-base text-text-secondary leading-relaxed max-w-xl"
+          >
             SerpoAI discovers your highest-impact SEO and AI-search opportunities, predicts what matters with mathematical ICE scoring, and opens verified git pull requests that move actual conversions.
-          </p>
+          </motion.p>
 
           {/* Input & Direct Action */}
-          <div className="max-w-xl space-y-2.5">
+          <motion.div variants={itemVariants} className="max-w-xl space-y-2.5">
             <form
               onSubmit={handleAnalyze}
               className="p-1 rounded-md border border-border bg-surface shadow-xs flex flex-col sm:flex-row items-center gap-2"
@@ -56,13 +84,15 @@ export default function Hero() {
                 />
               </div>
 
-              <button
+              <motion.button
                 type="submit"
-                className="btn-primary w-full sm:w-auto h-9 px-4 text-xs font-semibold shrink-0 gap-1.5"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-primary w-full sm:w-auto h-9 px-4 text-xs font-semibold shrink-0 gap-1.5 cursor-pointer"
               >
                 <span>Analyze</span>
                 <ArrowRight size={13} />
-              </button>
+              </motion.button>
             </form>
 
             {/* Quiet Links */}
@@ -82,10 +112,10 @@ export default function Hero() {
                 <span>→</span>
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Vector Badges */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-[11px] font-mono text-text-muted">
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-2 pt-2 text-[11px] font-mono text-text-muted">
             <span className="uppercase text-text-secondary text-[10px]">PIPELINES:</span>
             {["SEO Signals", "GEO Citations", "ICE Regressor", "Cannibalization Graph", "Git PR Bot"].map((item) => (
               <span
@@ -95,11 +125,16 @@ export default function Hero() {
                 {item}
               </span>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* ── Right Column: Live Instrument Terminal Simulation (45% = 5 cols) ── */}
-        <div className="lg:col-span-5">
+        <motion.div
+          initial={{ opacity: 0, x: 20, scale: 0.98 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="lg:col-span-5"
+        >
           <div className="surface-instrument rounded-md border border-border bg-[#10151B] text-[#E8EDF2] shadow-2xl overflow-hidden font-mono text-xs">
             {/* Terminal Window Chrome */}
             <div className="h-9 px-3.5 bg-[#151C24] border-b border-white/10 flex items-center justify-between select-none">
@@ -171,9 +206,8 @@ export default function Hero() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
-

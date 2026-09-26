@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Brand Column */}
         <div className="col-span-2 space-y-3">
           <Link to="/" className="flex items-center group">
-            <img src={Logo} alt="SerpoAI" className="brand-logo" />
+            <img src={Logo} alt="Logo" className="h-7 w-auto max-h-7 object-contain rounded" />
           </Link>
           <p className="text-xs font-sans text-text-secondary max-w-sm leading-relaxed">
             The Autonomous Search Growth Operating System. Continuous Crawling → Mathematical ICE Prioritization → AST Code Patches → Git PR Dispatch → Closed-Loop Revenue Attribution.
@@ -28,7 +28,7 @@ export default function Footer() {
           <ul className="space-y-1.5 text-text-secondary text-xs">
             <li><a href="#growth-loop" className="hover:text-text-primary transition-colors">Growth Loop</a></li>
             <li><a href="#platform-showcase" className="hover:text-text-primary transition-colors">ICE Opportunity Engine</a></li>
-            <li><Link to="/actions" className="hover:text-text-primary transition-colors">Serpo Bot Actions</Link></li>
+            <li><Link to="/actions" className="hover:text-text-primary transition-colors">Copilot Actions</Link></li>
             <li><Link to="/opportunities" className="hover:text-text-primary transition-colors">ML Predictions</Link></li>
             <li><Link to="/analytics" className="hover:text-text-primary transition-colors">Growth Graph</Link></li>
           </ul>
@@ -63,7 +63,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between text-[11px] text-text-muted font-mono gap-4">
-        <div>© {currentYear} SerpoAI Inc. Precision Search Telemetry.</div>
+        <div>© {currentYear} Precision Search Telemetry. All rights reserved.</div>
         <div className="flex items-center gap-5">
           <span>SSRF Protected</span>
           <span>·</span>

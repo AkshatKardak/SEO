@@ -1,9 +1,16 @@
+import { motion } from "framer-motion";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export default function ProblemSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
-      <div className="max-w-3xl mx-auto text-center space-y-3 mb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto text-center space-y-3 mb-12"
+      >
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-border bg-surface text-[11px] font-mono text-warning">
           <span>PARADIGM SHIFT · OBSERVABILITY VS CHECKLISTS</span>
         </div>
@@ -15,11 +22,18 @@ export default function ProblemSection() {
         <p className="font-sans text-xs sm:text-sm text-text-secondary leading-relaxed max-w-xl mx-auto">
           Legacy tools dump 200+ disconnected warnings into Jira, leave execution to busy developers, and remain completely blind to AI Overviews and answer citations.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
         {/* The Old Way */}
-        <div className="surface-instrument p-6 sm:p-7 rounded-md border border-border bg-surface space-y-4">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          whileHover={{ y: -2 }}
+          className="surface-instrument p-6 sm:p-7 rounded-md border border-border bg-surface space-y-4 transition-shadow hover:shadow-md"
+        >
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <span className="font-mono text-xs font-semibold uppercase tracking-wider text-negative">
               LEGACY AUDIT DUMPS
@@ -43,10 +57,17 @@ export default function ProblemSection() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* The SerpoAI Way */}
-        <div className="surface-instrument p-6 sm:p-7 rounded-md border border-accent/40 bg-surface space-y-4">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          whileHover={{ y: -2 }}
+          className="surface-instrument p-6 sm:p-7 rounded-md border border-accent/40 bg-surface space-y-4 shadow-sm hover:shadow-md transition-shadow"
+        >
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <span className="font-mono text-xs font-semibold uppercase tracking-wider text-accent">
               SERPOAI AUTONOMOUS ENGINE
@@ -70,9 +91,8 @@ export default function ProblemSection() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
-

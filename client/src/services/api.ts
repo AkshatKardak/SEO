@@ -29,15 +29,29 @@ const request = async (endpoint: string, options: RequestInit = {}) => {
     ...((options.headers as Record<string, string>) || {}),
   };
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  let res: Response;
+  try {
+    const url = BASE_URL ? `${BASE_URL}${endpoint}` : endpoint;
+    res = await fetch(url, {
+      ...options,
+      headers,
+    });
+  } catch (err: any) {
+    console.error(`[API Network Error] Could not reach backend at ${BASE_URL || ""}${endpoint}:`, err);
+    throw new Error(
+      "Unable to connect to the SerpoAI backend server. Please ensure the server is running on port 5000 (run `npm run dev` in the root or `cd server && npm start`)."
+    );
+  }
 
-  const data = await res.json();
+  let data: any;
+  try {
+    data = await res.json();
+  } catch {
+    data = { message: res.statusText || "Unexpected server response" };
+  }
 
   if (!res.ok) {
-    throw new Error(data.message || "Something went wrong");
+    throw new Error(data.message || data.error || `Server error (${res.status})`);
   }
 
   return data;

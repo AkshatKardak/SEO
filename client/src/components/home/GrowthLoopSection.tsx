@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Compass,
   Target,
@@ -98,34 +99,34 @@ const STAGES: Stage[] = [
     step: "05",
     title: "MEASURE",
     subtitle: "Closed-Loop Search Attribution & SERP Radar",
-    techEngine: "Growth Graph + GSC OAuth",
+    techEngine: "SERP Radar + CTR Curves",
     icon: BarChart3,
     details: [
-      "Ingests Google Search Console CTR curves and actual average ranking positions via official API",
-      "Maps end-to-end outcome chain: Impressions → Clicks → Signups → Attributed Revenue",
-      "Anomaly Radar flags unexpected algorithmic fluctuations and pinpoints contributing factors",
+      "Tracks daily keyword rankings across mobile, desktop, and local SERPs",
+      "Measures generative citation share across Google AI Overviews and answer engines",
+      "Calculates revenue delta attributed directly to dispatched search optimizations",
     ],
-    output: "Multi-touch search attribution and verified metric deltas",
-    sampleLog: "telemetry::radar ingested 2,400 query curves · +18.4% CTR delta post-patch",
-    metricLabel: "Attribution Fidelity",
-    metricValue: "Full-Funnel MRR",
+    output: "Attribution time-series and real-time anomaly detection alerts",
+    sampleLog: "serp::measure detected +4 positions for 8 primary keywords · +1,240 clicks/mo",
+    metricLabel: "Attributed ROI Tracking",
+    metricValue: "Closed-Loop",
   },
   {
     id: "repeat",
     step: "06",
     title: "REPEAT",
-    subtitle: "Persistent Growth Memory & Compounding Moat",
-    techEngine: "Growth Memory + Adaptive Prior",
+    subtitle: "Persistent Knowledge Graph Memory & Continuous Reinforcement",
+    techEngine: "Growth Memory + RLHF",
     icon: Repeat,
     details: [
-      "Persists verified causal findings from every executed experiment and code deployment",
-      "Feeds domain-specific outcomes back into the ML feature store to sharpen future scoring",
-      "Compounds search authority and AI citation dominance cycle after cycle",
+      "Stores every deployed patch, ranking movement, and algorithm update into institutional memory",
+      "Calibrates future ICE scoring models using empirical historical success rates",
+      "Powers autonomous continuous optimization loops that get smarter with every deployment",
     ],
-    output: "Permanent organizational search intelligence and refined priors",
-    sampleLog: "memory::store updated 12 experiment priors · continuous feedback active",
-    metricLabel: "Compounding Growth",
-    metricValue: "Self-Reinforcing",
+    output: "Self-improving growth weights and continuous compound search visibility",
+    sampleLog: "memory::record updated model weights (+2.4% confidence calibration on schema fixes)",
+    metricLabel: "Autonomous Compounding",
+    metricValue: "Continuous",
   },
 ];
 
@@ -137,7 +138,13 @@ export default function GrowthLoopSection() {
   return (
     <section id="growth-loop" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto select-none">
       {/* ── Section Header ── */}
-      <div className="max-w-3xl mx-auto text-center space-y-4 mb-14">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto text-center space-y-4 mb-14"
+      >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
           Autonomous Operating Architecture
         </div>
@@ -147,7 +154,7 @@ export default function GrowthLoopSection() {
         <p className="font-sans text-xs sm:text-sm text-text-secondary max-w-xl mx-auto leading-relaxed">
           Information flows continuously through 6 deterministic intelligence stages, turning raw search signals into verified business revenue and compounding velocity.
         </p>
-      </div>
+      </motion.div>
 
       {/* ── 6 Stages Pipeline Selector Grid ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
@@ -155,9 +162,11 @@ export default function GrowthLoopSection() {
           const isSelected = selectedStage.id === s.id;
           const StageIcon = s.icon;
           return (
-            <button
+            <motion.button
               key={s.id}
               type="button"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedStage(s)}
               className={`p-3.5 rounded border text-left transition-all cursor-pointer ${
                 isSelected
@@ -177,92 +186,94 @@ export default function GrowthLoopSection() {
               <div className="text-[10px] font-mono text-text-muted truncate">
                 {s.techEngine}
               </div>
-            </button>
+            </motion.button>
           );
         })}
       </div>
 
       {/* ── Active Stage Interactive Viewer ── */}
       <div className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-8 shadow-xs">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Stage Details Column */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded bg-accent-soft text-accent border border-accent/20 flex items-center justify-center shrink-0">
-                <Icon size={18} />
-              </div>
-              <div>
-                <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider block">
-                  STAGE {selectedStage.step} OF 06 · {selectedStage.techEngine}
-                </span>
-                <h3 className="font-serif text-xl sm:text-2xl text-text-primary font-normal leading-snug">
-                  {selectedStage.subtitle}
-                </h3>
-              </div>
-            </div>
-
-            <div className="space-y-2 pt-2">
-              {selectedStage.details.map((detail, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-text-primary font-sans">
-                  <span className="text-accent font-mono font-bold mt-0.5 text-[11px] tabular-nums shrink-0">
-                    0{idx + 1}.
-                  </span>
-                  <span className="leading-relaxed text-text-secondary">{detail}</span>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedStage.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+          >
+            {/* Stage Details Column */}
+            <div className="lg:col-span-7 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded bg-accent-soft text-accent border border-accent/20 flex items-center justify-center shrink-0">
+                  <Icon size={18} />
                 </div>
-              ))}
-            </div>
-
-            <div className="pt-3 border-t border-border flex flex-wrap items-center gap-2 text-xs">
-              <span className="font-mono text-[10px] uppercase font-bold text-text-muted">
-                PRIMARY ARTIFACT:
-              </span>
-              <span className="font-mono text-xs font-semibold text-accent">
-                {selectedStage.output}
-              </span>
-            </div>
-          </div>
-
-          {/* Telemetry Console Column */}
-          <div className="lg:col-span-5 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
-            <div className="flex items-center justify-between text-[10px] text-white/50 border-b border-white/10 pb-2">
-              <div className="flex items-center gap-1.5">
-                <Terminal size={12} className="text-accent" />
-                <span>TELEMETRY STAGE {selectedStage.step}</span>
+                <div>
+                  <span className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider block">
+                    STAGE {selectedStage.step} OF 06 · {selectedStage.techEngine}
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl text-text-primary font-normal leading-snug">
+                    {selectedStage.subtitle}
+                  </h3>
+                </div>
               </div>
-              <span className="text-accent font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-engine-breath" />
-                ONLINE
-              </span>
-            </div>
 
-            <div className="space-y-2 text-[11px]">
-              <div className="flex justify-between">
-                <span className="text-white/40">Subsystem:</span>
-                <span className="text-white/90 font-medium">{selectedStage.techEngine}</span>
+              <div className="space-y-2 pt-2">
+                {selectedStage.details.map((detail, idx) => (
+                  <div key={idx} className="flex items-start gap-2.5 text-xs text-text-primary font-sans">
+                    <span className="text-accent font-mono font-bold mt-0.5 text-[11px] tabular-nums shrink-0">
+                      0{idx + 1}.
+                    </span>
+                    <span className="leading-relaxed text-text-secondary">{detail}</span>
+                  </div>
+                ))}
               </div>
-              <div className="flex justify-between">
-                <span className="text-white/40">{selectedStage.metricLabel}:</span>
-                <span className="text-accent font-bold tabular-nums">{selectedStage.metricValue}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-white/40">Oversight Model:</span>
-                <span className="text-white/90">Autonomous + Human-in-the-Loop</span>
+
+              <div className="pt-3 border-t border-border flex flex-wrap items-center gap-2 text-xs">
+                <span className="font-mono text-[10px] uppercase font-bold text-text-muted">
+                  PRIMARY ARTIFACT:
+                </span>
+                <span className="font-mono text-xs font-semibold text-accent">
+                  {selectedStage.output}
+                </span>
               </div>
             </div>
 
-            <div className="pt-1">
-              <div className="p-2.5 rounded bg-black/40 border border-white/5 text-[10px] text-white/70 space-y-1">
-                <div className="text-white/40 text-[9px] uppercase tracking-wider">Console Output:</div>
-                <div className="text-accent font-mono break-all">$ {selectedStage.sampleLog}</div>
+            {/* Stage Telemetry Preview Column */}
+            <div className="lg:col-span-5 space-y-3">
+              <div className="p-4 rounded bg-[#10151B] border border-white/10 text-white space-y-3 font-mono text-xs shadow-inner">
+                <div className="flex items-center justify-between text-[11px] text-white/50 pb-2 border-b border-white/10">
+                  <span className="flex items-center gap-1.5">
+                    <Terminal size={12} className="text-accent" />
+                    <span>ENGINE TELEMETRY LOG</span>
+                  </span>
+                  <span className="text-accent text-[10px]">STAGE {selectedStage.step} ACTIVE</span>
+                </div>
+
+                <div className="text-[11px] text-[#6FD98F] leading-relaxed">
+                  $ {selectedStage.sampleLog}
+                </div>
+
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
+                  <span className="text-white/50">{selectedStage.metricLabel}</span>
+                  <span className="text-accent font-bold tabular-nums">
+                    {selectedStage.metricValue}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded bg-surface-muted border border-border flex items-center justify-between text-xs text-text-secondary font-sans">
+                <span className="flex items-center gap-1.5 font-medium text-text-primary">
+                  <CheckCircle2 size={13} className="text-positive" />
+                  Deterministic Engine Pipeline
+                </span>
+                <span className="font-mono text-[10px] text-text-muted uppercase">
+                  Continuous Telemetry
+                </span>
               </div>
             </div>
-
-            <div className="flex items-center gap-1.5 text-[10px] text-white/40 pt-0.5">
-              <CheckCircle2 size={11} className="text-accent shrink-0" />
-              <span>Closed-loop memory writes feed into Stage 0{selectedStage.step === "06" ? "01" : `0${Number(selectedStage.step) + 1}`.slice(-2)}</span>
-            </div>
-          </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

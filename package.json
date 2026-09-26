@@ -1,0 +1,21 @@
+{
+  "name": "serpo-ai-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ./scripts/dev.mjs",
+    "server": "npm --prefix server run server",
+    "client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "test": "npm --prefix server test"
+  },
+  "keywords": [
+    "seo",
+    "growth",
+    "machine-learning",
+    "serpoai"
+  ],
+  "license": "ISC"
+}
