@@ -25,6 +25,7 @@
   <a href="#-product-positioning">Positioning</a> •
   <a href="#-core-operating-loop">Growth Loop</a> •
   <a href="#-design-system-precision-instrument">Design System</a> •
+  <a href="#-platform-showcase--telemetry-screenshots">Screenshots</a> •
   <a href="#-core-features">Core Features</a> •
   <a href="#-the-integrated-in-server-ml--statistical-suite">ML Suite</a> •
   <a href="#-serpo-bot-github-pr-dispatcher">Serpo Bot</a> •
@@ -74,6 +75,71 @@ SerpoAI features a custom design system inspired by **Linear × Bloomberg Termin
   - **Top Status Strip**: Breadcrumb hierarchy, live UTC clock (`HH:MM:SS UTC`), and `● Engine online` pulse monitor.
   - **Serpo Bot Widget**: Docked bottom-right popover (`bottom-[76px]`) with real-time oscilloscope bars and code patch generator.
   - **Subtle Background Texture**: Fixed radial grid dot-matrix overlay (`radial-gradient(var(--grid-texture) 1px, transparent 1px)`).
+
+---
+
+## 📸 Platform Showcase & Telemetry Screenshots
+
+### 1. Autonomous Growth OS Dashboard
+> Real-time executive cockpit featuring 5-pillar health score, automated opportunity feeds, and time-series traffic telemetry.
+
+<p align="center">
+  <img src="client/public/Dashboard.png" alt="SerpoAI Dashboard" width="95%"/>
+</p>
+
+---
+
+### 2. Deterministic ICE Opportunity Prioritization
+> Mathematical ICE scoring (Impact × Confidence ÷ Effort) combined with trained ML regressors predicting traffic & conversion lift.
+
+<p align="center">
+  <img src="client/public/ICEOpportunities.png" alt="ICE Opportunities" width="95%"/>
+</p>
+
+---
+
+### 3. Generative Engine Optimization (GEO) Radar
+> Continuous citation intelligence tracking brand presence and quotation authority inside ChatGPT, Perplexity, Google AI Overviews, and Gemini.
+
+<p align="center">
+  <img src="client/public/GEOIntelligence.png" alt="GEO Intelligence" width="95%"/>
+</p>
+
+---
+
+### 4. Search Engine & Keyword Intelligence
+> Competitor keyword tracking, intent overlap detection, and striking distance search opportunities.
+
+<p align="center">
+  <img src="client/public/SearchEngine.png" alt="Search Engine Intelligence" width="95%"/>
+</p>
+
+---
+
+### 5. Growth Telemetry & Closed-Loop Analytics
+> Multi-touch growth graphs correlating search impressions and CTR directly to signups and recognized revenue.
+
+<p align="center">
+  <img src="client/public/Analytics.png" alt="Analytics and Telemetry" width="95%"/>
+</p>
+
+---
+
+### 6. Deep Technical Site Audit & DOM Hygiene
+> Automated full-spectrum crawler scanning 60+ DOM hygiene vectors, Schema.org entities, and Core Web Vitals.
+
+<p align="center">
+  <img src="client/public/TechnicalSiteAudit.png" alt="Technical Site Audit" width="95%"/>
+</p>
+
+---
+
+### 7. Executive Growth Reports
+> Comprehensive stakeholder audit briefs with one-click exportable PDF intelligence reports.
+
+<p align="center">
+  <img src="client/public/ExecutiveReports.png" alt="Executive Reports" width="95%"/>
+</p>
 
 ---
 
@@ -212,8 +278,6 @@ Because the ML and statistical engines are built directly into `server/ml/`, you
    ```
 4. **Health Check Path**: `/health` (or `/api/health`)
 
-> *Note: For teams requiring a standalone Python container, the legacy `ml-service/Dockerfile` is preserved and can optionally be deployed independently.*
-
 ### Deploying Frontend on Vercel / Netlify
 1. Connect repository $\to$ Root Directory: `client`
 2. Build Command: `npm run build`
@@ -250,26 +314,21 @@ seo-rank-tracker-main/
 │   │   └── services/api.ts                 # Resilient API Client with Auto-Sync & Error Interception
 │   └── package.json
 │
-├── server/                                 # Express + Node.js Backend API + Integrated ML Suite
-│   ├── ml/                                 # In-Process Mathematical & ML Engines
-│   │   ├── opportunityRanker.js            # Calibrated Mathematical ICE Prioritization & Regressors
-│   │   ├── anomalyDetector.js              # Rolling EWMA & Robust Z-Score Radar
-│   │   ├── trafficForecaster.js            # Autoregressive Time-Series Projection & 95% CI Bands
-│   │   ├── cannibalizationEngine.js        # Intent Cluster & Cannibalization Graph
-│   │   ├── gscCtrEngine.js                 # Log-Logistic CTR Curve Fitting & Striking Distance
-│   │   ├── patchVerifier.js                # AST Syntax Validation & JSON-LD Rich Snippet Checker
-│   │   └── index.js                        # Unified Barrel Export
-│   ├── ai/providers/                       # Multi-Provider LLM Cascade (Groq, Gemini, OpenRouter)
-│   ├── controllers/                        # Project, Opportunity, GEO, ML & Audit Controllers
-│   ├── models/                             # Mongoose Schemas (User, Project, Opportunity, Memory)
-│   ├── routes/                             # Clean Express Routers (/api/*, /api/v1/*, and /api/ml/*)
-│   ├── services/                           # Business Logic & In-Process ML Client
-│   └── server.js                           # Resilient Server Entrypoint (Instant listen + DB auto-retry)
-│
-└── ml-service/                             # Optional Standalone Python 3.11 FastAPI Container
-    ├── Dockerfile                          # Multi-Stage Slim Dockerfile
-    ├── app/                                # FastAPI Routes & Models
-    └── requirements.txt
+└── server/                                 # Express + Node.js Backend API + Integrated ML Suite
+    ├── ml/                                 # In-Process Mathematical & ML Engines
+    │   ├── opportunityRanker.js            # Calibrated Mathematical ICE Prioritization & Regressors
+    │   ├── anomalyDetector.js              # Rolling EWMA & Robust Z-Score Radar
+    │   ├── trafficForecaster.js            # Autoregressive Time-Series Projection & 95% CI Bands
+    │   ├── cannibalizationEngine.js        # Intent Cluster & Cannibalization Graph
+    │   ├── gscCtrEngine.js                 # Log-Logistic CTR Curve Fitting & Striking Distance
+    │   ├── patchVerifier.js                # AST Syntax Validation & JSON-LD Rich Snippet Checker
+    │   └── index.js                        # Unified Barrel Export
+    ├── ai/providers/                       # Multi-Provider LLM Cascade (Groq, Gemini, OpenRouter)
+    ├── controllers/                        # Project, Opportunity, GEO, ML & Audit Controllers
+    ├── models/                             # Mongoose Schemas (User, Project, Opportunity, Memory)
+    ├── routes/                             # Clean Express Routers (/api/*, /api/v1/*, and /api/ml/*)
+    ├── services/                           # Business Logic & In-Process ML Client
+    └── server.js                           # Resilient Server Entrypoint (Instant listen + DB auto-retry)
 
 ---
 
