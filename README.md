@@ -353,6 +353,7 @@ seo-rank-tracker-main/
     ├── routes/                             # Clean Express Routers (/api/*, /api/v1/*, and /api/ml/*)
     ├── services/                           # Business Logic & In-Process ML Client
     └── server.js                           # Resilient Server Entrypoint (Instant listen + DB auto-retry)
+```
 
 ---
 
