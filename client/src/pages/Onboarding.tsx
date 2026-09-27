@@ -18,6 +18,11 @@ import {
   Lock,
   Eye,
   EyeOff,
+  Rocket,
+  DollarSign,
+  Bot,
+  TrendingUp,
+  Swords,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -75,11 +80,11 @@ const AVAILABLE_PROCESSES: ProcessOption[] = [
 ];
 
 const GOALS = [
-  { id: "Increase SaaS signups", label: "Increase SaaS Signups", desc: "Prioritizes signup funnel, comparison pages, and CTA conversion", icon: "🚀" },
-  { id: "Increase revenue", label: "Increase Revenue", desc: "Optimizes pricing page proof, high-ticket landing pages, and retention", icon: "💰" },
-  { id: "Improve AI visibility", label: "Improve AI Visibility (GEO)", desc: "Optimizes citations & entity authority across modern AI search engines", icon: "🤖" },
-  { id: "Increase organic traffic", label: "Increase Organic Traffic", desc: "Focuses on high-volume keyword themes and content gap expansion", icon: "📈" },
-  { id: "Beat competitors", label: "Outrank Competitors", desc: "Identifies competitor weak points and authoritative citation gaps", icon: "⚔️" },
+  { id: "Increase SaaS signups", label: "Increase SaaS Signups", desc: "Prioritizes signup funnel, comparison pages, and CTA conversion", icon: Rocket },
+  { id: "Increase revenue", label: "Increase Revenue", desc: "Optimizes pricing page proof, high-ticket landing pages, and retention", icon: DollarSign },
+  { id: "Improve AI visibility", label: "Improve AI Visibility (GEO)", desc: "Optimizes citations & entity authority across modern AI search engines", icon: Bot },
+  { id: "Increase organic traffic", label: "Increase Organic Traffic", desc: "Focuses on high-volume keyword themes and content gap expansion", icon: TrendingUp },
+  { id: "Beat competitors", label: "Outrank Competitors", desc: "Identifies competitor weak points and authoritative citation gaps", icon: Swords },
 ];
 
 const FRAMEWORKS = [
@@ -461,6 +466,7 @@ export default function Onboarding() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {GOALS.map((goal) => {
                   const isSelected = selectedGoal === goal.id;
+                  const GoalIcon = goal.icon;
                   return (
                     <button
                       type="button"
@@ -473,7 +479,7 @@ export default function Onboarding() {
                       }`}
                     >
                       <div className="flex items-center gap-2 text-xs font-semibold mb-0.5 text-text-primary">
-                        <span>{goal.icon}</span>
+                        <span className="p-1 rounded bg-surface border border-border text-accent"><GoalIcon size={14} /></span>
                         <span>{goal.label}</span>
                       </div>
                       <p className="text-[10px] text-text-muted">{goal.desc}</p>

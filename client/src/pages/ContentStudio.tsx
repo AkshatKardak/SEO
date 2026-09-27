@@ -6,6 +6,9 @@ import {
   Sparkles,
   CheckCircle2,
   Copy,
+  Swords,
+  Bot,
+  Gem,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -74,27 +77,32 @@ export default function ContentStudio() {
       {/* Format Selector */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
-          { id: "comparison", label: "Comparison Page", desc: "Target 'Brand vs Competitor' high-intent searchers", icon: "⚔️" },
-          { id: "geo_authority", label: "GEO Authority Entity", desc: "Data-rich guide designed for AI engine citation", icon: "🤖" },
-          { id: "pricing_proof", label: "Pricing & ROI Page", desc: "Conversion proof asset to reduce pricing drop-off", icon: "💎" },
-        ].map((fmt) => (
-          <button
-            key={fmt.id}
-            onClick={() => {
-              setActiveFormat(fmt.id);
-              setGeneratedBrief(null);
-            }}
-            className={`rounded-lg p-4 text-left transition-all border ${
-              activeFormat === fmt.id
-                ? "border-accent bg-accent/10 shadow-sm"
-                : "bg-surface border-border hover:border-border-strong"
-            }`}
-          >
-            <span className="text-lg mb-1 block">{fmt.icon}</span>
-            <h3 className="text-sm font-serif text-text-primary">{fmt.label}</h3>
-            <p className="text-[11px] text-text-muted mt-0.5">{fmt.desc}</p>
-          </button>
-        ))}
+          { id: "comparison", label: "Comparison Page", desc: "Target 'Brand vs Competitor' high-intent searchers", icon: Swords },
+          { id: "geo_authority", label: "GEO Authority Entity", desc: "Data-rich guide designed for AI engine citation", icon: Bot },
+          { id: "pricing_proof", label: "Pricing & ROI Page", desc: "Conversion proof asset to reduce pricing drop-off", icon: Gem },
+        ].map((fmt) => {
+          const Icon = fmt.icon;
+          return (
+            <button
+              key={fmt.id}
+              onClick={() => {
+                setActiveFormat(fmt.id);
+                setGeneratedBrief(null);
+              }}
+              className={`rounded-lg p-4 text-left transition-all border ${
+                activeFormat === fmt.id
+                  ? "border-accent bg-accent/10 shadow-sm"
+                  : "bg-surface border-border hover:border-border-strong"
+              }`}
+            >
+              <span className="p-2 rounded-md bg-surface border border-border text-accent inline-block mb-2">
+                <Icon className="w-5 h-5" />
+              </span>
+              <h3 className="text-sm font-serif text-text-primary">{fmt.label}</h3>
+              <p className="text-[11px] text-text-muted mt-0.5">{fmt.desc}</p>
+            </button>
+          );
+        })}
       </div>
 
       {/* Builder Row */}

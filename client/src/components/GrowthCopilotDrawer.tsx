@@ -16,7 +16,7 @@ export default function GrowthCopilotDrawer() {
   const [messages, setMessages] = useState<Array<{ sender: "user" | "copilot"; text: string; time: string }>>([
     {
       sender: "copilot",
-      text: "👋 Hi! I'm your AI Growth Co-Pilot. I can answer questions about your site's conversion bottlenecks, GEO AI visibility, competitor teardowns, or formulate growth experiments. What would you like to explore?",
+      text: "Hi! I'm your AI Growth Co-Pilot. I can answer questions about your site's conversion bottlenecks, GEO AI visibility, competitor teardowns, or formulate growth experiments. What would you like to explore?",
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);

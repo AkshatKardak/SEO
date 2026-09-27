@@ -6,6 +6,15 @@ import {
   Sparkles,
   Plus,
   X,
+  Eye,
+  Activity,
+  Zap,
+  Target,
+  Rocket,
+  DollarSign,
+  BarChart3,
+  Search,
+  ShieldCheck,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -140,30 +149,33 @@ export default function AnalyticsView() {
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
             {[
-              { step: "1. Visibility", label: "Impressions", value: snapshot?.funnel?.visibilityImpressions?.toLocaleString() || "48,200", icon: "👁️", change: "+14%" },
-              { step: "2. Traffic", label: "Sessions", value: snapshot?.funnel?.organicTrafficSessions?.toLocaleString() || "3,250", icon: "📈", change: "+18%" },
-              { step: "3. Engagement", label: "Engaged Sessions", value: snapshot?.funnel?.engagedSessions?.toLocaleString() || "2,015", icon: "⚡", change: "62%" },
-              { step: "4. Signup", label: "Conversions", value: snapshot?.funnel?.signupsCount?.toLocaleString() || "72", icon: "🎯", change: `${snapshot?.rates?.signupConversionRate || 2.2}%` },
-              { step: "5. Activation", label: "Active Users", value: snapshot?.funnel?.activationsCount?.toLocaleString() || "32", icon: "🚀", change: `${snapshot?.rates?.activationRate || 45}%` },
-              { step: "6. Revenue", label: "Est. MRR", value: `$${snapshot?.funnel?.mrrRevenueUSD?.toLocaleString() || "1,568"}`, icon: "💰", change: "+24%" },
-            ].map((node) => (
-              <div
-                key={node.step}
-                className="p-3 rounded-md bg-surface-raised border border-border flex flex-col justify-between space-y-2"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-text-muted">
-                    <span>{node.step}</span>
-                    <span>{node.icon}</span>
+              { step: "1. Visibility", label: "Impressions", value: snapshot?.funnel?.visibilityImpressions?.toLocaleString() || "48,200", icon: Eye, change: "+14%" },
+              { step: "2. Traffic", label: "Sessions", value: snapshot?.funnel?.organicTrafficSessions?.toLocaleString() || "3,250", icon: Activity, change: "+18%" },
+              { step: "3. Engagement", label: "Engaged Sessions", value: snapshot?.funnel?.engagedSessions?.toLocaleString() || "2,015", icon: Zap, change: "62%" },
+              { step: "4. Signup", label: "Conversions", value: snapshot?.funnel?.signupsCount?.toLocaleString() || "72", icon: Target, change: `${snapshot?.rates?.signupConversionRate || 2.2}%` },
+              { step: "5. Activation", label: "Active Users", value: snapshot?.funnel?.activationsCount?.toLocaleString() || "32", icon: Rocket, change: `${snapshot?.rates?.activationRate || 45}%` },
+              { step: "6. Revenue", label: "Est. MRR", value: `$${snapshot?.funnel?.mrrRevenueUSD?.toLocaleString() || "1,568"}`, icon: DollarSign, change: "+24%" },
+            ].map((node) => {
+              const NodeIcon = node.icon;
+              return (
+                <div
+                  key={node.step}
+                  className="p-3 rounded-md bg-surface-raised border border-border flex flex-col justify-between space-y-2"
+                >
+                  <div>
+                    <div className="flex items-center justify-between text-[10px] font-mono text-text-muted">
+                      <span>{node.step}</span>
+                      <NodeIcon className="w-3.5 h-3.5 text-accent" />
+                    </div>
+                    <p className="text-lg font-mono tabular-nums font-bold text-text-primary mt-2">{node.value}</p>
+                    <p className="text-[11px] text-text-muted">{node.label}</p>
                   </div>
-                  <p className="text-lg font-mono tabular-nums font-bold text-text-primary mt-2">{node.value}</p>
-                  <p className="text-[11px] text-text-muted">{node.label}</p>
+                  <div className="pt-2 border-t border-border text-[10px] font-mono tabular-nums font-semibold text-success">
+                    {node.change}
+                  </div>
                 </div>
-                <div className="pt-2 border-t border-border text-[10px] font-mono tabular-nums font-semibold text-success">
-                  {node.change}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -216,11 +228,12 @@ export default function AnalyticsView() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { id: "google_analytics_4", label: "Google Analytics 4", desc: "Sessions, Events, Conversions", icon: "📊" },
-              { id: "google_search_console", label: "Google Search Console", desc: "Queries, Impressions, CTR", icon: "🔍" },
-              { id: "posthog", label: "PostHog", desc: "Product Funnels & Retention", icon: "🦔" },
+              { id: "google_analytics_4", label: "Google Analytics 4", desc: "Sessions, Events, Conversions", icon: BarChart3 },
+              { id: "google_search_console", label: "Google Search Console", desc: "Queries, Impressions, CTR", icon: Search },
+              { id: "posthog", label: "PostHog", desc: "Product Funnels & Retention", icon: Activity },
             ].map((provider) => {
               const isConnected = integrations.some((i: any) => i.provider === provider.id && i.status === "connected");
+              const ProvIcon = provider.icon;
               return (
                 <div
                   key={provider.id}
@@ -228,7 +241,7 @@ export default function AnalyticsView() {
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg">{provider.icon}</span>
+                      <span className="p-2 rounded-md bg-surface border border-border text-accent"><ProvIcon className="w-5 h-5" /></span>
                       <span
                         className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${
                           isConnected
@@ -321,8 +334,9 @@ export default function AnalyticsView() {
                 />
               </div>
 
-              <div className="p-3 rounded-md bg-surface-raised border border-border text-[11px] font-mono text-text-muted">
-                🔒 OAuth tokens and API secrets are securely encrypted server-side and never exposed to client browsers.
+              <div className="p-3 rounded-md bg-surface-raised border border-border text-[11px] font-mono text-text-muted flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-success shrink-0" />
+                <span>OAuth tokens and API secrets are securely encrypted server-side and never exposed to client browsers.</span>
               </div>
 
               <div className="flex items-center gap-2 pt-2">

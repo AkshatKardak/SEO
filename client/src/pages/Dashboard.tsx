@@ -37,6 +37,10 @@ import {
   Compass,
   Flame,
   GitPullRequest,
+  Brain,
+  Search,
+  PenTool,
+  BarChart3,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -792,29 +796,34 @@ export default function Dashboard() {
 
           <div className="space-y-2">
             {[
-              { name: "Growth Brain", role: "Strategy, ICE prioritization & Goal alignment", status: "Active", icon: "🧠" },
-              { name: "Intelligence Agent", role: "Company profile, audience & competitor teardowns", status: "Active", icon: "🎯" },
-              { name: "SEO Agent", role: "Technical crawls, metadata fixes & schema tags", status: "Ready", icon: "🔍" },
-              { name: "GEO Agent", role: "AI-search visibility & citation gap analysis", status: "Ready", icon: "🤖" },
-              { name: "Content Agent", role: "Comparison pages, briefs & conversion copy", status: "Ready", icon: "✍️" },
-              { name: "Growth Analyst", role: "Measures experiment outcomes & stores learnings", status: "Active", icon: "📊" },
-            ].map((agent) => (
-              <div
-                key={agent.name}
-                className="p-2.5 rounded-lg bg-surface-raised border border-border flex items-center justify-between text-xs"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="text-sm">{agent.icon}</span>
-                  <div>
-                    <span className="font-semibold text-text-primary">{agent.name}</span>
-                    <p className="text-[10px] text-text-muted font-sans">{agent.role}</p>
+              { name: "Growth Brain", role: "Strategy, ICE prioritization & Goal alignment", status: "Active", icon: Brain },
+              { name: "Intelligence Agent", role: "Company profile, audience & competitor teardowns", status: "Active", icon: Target },
+              { name: "SEO Agent", role: "Technical crawls, metadata fixes & schema tags", status: "Ready", icon: Search },
+              { name: "GEO Agent", role: "AI-search visibility & citation gap analysis", status: "Ready", icon: Bot },
+              { name: "Content Agent", role: "Comparison pages, briefs & conversion copy", status: "Ready", icon: PenTool },
+              { name: "Growth Analyst", role: "Measures experiment outcomes & stores learnings", status: "Active", icon: BarChart3 },
+            ].map((agent) => {
+              const AgentIcon = agent.icon;
+              return (
+                <div
+                  key={agent.name}
+                  className="p-2.5 rounded-lg bg-surface-raised border border-border flex items-center justify-between text-xs"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="p-1 rounded bg-surface border border-border text-accent">
+                      <AgentIcon className="w-3.5 h-3.5" />
+                    </span>
+                    <div>
+                      <span className="font-semibold text-text-primary">{agent.name}</span>
+                      <p className="text-[10px] text-text-muted font-sans">{agent.role}</p>
+                    </div>
                   </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5">
+                    {agent.status}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5">
-                  {agent.status}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Smartphone, Monitor } from "lucide-react";
 
 interface Metrics { lcp: string; fid: string; cls: string; fcp: string; ttfb: string; speedIndex: string; }
 interface Scores { performance: number; accessibility: number; seo: number; bestPractices: number; }
@@ -32,8 +33,8 @@ export default function PageSpeedWidget({ url }: { url: string }) {
         <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
           {(["mobile", "desktop"] as const).map((s) => (
             <button key={s} onClick={() => setStrategy(s)}
-              className={`px-3 py-1 text-xs rounded-md transition-all ${strategy === s ? "bg-white dark:bg-gray-600 shadow font-medium" : "text-gray-500"}`}>
-              {s === "mobile" ? "📱 Mobile" : "🖥 Desktop"}
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-md transition-all ${strategy === s ? "bg-white dark:bg-gray-600 shadow font-medium" : "text-gray-500"}`}>
+              {s === "mobile" ? <><Smartphone className="w-3.5 h-3.5" /> Mobile</> : <><Monitor className="w-3.5 h-3.5" /> Desktop</>}
             </button>
           ))}
         </div>

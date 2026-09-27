@@ -7,6 +7,9 @@ import {
   Bot,
   RefreshCw,
   Zap,
+  Search,
+  MessageSquare,
+  Globe,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -251,41 +254,44 @@ export default function GEOIntelligence() {
                 {/* 4-Engine Results Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
                   {[
-                    { name: "Google AI Overviews", data: q.engines?.google_ai, icon: "🔍" },
-                    { name: "Gemini Search", data: q.engines?.gemini, icon: "✨" },
-                    { name: "ChatGPT Citations", data: q.engines?.chatgpt, icon: "💬" },
-                    { name: "Perplexity Citations", data: q.engines?.perplexity, icon: "🌐" },
-                  ].map((eng) => (
-                    <div
-                      key={eng.name}
-                      className={`p-3 rounded-lg border transition-all flex flex-col justify-between gap-2 ${
-                        eng.data?.mentioned
-                          ? "bg-emerald-500/5 border-emerald-500/30 text-text-primary"
-                          : "bg-surface-raised border-border text-text-muted"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="font-mono text-[11px] text-text-primary flex items-center gap-1.5 truncate">
-                          <span>{eng.icon}</span> {eng.name}
-                        </span>
-                        {eng.data?.mentioned ? (
-                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 shrink-0">
-                            #{eng.data.position || 1} Mentioned
+                    { name: "Google AI Overviews", data: q.engines?.google_ai, icon: Search },
+                    { name: "Gemini Search", data: q.engines?.gemini, icon: Sparkles },
+                    { name: "ChatGPT Citations", data: q.engines?.chatgpt, icon: MessageSquare },
+                    { name: "Perplexity Citations", data: q.engines?.perplexity, icon: Globe },
+                  ].map((eng) => {
+                    const EngIcon = eng.icon;
+                    return (
+                      <div
+                        key={eng.name}
+                        className={`p-3 rounded-lg border transition-all flex flex-col justify-between gap-2 ${
+                          eng.data?.mentioned
+                            ? "bg-emerald-500/5 border-emerald-500/30 text-text-primary"
+                            : "bg-surface-raised border-border text-text-muted"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-mono text-[11px] text-text-primary flex items-center gap-1.5 truncate">
+                            <span className="text-accent"><EngIcon className="w-3.5 h-3.5" /></span> {eng.name}
                           </span>
-                        ) : (
-                          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded border border-border text-text-muted shrink-0">
-                            Not Cited
-                          </span>
-                        )}
-                      </div>
+                          {eng.data?.mentioned ? (
+                            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 shrink-0">
+                              #{eng.data.position || 1} Mentioned
+                            </span>
+                          ) : (
+                            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded border border-border text-text-muted shrink-0">
+                              Not Cited
+                            </span>
+                          )}
+                        </div>
                       {eng.data?.snippet && (
                         <p className="text-[11px] text-text-muted line-clamp-2 italic leading-relaxed font-sans">
                           "{eng.data.snippet}"
                         </p>
                       )}
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
+              </div>
 
                 {/* Missing topics & competitor citations */}
                 {(q.missingTopics?.length > 0 || q.competitorMentions?.length > 0) && (

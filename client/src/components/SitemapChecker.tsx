@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 
 export default function SitemapChecker({ defaultUrl }: { defaultUrl?: string }) {
   const [url, setUrl] = useState(defaultUrl || "");
@@ -17,8 +18,9 @@ export default function SitemapChecker({ defaultUrl }: { defaultUrl?: string }) 
   };
 
   const StatusBadge = ({ ok }: { ok: boolean }) => (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${ok ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
-      {ok ? "✓ Found" : "✗ Missing"}
+    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${ok ? "bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400" : "bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400"}`}>
+      {ok ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+      {ok ? "Found" : "Missing"}
     </span>
   );
 
@@ -48,7 +50,9 @@ export default function SitemapChecker({ defaultUrl }: { defaultUrl?: string }) 
             <div className="flex items-center gap-2">
               <StatusBadge ok={result.robots.exists} />
               {result.robots.sitemapInRobots && (
-                <span className="text-xs text-green-600">Sitemap referenced ✓</span>
+                <span className="inline-flex items-center gap-1 text-xs text-green-600">
+                  <CheckCircle2 className="w-3 h-3" /> Sitemap referenced
+                </span>
               )}
             </div>
           </div>
@@ -61,7 +65,8 @@ export default function SitemapChecker({ defaultUrl }: { defaultUrl?: string }) 
             <div className="mt-3 space-y-2">
               {result.recommendations.map((r: string, i: number) => (
                 <div key={i} className="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg">
-                  <span>⚠️</span> {r}
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span>{r}</span>
                 </div>
               ))}
             </div>

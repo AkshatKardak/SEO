@@ -1,11 +1,11 @@
-// ScheduleSelector.tsx
 import { useState } from "react";
 import axios from "axios";
+import { Sun, Calendar, BellOff } from "lucide-react";
 
 const options = [
-  { value: "daily", label: "Daily (6 AM)", icon: "🌅" },
-  { value: "weekly", label: "Weekly (Mon 6 AM)", icon: "📅" },
-  { value: "off", label: "Off", icon: "🔕" },
+  { value: "daily", label: "Daily (6 AM)", icon: Sun },
+  { value: "weekly", label: "Weekly (Mon 6 AM)", icon: Calendar },
+  { value: "off", label: "Off", icon: BellOff },
 ];
 
 export default function ScheduleSelector({ current, onChange}: { current: string;  onChange?: (val: string) => void; }) {
@@ -30,19 +30,23 @@ export default function ScheduleSelector({ current, onChange}: { current: string
         Auto Rank Check Schedule
       </p>
       <div className="flex gap-3">
-        {options.map((o) => (
-          <button
-            key={o.value}
-            onClick={() => save(o.value)}
-            className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
-              selected === o.value
-                ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300"
-            }`}
-          >
-            {o.icon} {o.label}
-          </button>
-        ))}
+        {options.map((o) => {
+          const Icon = o.icon;
+          return (
+            <button
+              key={o.value}
+              onClick={() => save(o.value)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+                selected === o.value
+                  ? "bg-indigo-600 text-white border-indigo-600"
+                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300"
+              }`}
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              <span>{o.label}</span>
+            </button>
+          );
+        })}
       </div>
       {saving && <p className="text-xs text-gray-400">Saving...</p>}
     </div>

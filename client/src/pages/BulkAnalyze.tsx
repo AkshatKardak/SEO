@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 interface BulkResult {
   url: string;
@@ -96,12 +97,12 @@ export default function BulkAnalyze() {
               {results.map((r) => (
                 <tr key={r.url} className="hover:bg-gray-50 dark:hover:bg-gray-750">
                   <td className="px-4 py-3 max-w-[200px] truncate font-medium text-gray-800 dark:text-gray-200">
-                    {r.error ? <span className="text-red-500">{r.url} ❌</span> : r.url}
+                    {r.error ? <span className="text-red-500 inline-flex items-center gap-1">{r.url} <AlertCircle className="w-3.5 h-3.5" /></span> : r.url}
                   </td>
                   <td className={`px-4 py-3 font-bold ${scoreColor(r.seoScore)}`}>{r.seoScore}</td>
                   <td className={`px-4 py-3 font-bold ${scoreColor(r.accessibilityScore)}`}>{r.accessibilityScore}</td>
-                  <td className="px-4 py-3">{r.hasViewport ? "✅" : "❌"}</td>
-                  <td className="px-4 py-3">{r.hasCanonical ? "✅" : "❌"}</td>
+                  <td className="px-4 py-3">{r.hasViewport ? <CheckCircle2 className="w-4 h-4 text-emerald-500 inline" /> : <XCircle className="w-4 h-4 text-rose-500 inline" />}</td>
+                  <td className="px-4 py-3">{r.hasCanonical ? <CheckCircle2 className="w-4 h-4 text-emerald-500 inline" /> : <XCircle className="w-4 h-4 text-rose-500 inline" />}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{r.imagesMissingAlt ?? "—"}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{r.h1Count ?? "—"}</td>
                 </tr>

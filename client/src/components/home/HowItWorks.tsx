@@ -93,7 +93,7 @@ const workflowSteps: StepDetail[] = [
     mockData: {
       input: "Generating production-ready schema patches and title/meta diff blocks...",
       processing: "Applying authorized patches & configuring automated rank tracking cron...",
-      output: "Patches deployed ✅. Tracking 15 keywords with automated weekly audit reports.",
+      output: "Patches deployed successfully. Tracking 15 keywords with automated weekly audit reports.",
     },
   },
 ];

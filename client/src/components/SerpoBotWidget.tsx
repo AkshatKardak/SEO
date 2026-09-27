@@ -167,7 +167,7 @@ export default function SerpoBotWidget({
               </button>
             </div>
             <p className="mt-1 text-xs font-sans text-text-primary leading-snug">
-              Hey! I am your Serpo Bot. Click here to inspect keywords, audit pages, or generate pull requests! 👋
+              Hey! I am your Serpo Bot. Click here to inspect keywords, audit pages, or generate pull requests!
             </p>
             {/* Downward triangle indicator */}
             <div className="absolute -bottom-1.5 right-8 w-3 h-3 bg-surface border-r border-b border-accent/40 rotate-45" />
