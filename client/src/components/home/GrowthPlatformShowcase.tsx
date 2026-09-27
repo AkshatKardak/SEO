@@ -140,9 +140,9 @@ export default function GrowthPlatformShowcase() {
                 </div>
               </div>
 
-              <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
-                  <span className="font-bold text-white flex items-center gap-1.5">
+              <div className="terminal-panel lg:col-span-6 p-4 rounded-xl border border-border text-text-primary space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-2.5 text-[10px]">
+                  <span className="font-bold text-text-primary flex items-center gap-1.5">
                     <Code2 size={13} className="text-accent" />
                     <span>ICE Scoring Engine</span>
                   </span>
@@ -152,43 +152,43 @@ export default function GrowthPlatformShowcase() {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 space-y-1">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-white font-medium">SoftwareApplication Schema Injection</span>
+                      <span className="text-text-primary font-medium">SoftwareApplication Schema Injection</span>
                       <span className="text-accent font-bold tabular-nums">ICE 9.2</span>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-white/50">
+                    <div className="flex items-center justify-between text-[10px] text-text-muted">
                       <span>Impact: 9.0 · Conf: 0.95 · Effort: 2.0</span>
-                      <span className="text-[#6FD98F]">+18–26% Traffic Lift</span>
+                      <span className="text-positive">+18–26% Traffic Lift</span>
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 space-y-1">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-white font-medium">Core Web Vitals LCP Optimization</span>
+                      <span className="text-text-primary font-medium">Core Web Vitals LCP Optimization</span>
                       <span className="text-accent font-bold tabular-nums">ICE 8.6</span>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-white/50">
+                    <div className="flex items-center justify-between text-[10px] text-text-muted">
                       <span>Impact: 8.5 · Conf: 0.90 · Effort: 3.0</span>
-                      <span className="text-[#6FD98F]">+12–18% Traffic Lift</span>
+                      <span className="text-positive">+12–18% Traffic Lift</span>
                     </div>
                   </div>
 
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 space-y-1">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-white font-medium">Meta Canonical Consolidation</span>
+                      <span className="text-text-primary font-medium">Meta Canonical Consolidation</span>
                       <span className="text-accent font-bold tabular-nums">ICE 7.9</span>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-white/50">
+                    <div className="flex items-center justify-between text-[10px] text-text-muted">
                       <span>Impact: 7.0 · Conf: 0.88 · Effort: 1.5</span>
-                      <span className="text-[#6FD98F]">+8–14% Traffic Lift</span>
+                      <span className="text-positive">+8–14% Traffic Lift</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-white/60 flex items-center justify-between">
+                <div className="p-2 rounded-lg bg-background border border-border text-[10px] text-text-secondary flex items-center justify-between">
                   <span>Engine: Bayesian ICE Calibrator v2.4</span>
-                  <span className="text-[#6FD98F]">Status: Calibrated ✓</span>
+                  <span className="text-positive">Status: Calibrated ✓</span>
                 </div>
               </div>
             </motion.div>
@@ -241,9 +241,9 @@ export default function GrowthPlatformShowcase() {
                 </div>
               </div>
 
-              <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
-                  <span className="font-bold text-white flex items-center gap-1.5">
+              <div className="terminal-panel lg:col-span-6 p-4 rounded-xl border border-border text-text-primary space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-2.5 text-[10px]">
+                  <span className="font-bold text-text-primary flex items-center gap-1.5">
                     <Sparkles size={13} className="text-accent" />
                     <span>AI Citation Telemetry</span>
                   </span>
@@ -253,32 +253,32 @@ export default function GrowthPlatformShowcase() {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border flex items-center justify-between">
                     <div>
-                      <div className="text-white text-xs font-semibold">Perplexity AI</div>
-                      <div className="text-white/40 text-[10px]">Top 3 Primary Cited Source</div>
+                      <div className="text-text-primary text-xs font-semibold">Perplexity AI</div>
+                      <div className="text-text-muted text-[10px]">Top 3 Primary Cited Source</div>
                     </div>
-                    <span className="text-[#6FD98F] font-bold tabular-nums text-xs">96% Cited</span>
+                    <span className="text-positive font-bold tabular-nums text-xs">96% Cited</span>
                   </div>
 
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border flex items-center justify-between">
                     <div>
-                      <div className="text-white text-xs font-semibold">ChatGPT Search</div>
-                      <div className="text-white/40 text-[10px]">Quoted in 4/5 summary answers</div>
+                      <div className="text-text-primary text-xs font-semibold">ChatGPT Search</div>
+                      <div className="text-text-muted text-[10px]">Quoted in 4/5 summary answers</div>
                     </div>
-                    <span className="text-[#6FD98F] font-bold tabular-nums text-xs">88% Quoted</span>
+                    <span className="text-positive font-bold tabular-nums text-xs">88% Quoted</span>
                   </div>
 
-                  <div className="p-2.5 rounded bg-white/5 border border-white/5 flex items-center justify-between">
+                  <div className="p-2.5 rounded-lg bg-surface-muted border border-border flex items-center justify-between">
                     <div>
-                      <div className="text-white text-xs font-semibold">Google AI Overviews</div>
-                      <div className="text-white/40 text-[10px]">Featured Snippet Anchor Entity</div>
+                      <div className="text-text-primary text-xs font-semibold">Google AI Overviews</div>
+                      <div className="text-text-muted text-[10px]">Featured Snippet Anchor Entity</div>
                     </div>
                     <span className="text-accent font-bold tabular-nums text-xs">Primary</span>
                   </div>
                 </div>
 
-                <div className="p-2 rounded bg-black/40 border border-white/5 text-[10px] text-white/60 flex items-center justify-between">
+                <div className="p-2 rounded-lg bg-background border border-border text-[10px] text-text-secondary flex items-center justify-between">
                   <span>Knowledge Graph Entity Triple: Verified</span>
                   <ShieldCheck size={12} className="text-accent" />
                 </div>
@@ -333,9 +333,9 @@ export default function GrowthPlatformShowcase() {
                 </div>
               </div>
 
-              <div className="lg:col-span-6 p-4 rounded border border-border bg-[#10151B] text-[#E8EDF2] space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-[10px]">
-                  <span className="font-bold text-white flex items-center gap-1.5">
+              <div className="terminal-panel lg:col-span-6 p-4 rounded-xl border border-border text-text-primary space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-2.5 text-[10px]">
+                  <span className="font-bold text-text-primary flex items-center gap-1.5">
                     <GitPullRequest size={13} className="text-accent" />
                     <span>Serpo Bot Dispatch Terminal</span>
                   </span>
@@ -344,26 +344,26 @@ export default function GrowthPlatformShowcase() {
                   </span>
                 </div>
 
-                <div className="p-3 rounded bg-black/40 border border-white/5 space-y-2">
-                  <div className="flex items-center justify-between text-[11px] text-white/50">
+                <div className="p-3 rounded-lg bg-background border border-border space-y-2">
+                  <div className="flex items-center justify-between text-[11px] text-text-muted">
                     <span>Branch:</span>
                     <code className="text-accent font-bold">serpo/seo-patch-schema</code>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <div className="flex items-center justify-between text-[11px] text-text-muted">
                     <span>Commit:</span>
-                    <span className="text-white font-medium">fix(seo): inject Organization schema</span>
+                    <span className="text-text-primary font-medium">fix(seo): inject Organization schema</span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <div className="flex items-center justify-between text-[11px] text-text-muted">
                     <span>AST Safety Score:</span>
-                    <span className="text-[#6FD98F] font-bold tabular-nums">99.8% Verified</span>
+                    <span className="text-positive font-bold tabular-nums">99.8% Verified</span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-white/50">
+                  <div className="flex items-center justify-between text-[11px] text-text-muted">
                     <span>CI Validation:</span>
-                    <span className="text-[#6FD98F] font-bold">Passing (3/3)</span>
+                    <span className="text-positive font-bold">Passing (3/3)</span>
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded bg-accent-soft text-accent border border-accent/20 text-xs font-semibold flex items-center justify-between font-mono">
+                <div className="p-2.5 rounded-lg bg-accent-soft text-accent border border-accent/20 text-xs font-semibold flex items-center justify-between font-mono">
                   <span className="flex items-center gap-1.5">
                     <CheckCircle2 size={13} />
                     <span>Ready to Merge</span>

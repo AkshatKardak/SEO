@@ -19,15 +19,18 @@
 
     <!-- Zero-Flash Theme Initialization Script -->
     <script>
-      (function() {
+      (function () {
         try {
-          var saved = localStorage.getItem('theme');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || (!saved && prefersDark)) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
+          var saved =
+            localStorage.getItem("serpoai-theme") ||
+            localStorage.getItem("rankpilot-theme");
+          var isDark =
+            saved === "dark" ||
+            ((saved === "system" || !saved) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          var root = document.documentElement;
+          root.classList.remove("light", "dark");
+          root.classList.add(isDark ? "dark" : "light");
         } catch (e) {}
       })();
     </script>

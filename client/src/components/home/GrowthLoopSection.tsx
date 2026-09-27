@@ -241,8 +241,8 @@ export default function GrowthLoopSection() {
 
             {/* Stage Telemetry Preview Column */}
             <div className="lg:col-span-5 space-y-3">
-              <div className="p-4 rounded bg-[#10151B] border border-white/10 text-white space-y-3 font-mono text-xs shadow-inner">
-                <div className="flex items-center justify-between text-[11px] text-white/50 pb-2 border-b border-white/10">
+              <div className="terminal-panel p-4 rounded-xl border border-border text-text-primary space-y-3 font-mono text-xs shadow-inner">
+                <div className="flex items-center justify-between text-[11px] text-text-muted pb-2 border-b border-border">
                   <span className="flex items-center gap-1.5">
                     <Terminal size={12} className="text-accent" />
                     <span>ENGINE TELEMETRY LOG</span>
@@ -250,12 +250,12 @@ export default function GrowthLoopSection() {
                   <span className="text-accent text-[10px]">STAGE {selectedStage.step} ACTIVE</span>
                 </div>
 
-                <div className="text-[11px] text-[#6FD98F] leading-relaxed">
+                <div className="text-[11px] text-positive leading-relaxed">
                   $ {selectedStage.sampleLog}
                 </div>
 
-                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
-                  <span className="text-white/50">{selectedStage.metricLabel}</span>
+                <div className="pt-2 border-t border-border flex items-center justify-between text-[11px]">
+                  <span className="text-text-muted">{selectedStage.metricLabel}</span>
                   <span className="text-accent font-bold tabular-nums">
                     {selectedStage.metricValue}
                   </span>

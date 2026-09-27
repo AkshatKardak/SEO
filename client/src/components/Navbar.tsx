@@ -2,13 +2,25 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
-import { Sun, Moon, ArrowRight, Menu, X } from "lucide-react";
+import { Sun, Moon, Monitor, ArrowRight, Menu, X } from "lucide-react";
 import Logo from "../assets/Logo.png";
 
 export default function Navbar() {
   const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const THEME_OPTIONS = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "system", label: "System", icon: Monitor },
+    { value: "dark", label: "Dark", icon: Moon },
+  ] as const;
+
+  const cycleTheme = () => {
+    const order = ["light", "system", "dark"] as const;
+    const idx = order.indexOf(theme);
+    setTheme(order[(idx + 1) % order.length]);
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 w-full h-14 bg-surface/90 backdrop-blur-md z-40 border-b border-border select-none">
@@ -46,14 +58,42 @@ export default function Navbar() {
 
         {/* ── Right Actions ── */}
         <div className="flex items-center gap-3">
-          {/* Theme Toggle */}
+          {/* Theme Switcher — segmented control (desktop) */}
+          <div
+            role="radiogroup"
+            aria-label="Theme"
+            className="hidden md:flex items-center gap-0.5 p-0.5 rounded-full border border-border bg-surface-muted"
+          >
+            {THEME_OPTIONS.map(({ value, label, icon: Icon }) => {
+              const isActive = theme === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  role="radio"
+                  aria-checked={isActive}
+                  title={label}
+                  onClick={() => setTheme(value)}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                    isActive
+                      ? "bg-surface text-text-primary shadow-2xs"
+                      : "text-text-muted hover:text-text-secondary"
+                  }`}
+                >
+                  <Icon size={13} />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Theme Switcher — cycle button (mobile) */}
           <button
             type="button"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-8 h-8 rounded border border-border bg-surface-muted hover:bg-surface text-text-secondary hover:text-text-primary flex items-center justify-center transition-colors cursor-pointer"
-            title={`Switch to ${theme === "dark" ? "Paper (Light)" : "Observatory (Dark)"}`}
+            onClick={cycleTheme}
+            aria-label={`Theme: ${theme}. Switch`}
+            className="md:hidden w-8 h-8 rounded-full border border-border bg-surface-muted hover:bg-surface text-text-secondary hover:text-text-primary flex items-center justify-center transition-colors cursor-pointer"
           >
-            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+            {resolvedTheme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
           </button>
 
           {user ? (
