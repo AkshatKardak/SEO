@@ -449,3 +449,46 @@ select {
 }
 
 
+/* ═══════════════════════════════════════════════════════════════
+   HERO MOTION & AMBIENCE UTILITIES
+   (all respect the global prefers-reduced-motion override)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Terminal typing caret */
+@keyframes caretBlink {
+    0%, 45% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+.terminal-caret {
+    color: var(--accent);
+    animation: caretBlink 1.1s steps(1) infinite;
+}
+
+/* Diagonal light sweep across the terminal chrome bar */
+@keyframes sheenSweep {
+    0% { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(100%); }
+}
+.sheen { position: relative; overflow: hidden; }
+.sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.08) 50%, transparent 70%);
+    animation: sheenSweep 5s var(--ease-in-out) infinite;
+    pointer-events: none;
+}
+
+/* Expanding ping ring (status dots) */
+@keyframes pingRing {
+    0% { transform: scale(1); opacity: 0.55; }
+    80%, 100% { transform: scale(2.8); opacity: 0; }
+}
+.ping-ring { animation: pingRing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* Gentle levitation for the terminal panel */
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+.animate-float { animation: floatY 7s ease-in-out infinite; }

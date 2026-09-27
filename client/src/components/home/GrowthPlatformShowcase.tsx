@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { sectionReveal } from "./motion";
 
 export default function GrowthPlatformShowcase() {
   const [activeTab, setActiveTab] = useState<"seo_ice" | "geo_search" | "autonomous_pr">("seo_ice");
@@ -19,10 +20,10 @@ export default function GrowthPlatformShowcase() {
     <section id="platform-showcase" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
       {/* ── SECTION HEADER ── */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
         className="text-center max-w-3xl mx-auto space-y-4 mb-14"
       >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
@@ -41,7 +42,13 @@ export default function GrowthPlatformShowcase() {
       </motion.div>
 
       {/* ── PILLAR TAB SWITCHER ── */}
-      <div className="flex justify-center mb-10">
+      <motion.div
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="flex justify-center mb-10"
+      >
         <div className="p-1 rounded bg-surface border border-border flex flex-wrap items-center justify-center gap-1 max-w-2xl w-full">
           <motion.button
             type="button"
@@ -88,10 +95,16 @@ export default function GrowthPlatformShowcase() {
             <span>03. Serpo Bot PR Dispatch</span>
           </motion.button>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── PILLAR CONTENT PANELS ── */}
-      <div className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-9 shadow-xs transition-all overflow-hidden">
+      <motion.div
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-9 shadow-xs transition-all overflow-hidden"
+      >
         <AnimatePresence mode="wait">
           {/* TAB 1: Smart SEO & ICE Scoring */}
           {activeTab === "seo_ice" && (
@@ -374,7 +387,7 @@ export default function GrowthPlatformShowcase() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { sectionReveal, staggerContainer } from "./motion";
 
 export default function ProblemSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
         className="max-w-3xl mx-auto text-center space-y-3 mb-12"
       >
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-border bg-surface text-[11px] font-mono text-warning">
@@ -24,13 +25,16 @@ export default function ProblemSection() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+      >
         {/* The Old Way */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          variants={sectionReveal}
           whileHover={{ y: -2 }}
           className="surface-instrument p-6 sm:p-7 rounded-md border border-border bg-surface space-y-4 transition-shadow hover:shadow-md"
         >
@@ -61,10 +65,7 @@ export default function ProblemSection() {
 
         {/* The SerpoAI Way */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          variants={sectionReveal}
           whileHover={{ y: -2 }}
           className="surface-instrument p-6 sm:p-7 rounded-md border border-accent/40 bg-surface space-y-4 shadow-sm hover:shadow-md transition-shadow"
         >
@@ -92,7 +93,7 @@ export default function ProblemSection() {
             ))}
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

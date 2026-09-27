@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
+import { sectionReveal } from "./motion";
 
 interface ComparisonRow {
   dimension: string;
@@ -44,10 +45,10 @@ export default function ProofSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
         className="max-w-3xl mx-auto text-center space-y-4 mb-14"
       >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
@@ -62,10 +63,10 @@ export default function ProofSection() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.5, delay: 0.15 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
         className="surface-instrument rounded-md border border-border bg-surface max-w-5xl mx-auto overflow-hidden shadow-xs"
       >
         <div className="overflow-x-auto">

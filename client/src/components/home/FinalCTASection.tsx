@@ -14,6 +14,7 @@ import {
   Layers,
   BookOpen,
 } from "lucide-react";
+import { sectionReveal, staggerContainer } from "./motion";
 
 interface FAQItem {
   question: string;
@@ -139,10 +140,10 @@ export default function FinalCTASection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-border select-none">
       {/* ── FAQ HEADER ── */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
         className="max-w-3xl mx-auto text-center space-y-4 mb-14"
       >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
@@ -160,16 +161,19 @@ export default function FinalCTASection() {
       </motion.div>
 
       {/* ── ARCHITECTURE TRUST PILLARS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-14">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-14"
+      >
         {TRUST_PILLARS.map((pillar, idx) => {
           const Icon = pillar.icon;
           return (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              variants={sectionReveal}
               whileHover={{ y: -2 }}
               className="surface-instrument p-4.5 rounded-md border border-border bg-surface flex flex-col justify-between shadow-2xs transition-shadow hover:shadow-sm"
             >
@@ -192,10 +196,16 @@ export default function FinalCTASection() {
             </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* ── INTERACTIVE FAQ ACCORDION ── */}
-      <div className="max-w-3xl mx-auto space-y-2 mb-14">
+      <motion.div
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="max-w-3xl mx-auto space-y-2 mb-14"
+      >
         {FAQS.map((faq, idx) => {
           const isOpen = openIndex === idx;
           return (
@@ -245,10 +255,16 @@ export default function FinalCTASection() {
             </div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* ── PLAIN-ENGLISH GLOSSARY OF TERMS ── */}
-      <div className="max-w-4xl mx-auto mb-16 space-y-6">
+      <motion.div
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="max-w-4xl mx-auto mb-16 space-y-6"
+      >
         <div className="text-center space-y-2">
           <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
             <BookOpen size={11} />
@@ -279,14 +295,14 @@ export default function FinalCTASection() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* ── REFINED LAUNCHPAD (PRECISION INSTRUMENT) ── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
         className="surface-instrument p-8 sm:p-12 rounded-md border border-border bg-surface text-center max-w-4xl mx-auto space-y-5 shadow-xs relative overflow-hidden"
       >
         <div className="badge-instrument text-[10px] font-mono text-accent border-accent/20">

@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Terminal,
 } from "lucide-react";
+import { sectionReveal, staggerContainer } from "./motion";
 
 interface Stage {
   id: string;
@@ -139,10 +140,10 @@ export default function GrowthLoopSection() {
     <section id="growth-loop" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto select-none">
       {/* ── Section Header ── */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5 }}
         className="max-w-3xl mx-auto text-center space-y-4 mb-14"
       >
         <div className="badge-instrument text-[10px] font-mono uppercase tracking-wider text-accent border-accent/20">
@@ -157,7 +158,13 @@ export default function GrowthLoopSection() {
       </motion.div>
 
       {/* ── 6 Stages Pipeline Selector Grid ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8"
+      >
         {STAGES.map((s) => {
           const isSelected = selectedStage.id === s.id;
           const StageIcon = s.icon;
@@ -165,6 +172,7 @@ export default function GrowthLoopSection() {
             <motion.button
               key={s.id}
               type="button"
+              variants={sectionReveal}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedStage(s)}
@@ -189,10 +197,16 @@ export default function GrowthLoopSection() {
             </motion.button>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* ── Active Stage Interactive Viewer ── */}
-      <div className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-8 shadow-xs">
+      <motion.div
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        className="surface-instrument rounded-md border border-border bg-surface p-6 sm:p-8 shadow-xs"
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedStage.id}
@@ -274,7 +288,7 @@ export default function GrowthLoopSection() {
             </div>
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
     </section>
   );
 }
