@@ -9,8 +9,9 @@ export default function SitemapChecker({ defaultUrl }: { defaultUrl?: string }) 
 
   const check = async () => {
     setLoading(true);
+    const apiBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
     const { data } = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/seo/sitemap-check?url=${encodeURIComponent(url)}`,
+      `${apiBase}/api/seo/sitemap-check?url=${encodeURIComponent(url)}`,
       { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     setResult(data.result);

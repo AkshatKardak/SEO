@@ -16,8 +16,9 @@ export default function ScheduleSelector({ current, onChange}: { current: string
     setSaving(true);
     setSelected(val);
     onChange?.(val);
+    const apiBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
     await axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/auth/schedule`,
+      `${apiBase}/api/auth/schedule`,
       { schedulePreference: val },
       { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );

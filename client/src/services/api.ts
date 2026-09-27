@@ -1,5 +1,6 @@
-// Base URL — set VITE_API_URL in client/.env
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// Base URL — configured via VITE_API_URL or VITE_BACKEND_URL
+const rawBaseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const BASE_URL = rawBaseUrl.replace(/\/api\/?$/, "").replace(/\/+$/, "");
 
 // ─── Helper ───────────────────────────────────────────────
 const getToken = () => localStorage.getItem("token");

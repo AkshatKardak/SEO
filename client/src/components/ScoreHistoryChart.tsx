@@ -18,8 +18,9 @@ export default function ScoreHistoryChart({ url }: { url?: string }) {
   useEffect(() => {
     const fetch = async () => {
       const params = url ? `?url=${encodeURIComponent(url)}` : "";
+      const apiBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/seo/score-history${params}`,
+        `${apiBase}/api/seo/score-history${params}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setData(

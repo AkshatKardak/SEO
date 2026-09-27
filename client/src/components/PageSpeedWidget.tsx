@@ -13,8 +13,9 @@ export default function PageSpeedWidget({ url }: { url: string }) {
   const fetch = async () => {
     setLoading(true);
     try {
+      const apiBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
       const { data: d } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/seo/pagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`,
+        `${apiBase}/api/seo/pagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setData(d);

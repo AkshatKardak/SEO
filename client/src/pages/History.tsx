@@ -49,8 +49,9 @@ export default function History() {
         if (!confirm("Delete this analysis?")) return;
         setDeleting(id);
         try {
+            const apiBase = (import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
             await fetch(
-                `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/seo/analysis/${id}`,
+                `${apiBase}/api/seo/analysis/${id}`,
                 {
                     method: "DELETE",
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

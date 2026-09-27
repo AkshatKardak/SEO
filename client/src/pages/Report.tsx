@@ -108,7 +108,8 @@ export default function Report() {
     setSharing(true);
     try {
       const token = sessionStorage.getItem("token") ?? localStorage.getItem("token") ?? "";
-      const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const rawBase = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const baseUrl = rawBase.replace(/\/api\/?$/, "").replace(/\/+$/, "");
       const { data } = await axios.post(
         `${baseUrl}/api/seo/${analysis._id}/share`,
         {},

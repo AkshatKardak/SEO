@@ -33,8 +33,9 @@ export default function BulkAnalyze() {
     setLoading(true);
     setResults([]);
     try {
+      const apiBase = (import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "").replace(/\/+$/, "");
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/seo/analyze-bulk`,
+        `${apiBase}/api/seo/analyze-bulk`,
         { urls: valid },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
